@@ -1,0 +1,46 @@
+/* src/components/TopBar.css */
+.top-bar {
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .top-bar .app-name {
+    flex-grow: 1;  /* This makes the app name grow to fill available space */
+    text-align: center;  /* Centers the app name */
+    margin: 0;
+  }
+  
+  .settings-button, .logout-button {
+    background-color: #444; /* Dark background */
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 4px;
+  }
+  
+  .settings-button:hover, .logout-button:hover {
+    background-color: #666; /* Lighter color on hover */
+  }
+  
+  .settings-button {
+    background-color: #007bff; /* Blue for the settings button */
+  }
+  
+  .settings-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+  }
+  
+  .logout-button {
+    background-color: #f44336; /* Red for the logout button */
+  }
+  
+  .logout-button:hover {
+    background-color: #d32f2f; /* Darker red on hover */
+  }
+  
