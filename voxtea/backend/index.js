@@ -3,14 +3,21 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
+const multer = require('multer');
+const profilePictureRoute = multer({ dest: 'uploads/profilePictures/' });
 
 const tokenCheck = require('./authCheck2');
 
-const postRoutes = require('./routes/posts/posts');
+
 const CreateAccount = require("./routes/users/CreateAccount");
 const Login = require("./routes/users/login");
+const GetProfilePicture = require("./routes/users/profilePicture/getProfilePicture");
+const updateProfilePicture = require("./routes/users/profilePicture/updateProfilePicture");
+const posts = require('./routes/posts/posts');
 
-dotenv.config(); // Load environment variables from .env file
+
+
+dotenv.config(); 
 
 const app = express();
 
@@ -18,6 +25,8 @@ const app = express();
 app.use(cors());
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: true })); 
+
+app.use('/api', tokenCheck);
 
 // Connecting to Mongo
 mongoose
@@ -30,14 +39,19 @@ mongoose
 
 
 // Static file serving (profile image access)
-//app.use("/uploads", express.static("uploads"));
+app.use("/uploads", express.static("uploads"));
+//app.use('/uploads/audioFiles', express.static(path.join(__dirname, 'uploads/audioFiles')));
 //app.use("/uploads", uploads);
 
 // Routes
-app.use('/api/auth/authCheck', tokenCheck);
+//app.use('/api/auth/authCheck', tokenCheck);
 
 app.use("/api/users", CreateAccount);
 app.use("/api/users", Login);
+app.use("/api/users/getProfilePicture", GetProfilePicture);
+app.use("/api/users/updateProfilePicture", updateProfilePicture);
+app.use("/api/posts/create", posts);
+
 
 // Start server
 const PORT = process.env.PORT || 5000;

@@ -1,13 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import TopBar from '../components/TopBar';
 import BottomBar from '../components/BottomBar';
+import PostForm from '../components/PostForm';
 
 const Home = () => {
+    const [showPostForm, setShowPostForm] = useState(false);
+
+    const togglePostForm = () => {
+        setShowPostForm(!showPostForm);
+    };
 
     return (
-        <div >
+        <div>
             <TopBar />
-                Welcome home
+            <div>posts</div>
+            <div>
+                <button onClick={togglePostForm}>
+                    {showPostForm ? "Cancel" : "Create Post"}
+                </button>
+                {showPostForm && <PostForm />}
+            </div>
             <BottomBar />
         </div>
     );

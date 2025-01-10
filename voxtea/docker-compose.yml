@@ -42,8 +42,6 @@ volumes:
   mongo-data:
   backend-data:
 
-
-
 networks:
   node-network:
     driver: bridge

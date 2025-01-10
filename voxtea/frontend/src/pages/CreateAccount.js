@@ -6,7 +6,7 @@ const CreateAccount = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [username, setUsername] = useState('');
-    const [profileImage, setProfileImage] = useState(null); // For profile image upload
+    const [profilePicture, setProfilePicture] = useState(null); // For profile image upload
 
     const navigate = useNavigate();
 
@@ -24,12 +24,15 @@ const CreateAccount = () => {
         formData.append('email', email);
         formData.append('password', password);
         formData.append('username', username);
-        if (profileImage) {
-            formData.append('profileImage', profileImage); // Append image if provided
+        // If there is a image append it as well
+        if (profilePicture) {
+            formData.append('profilePicture', profilePicture);
         }
 
+        console.log(formData);
+
         try {
-            // Sending POST request to backend for account creation
+            // Sending POST request to backend
             const response = await fetch('http://localhost:5000/api/users/register', {
                 method: 'POST',
                 body: formData,
@@ -49,13 +52,12 @@ const CreateAccount = () => {
                 navigate('/Home');
             } 
             else {
-                // Handle error (display message, etc.)
-                const errorData = await response.json();
-                alert(errorData.message || 'Error creating account');
+                // display error / message from server
+                alert(data.message || 'Error creating account');
             }
         } catch (error) {
             console.error('Error:', error);
-            alert('An error occurred while creating the account');
+            alert(error.message || 'Error creating account');
         }
     };
 
@@ -107,7 +109,8 @@ const CreateAccount = () => {
                     <label>Profile Image (optional):</label>
                     <input
                         type="file"
-                        onChange={(e) => setProfileImage(e.target.files[0])}
+                        accept="image/png, image/jpeg"
+                        onChange={(e) => setProfilePicture(e.target.files[0])}
                         style={{ display: 'block', margin: '10px 0' }}
                     />
                 </div>

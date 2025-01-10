@@ -1,36 +1,83 @@
 const express = require('express');
 const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
+const jwt = require('jsonwebtoken');
 const Post = require('../../models/Post');
+
 const router = express.Router();
 
+const JWT_SECRET = "qwertyuiopasdfghjklzxcvbnm";
+
+// Configure the directory for audio uploads
+const audioUploadDir = path.join(__dirname, '../../uploads/audioFiles');
+if (!fs.existsSync(audioUploadDir)) {
+  fs.mkdirSync(audioUploadDir, { recursive: true });
+}
+
+// Multer setup
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => cb(null, 'uploads/'),
-    filename: (req, file, cb) => cb(null, Date.now() + '-' + file.originalname),
+  destination: (req, file, cb) => {
+    cb(null, audioUploadDir);
+  },
+  filename: (req, file, cb) => {
+    const uniqueName = Date.now() + '-' + Math.round(Math.random() * 1e9) + path.extname(file.originalname);
+    cb(null, uniqueName);
+  },
 });
 
-const upload = multer({ storage });
+const upload = multer({
+  storage,
+  fileFilter: (req, file, cb) => {
+    const allowedTypes = ['audio/mpeg', 'audio/mp3'];
+    if (allowedTypes.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only MP3 files are allowed!'), false);
+    }
+  },
+  // Limit file size to 10MB
+  limits: { fileSize: 10 * 1024 * 1024 }, 
+});
 
-// Create a post
+
+
+
+// Endpoint for the new posts
 router.post('/', upload.single('audioFile'), async (req, res) => {
-    const { description } = req.body;
-    const audioFile = req.file.path;
+  const token = req.headers.authorization;
+  const { description } = req.body;
 
-    try {
-        const post = await Post.create({ description, audioFile });
-        res.status(201).json(post);
-    } catch (error) {
-        res.status(500).json({ error: 'Failed to create post' });
-    }
-});
+  if (!token) {
+    return res.status(401).json({ message: 'Unauthorized.' });
+  }
 
-// Get all posts
-router.get('/', async (req, res) => {
-    try {
-        const posts = await Post.find();
-        res.status(200).json(posts);
-    } catch (error) {
-        res.status(500).json({ error: 'Failed to fetch posts' });
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET || 'defaultsecret'); 
+    const userId = decoded.id;
+
+    if (!req.file) {
+      return res.status(400).json({ message: 'Audio file is required.' });
     }
+
+    // Create new post
+    const newPost = new Post({
+      description,
+      audioFile: `/uploads/audioFiles/${req.file.filename}`, 
+      userId,
+    });
+
+    console.log(newPost);
+
+    // Save to the database
+    await newPost.save();
+
+    res.status(201).json({ message: 'Post created successfully!', post: newPost });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Failed to create post.' });
+  }
 });
 
 module.exports = router;
+

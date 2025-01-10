@@ -1,24 +1,35 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import './PostForm.css';
 
 const PostForm = () => {
     const [description, setDescription] = useState('');
     const [audioFile, setAudioFile] = useState(null);
+    const [selectedEffect, setSelectedEffect] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         const formData = new FormData();
         formData.append('description', description);
         formData.append('audioFile', audioFile);
+        formData.append('effect', selectedEffect);
 
         try {
-            await axios.post('http://localhost:5000/posts', formData, {
-                headers: { 'Content-Type': 'multipart/form-data' },
+            const token = sessionStorage.getItem('authToken');
+            console.log(token);
+            await axios.post('http://localhost:5000/api/posts/create', formData, {
+                headers: { 
+                    Authorization: token,
+                    'Content-Type': 'multipart/form-data' },
             });
             alert('Post created!');
         } catch (error) {
             alert('Failed to create post');
         }
+    };
+
+    const handleEffectSelect = (effect) => {
+        setSelectedEffect(effect);
     };
 
     return (
@@ -34,9 +45,21 @@ const PostForm = () => {
                 accept="audio/mp3"
                 onChange={(e) => setAudioFile(e.target.files[0])}
             />
+            <div className="dropdown">
+                <button className="dropbtn">
+                    Effects: {selectedEffect || 'None'}
+                </button>
+                <div className="dropdown-content">
+                    <div onClick={() => handleEffectSelect('Reverb')}>Reverb</div>
+                    <div onClick={() => handleEffectSelect('Echo')}>Echo</div>
+                    <div onClick={() => handleEffectSelect('Flanger')}>Flanger</div>
+                    <div onClick={() => handleEffectSelect('Distortion')}>Distortion</div>
+                </div>
+            </div>
             <button type="submit">Post</button>
         </form>
     );
 };
 
 export default PostForm;
+

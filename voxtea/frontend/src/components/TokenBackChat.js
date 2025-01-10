@@ -17,7 +17,7 @@ const NeverWithout = ({ children }) => {
         }
 
         // Send request to the backend with the token in the headers
-        const response = await fetch('http://localhost:5000/api/auth/authCheck', {
+        const response = await fetch('http://localhost:5000/api/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

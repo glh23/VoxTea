@@ -1,62 +1,35 @@
 const express = require("express");
-const multer = require("multer");
-const path = require("path");
+const jwt = require("jsonwebtoken");
 const User = require("../../models/User");
-const fs = require("fs"); 
-const jwt = require('jsonwebtoken');
+const upload = require("./profilePicture/profilePictureUpload");  // Import the file upload component
 
 const router = express.Router();
 
-// Secret key for JWT in production change to .env secret 
-const JWT_SECRET = 'qwertyuiopasdfghjklzxcvbnm'; 
+// Secret key for JWT
+const JWT_SECRET = "qwertyuiopasdfghjklzxcvbnm";
 
-// Make sure uploads directory exists
-if (!fs.existsSync('uploads/')) {
-  fs.mkdirSync('uploads/');
-}
+// Route for user registration
+router.post("/register", upload.single("profilePicture"), async (req, res) => {
+  const { username, email, password } = req.body;
+  const profilePicture = req.file;  // Get the uploaded file for debugging
+  const fileName = req.fileName; // Get the filename generated in the upload
 
-// Multer Setup 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb){
-    cb(null, 'uploads/'); 
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, `profileImage-${uniqueSuffix}${path.extname(file.originalname)}`);
-  },
-});
-
-//File filter to allow only image uploads 
-const fileFilter = (req, file, cb) => {
-  const allowedTypes = ['image/jpeg', 'image/png'];
-  if (allowedTypes.includes(file.mimetype)) {
-    cb(null, true); 
-  } else {
-    cb(new Error('Only jpeg and png files are allowed!'), false); 
-  }
-};
-
-// This gets sent to backend storage to look in it type in docker-backend (bash, dir, cd uploads, dir)
-const upload = multer({ 
-  storage: storage, 
-  fileFilter: fileFilter, 
-  limits: { fileSize: 20 * 1024 * 1024 } // Limit file size to 20MB
-});
-
-
-
-// User Registration Route
-router.post("/register", upload.single("profileImage"), async (req, res) => {
-  const { username, email, password} = req.body;
-  const profileImage = req.file;
-
-  console.log({ username, email, password, profileImage});
+  // Debugging
+  console.log({ username, email, password, profilePicture, fileName });
 
   try {
-
-    // Validate email format
+    // Validate input fields (e.g., password strength, email format)
+    if (!password) {
+      return res.status(400).json({ message: "Password is required." });
+    }
+    if (/\s/.test(password)) {
+      return res.status(400).json({ message: "Password can't have spaces." });
+    }
     if (!/\S+@\S+\.\S+/.test(email)) {
       return res.status(400).json({ message: "Invalid email format." });
+    }
+    if (password.length < 12) {
+      return res.status(400).json({ message: "Password length must be at least 12 characters." });
     }
 
     // Check if user already exists
@@ -69,20 +42,22 @@ router.post("/register", upload.single("profileImage"), async (req, res) => {
     const newUser = new User({
       username,
       email,
-      password,  
-      profileImage: req.file ? req.file.path : null, 
+      password,
+      profilePicture: fileName  // Store the filename in the database
     });
+
+    console.log(newUser);
 
     // Save the user to the database
     await newUser.save();
 
-    // Generate JWT
+    // Generate JWT token
     const token = jwt.sign({ id: newUser._id }, JWT_SECRET, { expiresIn: "1h" });
-  
-    // Respond with token
+
+    // Respond with the token
     res.json({ token });
     console.log("User registered successfully!");
-
+    
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Server error. Please try again." });

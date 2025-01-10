@@ -11,9 +11,7 @@ const JWT_SECRET = 'qwertyuiopasdfghjklzxcvbnm';
 // Login Route
 router.post("/login", async (req, res) => {
 
-    console.log("In /login")
-
-    console.log(JWT_SECRET);
+    console.log("In /login");
 
     const { email, password } = req.body;
 
