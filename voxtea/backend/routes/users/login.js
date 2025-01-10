@@ -5,8 +5,13 @@ const User = require("../../models/User");
 
 const router = express.Router();
 
+
+
 // Secret key for JWT in production change to .env secret 
-const JWT_SECRET = 'qwertyuiopasdfghjklzxcvbnm'; 
+//const JWT_SECRET = 'qwertyuiopasdfghjklzxcvbnm'; 
+const JWT_SECRET = process.env.JWT_SECRET; 
+
+console.log("env",JWT_SECRET);
 
 // Login Route
 router.post("/login", async (req, res) => {

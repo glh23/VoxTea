@@ -2,8 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const dotenv = require('dotenv');
 const multer = require('multer');
+const path = require('path');
 const profilePictureRoute = multer({ dest: 'uploads/profilePictures/' });
 
 const tokenCheck = require('./authCheck2');
@@ -16,8 +16,7 @@ const updateProfilePicture = require("./routes/users/profilePicture/updateProfil
 const posts = require('./routes/posts/posts');
 
 
-
-dotenv.config(); 
+require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
 const app = express();
 

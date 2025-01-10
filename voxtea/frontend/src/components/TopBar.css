@@ -1,7 +1,8 @@
-/* src/components/TopBar.css */
+@import "../App.css";
+
 .top-bar {
-    background-color: #333;
-    color: white;
+    background-color: #DB2F62;
+    color: var(--topbar-text);
     padding: 10px 20px;
     display: flex;
     justify-content: space-between;
@@ -9,14 +10,14 @@
   }
   
   .top-bar .app-name {
-    flex-grow: 1;  /* This makes the app name grow to fill available space */
-    text-align: center;  /* Centers the app name */
+    flex-grow: 1;  
+    text-align: center;  
     margin: 0;
   }
   
   .settings-button, .logout-button {
-    background-color: #444; /* Dark background */
-    color: white;
+    background-color: #1d2954; 
+    color: #fff5dc;
     border: none;
     padding: 8px 16px;
     cursor: pointer;
@@ -25,22 +26,22 @@
   }
   
   .settings-button:hover, .logout-button:hover {
-    background-color: #666; /* Lighter color on hover */
+    background-color: #482f86; 
   }
   
   .settings-button {
-    background-color: #007bff; /* Blue for the settings button */
+    background-color: #1d2954; 
   }
   
   .settings-button:hover {
-    background-color: #0056b3; /* Darker blue on hover */
+    background-color: #482f86 ; 
   }
   
   .logout-button {
-    background-color: #f44336; /* Red for the logout button */
+    background-color: #1d2954; 
   }
   
   .logout-button:hover {
-    background-color: #d32f2f; /* Darker red on hover */
+    background-color: #482f86 ; 
   }
   

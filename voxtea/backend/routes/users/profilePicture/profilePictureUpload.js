@@ -8,6 +8,8 @@ const uploadDir = "uploads/profilePictures/";
 // Check if the directory exists, if not, create it
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true }); 
+  //
+
   console.log(`Directory ${uploadDir} created!`);
 } else {
   console.log(`Directory ${uploadDir} already exists.`);

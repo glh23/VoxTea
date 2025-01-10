@@ -1,11 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import TopBar from "../components/TopBar";
 import BottomBar from "../components/BottomBar";
 import axios from "axios";
+import ThemeContext from "../components/themeContext";
 
 const Settings = () => {
   const [profilePicture, setProfilePicture] = useState(null); 
   const [newImage, setNewImage] = useState(null);
+
+  const { theme, toggleTheme } = useContext(ThemeContext);
+
 // Get token from session storage
   const token = sessionStorage.getItem("authToken"); 
 
@@ -66,7 +70,9 @@ const Settings = () => {
     <div>
       <TopBar />
       <div style={{ textAlign: "center", margin: "20px" }}>
+
         <h1>Settings</h1>
+
         <div>
           <h2>Profile Picture</h2>
           <img
@@ -79,6 +85,14 @@ const Settings = () => {
           <input type="file" onChange={handleImageChange} />
           <button onClick={handleUpload}>Upload</button>
         </div>
+
+        <div>
+          <h2>{`Current Theme: ${theme.charAt(0).toUpperCase() + theme.slice(1)}`}</h2>
+          <button onClick={toggleTheme}>
+            Switch to {theme === "light" ? "Dark" : "Light"} Mode
+          </button>
+      </div>
+
       </div>
       <BottomBar />
     </div>

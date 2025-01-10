@@ -36,3 +36,52 @@
     transform: rotate(360deg);
   }
 }
+
+
+/* Light theme (default) */
+:root {
+  --background: #fff5dc;
+  --text: #000000;
+  --button-bg: #1d2954;
+  --button-bgh: #DB2F62;
+  --button-text: #ffffff;
+  --button-border: #2f4286;
+  --form-bg: #1d2954;
+  --form-text: #fff5dc;
+  --form-border: #2f4286;
+  --topbar-text: #1d2954;
+}
+
+/* Dark theme */
+.dark-theme {
+  --background: #1d2954;
+  --text: #ffffff;
+  --button-bg: #fff5dc;
+  --button-bgh: #DB2F62;
+  --button-text: #000000;
+  --button-border: #2f4286;
+  --form-bg: #fff5dc;
+  --form-text: #1d2954;
+  --form-border: #DB2F62;
+  --topbar-text: #fff5dc;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--text);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+button {
+  background-color: var(--button-bg);
+  color: var(--button-text);
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+  border-radius: 10px;
+}
+
+button:hover{
+  background-color: #DB2F62;
+}
