@@ -4,6 +4,7 @@ const path = require('path');
 const fs = require('fs');
 const jwt = require('jsonwebtoken');
 const Post = require('../../models/Post');
+const User = require('../../models/User');
 
 const router = express.Router();
 
@@ -83,6 +84,11 @@ router.post('/', upload.single('audioFile'), async (req, res) => {
 
     // Save to the database
     await newPost.save();
+
+  // Add the post ID to the user's posts array
+    await User.findByIdAndUpdate(userId, { $push: { posts: newPost._id } });
+
+    console.log("post created successfully!")
 
     res.status(201).json({ message: 'Post created successfully!', post: newPost });
   } catch (error) {

@@ -40,7 +40,8 @@ mongoose
 
 
 // Static file serving (profile image access)
-app.use("/uploads", express.static("uploads"));
+//app.use("/uploads", express.static("uploads"));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 //app.use('/uploads/audioFiles', express.static(path.join(__dirname, 'uploads/audioFiles')));
 //app.use("/uploads", uploads);
 
@@ -52,7 +53,7 @@ app.use("/api/users/getProfilePicture", GetProfilePicture);
 app.use("/api/users/updateProfilePicture", updateProfilePicture);
 
 app.use("/api/posts/create", posts);
-app.use("/api/posts/get", posts);
+app.use("/api/posts/get", getPosts);
 
 
 // Start server

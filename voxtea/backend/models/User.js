@@ -7,6 +7,7 @@ const UserSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   profilePicture: { type: String, default: "" },  // Field to store profile image path or URL
+  posts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }] 
 });
 
 // Hash password before saving

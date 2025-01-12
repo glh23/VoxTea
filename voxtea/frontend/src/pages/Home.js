@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import TopBar from '../components/TopBar';
 import BottomBar from '../components/BottomBar';
 import PostForm from '../components/PostForm';
+import PostView from '../components/postView';
 
 const Home = () => {
     const [showPostForm, setShowPostForm] = useState(false);
@@ -13,7 +14,9 @@ const Home = () => {
     return (
         <div>
             <TopBar />
-            <div>posts</div>
+            <div>
+                <PostView/>
+            </div>
             <div>
                 <button onClick={togglePostForm}>
                     {showPostForm ? "Cancel" : "Create Post"}
