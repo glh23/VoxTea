@@ -5,7 +5,7 @@ const fs = require("fs");
 const User = require("../../../models/User");
 
 const router = express.Router();
-const JWT_SECRET = "qwertyuiopasdfghjklzxcvbnm"; // Secret key for JWT
+const JWT_SECRET = process.env.JWT_SECRET; 
 
 // Route to get the profile picture
 router.get("/", async (req, res) => {

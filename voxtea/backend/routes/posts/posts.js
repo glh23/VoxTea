@@ -7,7 +7,7 @@ const Post = require('../../models/Post');
 
 const router = express.Router();
 
-const JWT_SECRET = "qwertyuiopasdfghjklzxcvbnm";
+const JWT_SECRET = process.env.JWT_SECRET; 
 
 // Configure the directory for audio uploads
 const audioUploadDir = path.join(__dirname, '../../uploads/audioFiles');

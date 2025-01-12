@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 
 
 // Change to .env in production
-const JWT_SECRET = 'qwertyuiopasdfghjklzxcvbnm'; 
+const JWT_SECRET = process.env.JWT_SECRET; 
 
 
 const verifyToken = (req, res, next) => {

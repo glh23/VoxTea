@@ -5,7 +5,7 @@ const User = require("../../../models/User");
 const upload = require("./profilePictureUpload");
 
 const router = express.Router();
-const JWT_SECRET = "qwertyuiopasdfghjklzxcvbnm"; // Secret key for JWT
+const JWT_SECRET = process.env.JWT_SECRET; 
 
 // Route to handle profile picture upload
 router.post("/", upload.single("profilePicture"), async (req, res) => {

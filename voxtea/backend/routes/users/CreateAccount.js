@@ -6,7 +6,7 @@ const upload = require("./profilePicture/profilePictureUpload");  // Import the 
 const router = express.Router();
 
 // Secret key for JWT
-const JWT_SECRET = "qwertyuiopasdfghjklzxcvbnm";
+const JWT_SECRET = process.env.JWT_SECRET; 
 
 // Route for user registration
 router.post("/register", upload.single("profilePicture"), async (req, res) => {
