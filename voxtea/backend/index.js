@@ -14,6 +14,7 @@ const Login = require("./routes/users/login");
 const GetProfilePicture = require("./routes/users/profilePicture/getProfilePicture");
 const updateProfilePicture = require("./routes/users/profilePicture/updateProfilePicture");
 const posts = require('./routes/posts/posts');
+const getPosts = require('./routes/posts/getPosts');
 
 
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
@@ -25,6 +26,7 @@ app.use(cors());
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: true })); 
 
+// Security route
 app.use('/api', tokenCheck);
 
 // Connecting to Mongo
@@ -43,13 +45,14 @@ app.use("/uploads", express.static("uploads"));
 //app.use("/uploads", uploads);
 
 // Routes
-//app.use('/api/auth/authCheck', tokenCheck);
-
 app.use("/api/users", CreateAccount);
 app.use("/api/users", Login);
+
 app.use("/api/users/getProfilePicture", GetProfilePicture);
 app.use("/api/users/updateProfilePicture", updateProfilePicture);
+
 app.use("/api/posts/create", posts);
+app.use("/api/posts/get", posts);
 
 
 // Start server

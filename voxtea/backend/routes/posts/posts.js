@@ -18,13 +18,22 @@ if (!fs.existsSync(audioUploadDir)) {
 // Multer setup
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, audioUploadDir);
+      const now = new Date();
+      const monthDir = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+      const uploadDir = path.join(audioUploadDir, monthDir);
+      
+      // Create the directory if it doesn't exist
+      if (!fs.existsSync(uploadDir)) {
+          fs.mkdirSync(uploadDir, { recursive: true });
+      }
+      cb(null, uploadDir);
   },
   filename: (req, file, cb) => {
-    const uniqueName = Date.now() + '-' + Math.round(Math.random() * 1e9) + path.extname(file.originalname);
-    cb(null, uniqueName);
+      const uniqueName = Date.now() + '-' + Math.round(Math.random() * 1e9) + path.extname(file.originalname);
+      cb(null, uniqueName);
   },
 });
+
 
 const upload = multer({
   storage,
@@ -60,10 +69,13 @@ router.post('/', upload.single('audioFile'), async (req, res) => {
       return res.status(400).json({ message: 'Audio file is required.' });
     }
 
+    const now = new Date();
+    const yearMonthDir = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+
     // Create new post
     const newPost = new Post({
       description,
-      audioFile: `/uploads/audioFiles/${req.file.filename}`, 
+      audioFile: `/uploads/audioFiles/${yearMonthDir}/${req.file.filename}`,
       userId,
     });
 
