@@ -42,28 +42,60 @@
 :root {
   --background: #fff5dc;
   --text: #000000;
+
   --button-bg: #1d2954;
   --button-bgh: #DB2F62;
   --button-text: #ffffff;
   --button-border: #2f4286;
-  --form-bg: #1d2954;
+
+  --form-bg: #233265;
   --form-text: #fff5dc;
-  --form-border: #2f4286;
-  --topbar-text: #1d2954;
+  --form-border: #DB2F62;
+  --form-input-hover: #e46389;
+
+  --topbar-bg: #1d2954;
+  --topbar-text: #DB2F62;
+  --topbar-button-bg: #233265;
+  --topbar-button-text: #fff5dc;
+  --topbar-button-h: #DB2F62;
+
+  --bottombar-bg: #1d2954;
+  --bottombar-text: #fff5dc;
+
+  --setting-bg:#FFE6A9;
+  --setting-border: #2f4286;
+
+  --profile-border: #2f4286;
 }
 
 /* Dark theme */
 .dark-theme {
-  --background: #1d2954;
-  --text: #ffffff;
+  --background: #233265;
+  --text: #fff5dc;
+
   --button-bg: #fff5dc;
   --button-bgh: #DB2F62;
   --button-text: #000000;
   --button-border: #2f4286;
-  --form-bg: #fff5dc;
-  --form-text: #1d2954;
+
+  --form-bg: #2f4286;
+  --form-text: #fff5dc;
   --form-border: #DB2F62;
-  --topbar-text: #fff5dc;
+  --form-input-hover: #ed97b1;
+
+  --topbar-bg: #182143;
+  --topbar-text: #DB2F62;
+  --topbar-button-bg: #233265;
+  --topbar-button-text: #fff5dc;
+  --topbar-button-h: #DB2F62;
+
+  --bottombar-bg: #182143;
+  --bottombar-text: #fff5dc;
+
+  --setting-bg:#2f4286;
+  --setting-border: #DB2F62;
+
+  --profile-border: #DB2F62;
 }
 
 body {
@@ -76,12 +108,41 @@ button {
   background-color: var(--button-bg);
   color: var(--button-text);
   padding: 10px 20px;
+  margin: 10px 20px;
   border: none;
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s;
-  border-radius: 10px;
+  border-radius: 5px;
 }
 
 button:hover{
   background-color: #DB2F62;
+}
+
+form{
+  margin: 10px 20px;
+  padding: 10px 20px 10px 20px;
+  background-color: var(--form-bg);
+  border: 3px solid var(--form-border);
+  border-radius: 5px;
+  color: var(--form-text);
+  text-align: center;
+  box-shadow: 0px 10px 20px 0px rgba(0,0,0,0.2);
+}
+
+input:hover{
+  background-color: var(--form-input-hover);
+}
+
+.setting{
+  border: 3px solid var(--setting-border);
+  border-radius: 5px;
+  background-color: var(--setting-bg);
+  margin: 10px 20px;
+  box-shadow: 0px 10px 20px 0px rgba(0,0,0,0.2);
+}
+
+.profilePicture{
+  border: 3px solid var(--profile-border);
+  border-radius: 50%;
 }

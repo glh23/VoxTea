@@ -64,57 +64,67 @@ const CreateAccount = () => {
     return (
         <div style={{ textAlign: 'center', marginTop: '50px' }}>
             <h1>Create Account</h1>
-            <form onSubmit={handleCreateAccount} style={{ display: 'inline-block', textAlign: 'left' }}>
+            <form onSubmit={handleCreateAccount} style={{ display: 'inline-block', textAlign: 'center' }}>
                 <div>
-                    <label>Username:</label>
+                    <div>
+                        <label>Username:</label>
+                    </div>
                     <input
                         type="text"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                         required
-                        style={{ display: 'block', margin: '10px 0' }}
+                        style={{ margin: '10px' }}
                     />
                 </div>
                 <div>
-                    <label>Email:</label>
+                    <div>
+                        <label>Email:</label>
+                    </div>
                     <input
                         type="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
-                        style={{ display: 'block', margin: '10px 0' }}
+                        style={{ margin: '10px' }}
                     />
                 </div>
                 <div>
-                    <label>Password:</label>
+                    <div>
+                        <label>Password:</label>
+                    </div>
                     <input
                         type="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
-                        style={{ display: 'block', margin: '10px 0' }}
+                        style={{margin: '10px'}}
                     />
                 </div>
                 <div>
-                    <label>Confirm Password:</label>
+                    <div>
+                        <label>Confirm Password:</label>
+                    </div>
                     <input
                         type="password"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         required
-                        style={{ display: 'block', margin: '10px 0' }}
+                        style={{ margin: '10px' }}
                     />
                 </div>
                 <div>
+                    <div>
                     <label>Profile Image (optional):</label>
+                    </div>
                     <input
                         type="file"
                         accept="image/png, image/jpeg"
                         onChange={(e) => setProfilePicture(e.target.files[0])}
-                        style={{ display: 'block', margin: '10px 0' }}
+                        style={{ margin: '10px' }}
                     />
                 </div>
-                <button type="submit" style={{ padding: '10px 20px' }}>Create Account</button>
+                <button type="submit" style={{ padding: '10px 20px', backgroundColor: "#DB2F62", color: "#fff5dc", margin: '10px'}}>Create Account</button>
             </form>
         </div>
     );

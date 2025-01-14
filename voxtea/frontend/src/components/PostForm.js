@@ -34,17 +34,21 @@ const PostForm = () => {
 
     return (
         <form onSubmit={handleSubmit}>
-            <input
-                type="text"
-                placeholder="Description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-            />
-            <input
-                type="file"
-                accept="audio/mp3"
-                onChange={(e) => setAudioFile(e.target.files[0])}
-            />
+            <div>
+                <input
+                    type="text"
+                    placeholder="Description"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                />
+            </div>
+            <div>
+                <input
+                    type="file"
+                    accept="audio/mp3"
+                    onChange={(e) => setAudioFile(e.target.files[0])}
+                />
+            </div>
             <div className="dropdown">
                 <button className="dropbtn">
                     Effects: {selectedEffect || 'None'}

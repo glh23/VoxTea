@@ -17,7 +17,7 @@ router.get('/recent', async (req, res) => {
 
         res.status(200).json({ posts: recentPosts });
     } catch (error) {
-        console.error(error);
+        console.log(error);
         res.status(500).json({ message: 'Failed to fetch recent posts.' });
     }
 });
@@ -35,7 +35,7 @@ router.get('/user/:userId/posts', async (req, res) => {
   
       res.status(200).json(userWithPosts.posts);  
     } catch (error) {
-      console.error(error);
+      console.log(error);
       res.status(500).json({ message: 'Failed to fetch user posts.' });
     }
   });

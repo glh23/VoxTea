@@ -23,9 +23,9 @@ const handleSettings = () => {
 
   return (
     <div className="top-bar">
-      <button className="settings-button" onClick={handleSettings}>Settings</button>
+      <button className="top-bar-button" onClick={handleSettings}>Settings</button>
       <h1 className="app-name" onClick={handleAppName}>VoxTea</h1>
-      <button className="logout-button" onClick={handleLogout}>Logout</button>
+      <button className="top-bar-button" onClick={handleLogout}>Logout</button>
     </div>
   );
 };

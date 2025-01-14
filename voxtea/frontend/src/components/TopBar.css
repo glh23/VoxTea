@@ -1,12 +1,13 @@
 @import "../App.css";
 
 .top-bar {
-    background-color: #DB2F62;
+    background-color: var(--topbar-bg);
     color: var(--topbar-text);
     padding: 10px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    box-shadow: 0px 10px 20px 0px rgba(0,0,0,0.2);
   }
   
   .top-bar .app-name {
@@ -14,34 +15,15 @@
     text-align: center;  
     margin: 0;
   }
+
   
-  .settings-button, .logout-button {
-    background-color: #1d2954; 
-    color: #fff5dc;
-    border: none;
-    padding: 8px 16px;
-    cursor: pointer;
-    font-size: 16px;
-    border-radius: 4px;
+  .top-bar-button {
+    background-color: var(--topbar-button-bg); 
+    color: var(--topbar-button-text);
   }
   
-  .settings-button:hover, .logout-button:hover {
-    background-color: #482f86; 
+  .top-bar-button:hover {
+    background-color: var(--topbar-button-h);
   }
-  
-  .settings-button {
-    background-color: #1d2954; 
-  }
-  
-  .settings-button:hover {
-    background-color: #482f86 ; 
-  }
-  
-  .logout-button {
-    background-color: #1d2954; 
-  }
-  
-  .logout-button:hover {
-    background-color: #482f86 ; 
-  }
+
   

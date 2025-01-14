@@ -27,7 +27,7 @@ const Settings = () => {
       })
       .catch((err) => {
         console.error(err);
-        alert("Failed to load profile image.");
+        console.log("Failed to load profile image.");
       });
   }, [token]);
 
@@ -73,20 +73,25 @@ const Settings = () => {
 
         <h1>Settings</h1>
 
-        <div>
+        <div className="setting">
           <h2>Profile Picture</h2>
           <img
+            className="profilePicture"
             src={`http://localhost:5000/uploads/profilePictures/${profilePicture}`}
             alt="Profile"
-            style={{ width: "150px", height: "150px", borderRadius: "50%" }}
+            style={{ width: "150px", height: "150px" }}
+            onError={(e) => {
+              e.target.onerror = null; 
+              e.target.src = "/user.png";
+            }}
           />
-        </div>
-        <div>
-          <input type="file" onChange={handleImageChange} />
-          <button onClick={handleUpload}>Upload</button>
+          <div>
+            <input type="file" onChange={handleImageChange} />
+            <button onClick={handleUpload}>Upload</button>
+          </div>
         </div>
 
-        <div>
+        <div className="setting">
           <h2>{`Current Theme: ${theme.charAt(0).toUpperCase() + theme.slice(1)}`}</h2>
           <button onClick={toggleTheme}>
             Switch to {theme === "light" ? "Dark" : "Light"} Mode

@@ -14,14 +14,16 @@ const Home = () => {
     return (
         <div>
             <TopBar />
-            <div>
-                <PostView/>
-            </div>
-            <div>
-                <button onClick={togglePostForm}>
-                    {showPostForm ? "Cancel" : "Create Post"}
-                </button>
-                {showPostForm && <PostForm />}
+            <div style={{ textAlign: "center", margin: "20px" }}>
+                <div>
+                    <PostView/>
+                </div>
+                <div>
+                    <button onClick={togglePostForm}>
+                        {showPostForm ? "Cancel" : "Create Post"}
+                    </button>
+                    {showPostForm && <PostForm />}
+                </div>
             </div>
             <BottomBar />
         </div>

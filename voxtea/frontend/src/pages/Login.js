@@ -46,32 +46,36 @@ const Login = () => {
     return (
         <div style={{ textAlign: 'center', marginTop: '50px' }}>
             <h1>Login</h1>
-            <form onSubmit={handleLogin} style={{ display: 'inline-block', textAlign: 'left' }}>
+            <form onSubmit={handleLogin} style={{ display: 'inline-block', textAlign: 'center', width: '40ch' }}>
                 {error && (
                     <div style={{ color: 'red', marginBottom: '10px' }}>
                         {error}
                     </div>
                 )}
                 <div>
-                    <label htmlFor="email">Email:</label>
+                    <div>
+                        <label htmlFor="email">Email:</label>
+                    </div>
                     <input
                         id="email"
                         type="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
-                        style={{ display: 'block', margin: '10px 0', width: '100%' }}
+                        style={{padding: '10px 20px', margin: '10px 0', width: '30ch' }}
                     />
                 </div>
                 <div>
-                    <label htmlFor="password">Password:</label>
+                    <div>
+                        <label htmlFor="password">Password:</label>
+                    </div>
                     <input
                         id="password"
                         type="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
-                        style={{ display: 'block', margin: '10px 0', width: '100%' }}
+                        style={{padding: '10px 20px',margin: '10px 0', width: '30ch' }}
                     />
                 </div>
                 <button
@@ -79,7 +83,7 @@ const Login = () => {
                     disabled={loading}
                     style={{
                         padding: '10px 20px',
-                        backgroundColor: loading ? '#ccc' : '#007BFF',
+                        backgroundColor: loading ? '#DB2F62' : '#DB2F62',
                         color: '#fff',
                         border: 'none',
                         cursor: loading ? 'not-allowed' : 'pointer',

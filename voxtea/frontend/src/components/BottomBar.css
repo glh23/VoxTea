@@ -1,6 +1,8 @@
+@import "../App.css";
+
 .bottom-bar {
-    background-color: #333;
-    color: white;
+    background-color: var(--bottombar-bg);
+    color: var(--bottombar-text);
     padding: 10px 20px;
     position: fixed;
     bottom: 0;
