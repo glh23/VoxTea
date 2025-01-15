@@ -1,0 +1,9 @@
+@import "../App.css";
+
+.player{
+    background-color: var(--form-bg);
+    color: var(--form-text);
+    border: 5px solid var(--form-border);
+    border-radius: 5px;
+    box-shadow: 0px 15px 25px 0px rgba(0,0,0,0.2);
+}

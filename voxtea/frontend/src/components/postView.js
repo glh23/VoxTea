@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import './postView.css';
 
 const PostList = () => {
   const [posts, setPosts] = useState([]); // Array of posts
@@ -78,22 +79,25 @@ const PostList = () => {
       <div>
         <button onClick={handleRefresh}>Refresh</button>
         <h2>Player</h2>
-        <p>Post {currentPostIndex + 1} of {posts.length}</p>
-        <p>{currentPost.description}</p>
-        {/* Cross origin allows the audio to play in firefox (the best browser) */}
-        <audio controls crossOrigin="anonymous"> 
-          <source src={`http://localhost:5000${currentPost.audioFile}`} type="audio/mp3" />
-          Your browser does not support the audio element. 
-        </audio>
-      </div>
+        <div className="player">
+          <p>Post {currentPostIndex + 1} of {posts.length}</p>
+          <p>{currentPost.description}</p>
+          {/* Cross origin allows the audio to play in firefox (the best browser) */}
+          <audio controls crossOrigin="anonymous"> 
+            <source src={`http://localhost:5000${currentPost.audioFile}`} type="audio/mp3" />
+            Your browser does not support the audio element. 
+          </audio>
+          
 
-      <div>
-        <button onClick={handlePrevious} disabled={currentPostIndex === 0}>
-          Previous
-        </button>
-        <button onClick={handleNext} disabled={currentPostIndex === posts.length - 1}>
-          Next
-        </button>
+          <div>
+            <button onClick={handlePrevious} disabled={currentPostIndex === 0}>
+              Previous
+            </button>
+            <button onClick={handleNext} disabled={currentPostIndex === posts.length - 1}>
+              Next
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
