@@ -81,21 +81,20 @@ const PostList = () => {
         <h2>Player</h2>
         <div className="player">
           <p>Post {currentPostIndex + 1} of {posts.length}</p>
-          <p>{currentPost.description}</p>
-          {/* Cross origin allows the audio to play in firefox (the best browser) */}
-          <audio controls crossOrigin="anonymous"> 
-            <source src={`http://localhost:5000${currentPost.audioFile}`} type="audio/mp3" />
-            Your browser does not support the audio element. 
-          </audio>
-          
+          <div className="postInfo">
+            <p>{currentPost.description}</p>
+            {/* Cross origin allows the audio to play in firefox (the best browser) */}
+            <audio controls crossOrigin="anonymous"> 
+              <source src="" type="audio/mp3" />
+              Your browser does not support the audio element. 
+            </audio>
+          </div>
 
           <div>
-            <button onClick={handlePrevious} disabled={currentPostIndex === 0}>
-              Previous
-            </button>
-            <button onClick={handleNext} disabled={currentPostIndex === posts.length - 1}>
-              Next
-            </button>
+              <img src= "/voxtea/previous.png" alt="Previous Button" className="button-icon" 
+              onClick={handlePrevious} disabled={currentPostIndex === 0}/>
+              <img src= "/voxtea/next.png" alt="Next Button" className="button-icon" 
+              onClick={handleNext} disabled={currentPostIndex === posts.length - 1}/>
           </div>
         </div>
       </div>
