@@ -61,8 +61,19 @@ const CreateAccount = () => {
         }
     };
 
+    const handleBack = () => {
+        navigate('/');
+    }
+
     return (
         <div style={{ textAlign: 'center', marginTop: '50px' }}>
+            <img 
+                src= "/voxtea/turn-back.png" 
+                alt="Previous Button" 
+                className="button-icon" 
+                onClick={handleBack} 
+                style={{position: 'absolute', top: '10px', left: '10px'}}
+            />
             <h1>Create Account</h1>
             <form onSubmit={handleCreateAccount} style={{ display: 'inline-block', textAlign: 'center' }}>
                 <div>

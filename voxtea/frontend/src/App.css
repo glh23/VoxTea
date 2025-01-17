@@ -114,11 +114,9 @@ button {
   transition: background-color 0.3s, color 0.3s;
   border-radius: 5px;
 }
-
 @keyframes wiggle {0% {transform: rotate(0deg);}25% {transform: rotate(-2deg);}
   50% {transform: rotate(2deg);}75% {transform: rotate(-2deg);}100% {transform: rotate(0deg);}
 }
-
 button:hover{
   background-color: #DB2F62;
   animation: wiggle 0.4s ease-in-out;
@@ -154,11 +152,11 @@ input:hover{
 
 .button-icon{
   border-radius: 50%;
-  max-height: 10ch;
-  max-width: 10ch;
-  background-color: #fff5dc;
+  max-height: 6ch;
+  max-width: 6ch;
+  background-color: var(--background);
   margin-top: 10px 10px;
 }
 .button-icon:hover{
-  background-color: #FFFFFF;
+  opacity: 0.8;
 }

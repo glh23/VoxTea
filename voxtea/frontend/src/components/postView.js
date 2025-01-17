@@ -50,9 +50,16 @@ const PostList = () => {
   }, []);
 
   // Display loading, error, or the current post
-  if (loading) {
-    return <p>Loading posts...</p>;
-  }
+  // if (loading) {
+  //   return (
+  //     <img 
+  //       src= "/voxtea/refresh.png" 
+  //       alt="Refresh Button" 
+  //       className="reload-button" 
+  //       onClick={handleRefresh} 
+  //     />
+  //   );
+  // }
 
   if (error) {
     return (
@@ -77,24 +84,40 @@ const PostList = () => {
   return (
     <div>
       <div>
-        <button onClick={handleRefresh}>Refresh</button>
         <h2>Player</h2>
         <div className="player">
+          <img 
+            src= "/voxtea/refresh.png" 
+            alt="Refresh Button" 
+            className="reload-button" 
+            onClick={handleRefresh} 
+          />
           <p>Post {currentPostIndex + 1} of {posts.length}</p>
           <div className="postInfo">
             <p>{currentPost.description}</p>
             {/* Cross origin allows the audio to play in firefox (the best browser) */}
             <audio controls crossOrigin="anonymous"> 
-              <source src="" type="audio/mp3" />
+              <source src={`http://localhost:5000${currentPost.audioFile}`} type="audio/mp3" />
               Your browser does not support the audio element. 
             </audio>
           </div>
-
           <div>
-              <img src= "/voxtea/previous.png" alt="Previous Button" className="button-icon" 
-              onClick={handlePrevious} disabled={currentPostIndex === 0}/>
-              <img src= "/voxtea/next.png" alt="Next Button" className="button-icon" 
-              onClick={handleNext} disabled={currentPostIndex === posts.length - 1}/>
+              <img 
+                src= "/voxtea/previous.png" 
+                alt="Previous Button" 
+                className="skip-button-left" 
+                onClick={handlePrevious} 
+                disabled={currentPostIndex === 0}
+                style={{position: 'relative', right: '4ch'}}
+              />
+              <img 
+                src= "/voxtea/next.png" 
+                alt="Next Button" 
+                className="skip-button-right" 
+                onClick={handleNext} 
+                disabled={currentPostIndex === posts.length - 1}
+                style={{position: 'relative', left: '4ch'}}
+              />
           </div>
         </div>
       </div>

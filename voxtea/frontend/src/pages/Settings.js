@@ -3,8 +3,12 @@ import TopBar from "../components/TopBar";
 import BottomBar from "../components/BottomBar";
 import axios from "axios";
 import ThemeContext from "../components/themeContext";
+import { useNavigate } from 'react-router-dom';
 
 const Settings = () => {
+
+  const navigate = useNavigate();
+
   const [profilePicture, setProfilePicture] = useState(null); 
   const [newImage, setNewImage] = useState(null);
 
@@ -66,9 +70,20 @@ const Settings = () => {
     }
   };
 
+  const handleBack = () => {
+    navigate('/Home');
+}
+
   return (
     <div>
       <TopBar />
+      <img 
+        src= "/voxtea/turn-back.png" 
+        alt="Previous Button" 
+        className="button-icon" 
+        onClick={handleBack} 
+        style={{position: 'absolute', top: '80px', left: '10px'}}
+      />
       <div style={{ textAlign: "center", margin: "20px" }}>
 
         <h1>Settings</h1>
