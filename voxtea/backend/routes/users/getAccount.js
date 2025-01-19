@@ -18,7 +18,10 @@ router.get('/', async (req, res) => {
         const userId = decoded.id;
 
         // Find the user by ID and populate their posts
-        const user = await User.findById(userId).populate('posts');
+        const user = await User.findById(userId) .populate({
+            path: 'posts',
+            options: { sort: { createdAt: -1 } } 
+        });;
 
         if (!user) {
             return res.status(404).json({ message: 'User not found.' });

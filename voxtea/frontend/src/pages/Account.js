@@ -1,84 +1,206 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import TopBar from "../components/TopBar";
 import BottomBar from "../components/BottomBar";
+import '../components/postView.css';
 
 const Account = () => {
-    const { userId } = useParams(); // Assume userId is passed in the URL (e.g., /account/:userId)
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const [user, setUser] = useState(null); 
+  const [posts, setPosts] = useState([]); 
+  const [currentPostIndex, setCurrentPostIndex] = useState(0); 
+  const [loading, setLoading] = useState(true); 
+  const [error, setError] = useState(null); 
 
-    const [user, setUser] = useState(null);
-    const [posts, setPosts] = useState([]);
-    const [loading, setLoading] = useState(true);
+  // Fetch user account data
+  useEffect(() => {
+    const fetchAccountData = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const token = sessionStorage.getItem("authToken");
+        console.log("token: ", token);
+        if (!token) {
+          console.error("No token found. Please log in again.");
+          navigate("/login");
+          return;
+        }
 
-    useEffect(() => {
-        const fetchAccountData = async () => {
-            try {
-                const response = await fetch(`http://localhost:5000/api/users/account/get/${userId}`);
-                const data = await response.json();
+        const response = await fetch("http://localhost:5000/api/users/account/get", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-                if (response.ok) {
-                    setUser(data.username);
-                    setPosts(data.posts);
-                } else {
-                    console.error(data.message);
-                }
-            } catch (error) {
-                console.error('Error fetching account data:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
+        const data = await response.json();
+        if (response.ok) {
+          setUser(data.username);
+          setPosts(data.posts || []);
+        } else {
+          setError(data.message || "Failed to fetch account data.");
+        }
+      } catch (error) {
+        console.error("Error fetching account data:", error);
+        setError("An error occurred while fetching account data.");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-        fetchAccountData();
-    }, [userId]);
+    fetchAccountData();
+  }, [navigate]);
 
-    if (loading) {
-        return (
-            <div style={{ textAlign: 'center', marginTop: '50px' }}>
-                <img src= "/voxtea/VoxTea logo 1.png" style={{maxWidth: '30%', maxHeight: '30%'}}/>
-            </div>
-        );
+  // Handle Next Post
+  const handleNext = () => {
+    if (currentPostIndex < posts.length - 1) {
+      setCurrentPostIndex((prevIndex) => prevIndex + 1);
     }
+  };
 
-    if (!user) {
-        return <div>User not found.</div>;
+  // Handle Previous Post
+  const handlePrevious = () => {
+    if (currentPostIndex > 0) {
+      setCurrentPostIndex((prevIndex) => prevIndex - 1);
     }
+  };
 
+  // Handle Refresh Posts
+  const handleRefresh = () => {
+    setCurrentPostIndex(0); // Reset index
+    setLoading(true);
+    setError(null);
+    const fetchPosts = async () => {
+      try {
+        const token = sessionStorage.getItem("token");
+        if (!token) return;
+
+        const response = await fetch("http://localhost:5000/api/users/account/get", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+          setPosts(data.posts || []);
+        } else {
+          setError(data.message || "Failed to refresh posts.");
+        }
+      } catch (err) {
+        setError("An error occurred while refreshing posts.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPosts();
+  };
+
+  // Display loading screen
+  if (loading) {
     return (
-        <div>
-            <TopBar />
-            <div style={{ textAlign: 'center', marginTop: '50px' }}>
-                <h1>Welcome, {user}</h1>
-                <h2>Your Posts</h2>
-                {posts.length === 0 ? (
-                    <p>You haven't posted anything yet.</p>
-                ) : (
-                    <ul style={{ listStyleType: 'none', padding: 0 }}>
-                        {posts.map(post => (
-                            <li 
-                                key={post._id} 
-                                style={{ 
-                                    margin: '20px 0', 
-                                    border: '1px solid #ccc', 
-                                    borderRadius: '10px', 
-                                    padding: '10px' 
-                                }}
-                            >
-                                <p><strong>Description:</strong> {post.description}</p>
-                                <audio controls>
-                                    <source src={`http://localhost:5000${post.audioFile}`} type="audio/mpeg" />
-                                    Your browser does not support the audio element.
-                                </audio>
-                            </li>
-                        ))}
-                    </ul>
-                )}
-                <button onClick={() => navigate('/')}>Go Back</button>
-            </div>
-            <BottomBar/>
-        </div>
+      <div style={{ textAlign: "center", marginTop: "50px" }}>
+        <div>Loading...</div>
+        <img
+          src="/voxtea/VoxTea logo 1.png"
+          alt="Loading"
+          style={{ maxWidth: "50%", maxHeight: "50%" }}
+        />
+      </div>
     );
+  }
+
+  // Display error screen
+  if (error) {
+    return (
+      <div style={{ textAlign: "center", marginTop: "50px" }}>
+        <div>{error}</div>
+        <button onClick={handleRefresh} style={{ marginTop: "20px" }}>
+          Refresh
+        </button>
+      </div>
+    );
+  }
+
+  // Display no posts available
+  if (posts.length === 0) {
+    return (
+      <div style={{ textAlign: "center", marginTop: "50px" }}>
+        <h2>No posts available.</h2>
+        <img
+          src="/voxtea/VoxTea logo 1.png"
+          alt="No Posts"
+          style={{ maxWidth: "30%", maxHeight: "30%" }}
+        />
+      </div>
+    );
+  }
+
+  // Get the current post
+  const currentPost = posts[currentPostIndex];
+
+  return (
+    <div>
+      <TopBar />
+      <div style={{ textAlign: "center", marginTop: "50px" }}>
+        <h1>Welcome, {user}</h1>
+        <h2>Your Posts</h2>
+        <div>
+          <h2>Player</h2>
+          <div className="player">
+            {/* Refresh Button */}
+            <img
+              src="/voxtea/arrow.png"
+              alt="Refresh Button"
+              className="reload-button"
+              onClick={handleRefresh}
+              style={{ cursor: "pointer" }}
+            />
+
+            {/* Post Info */}
+            <p>Post {currentPostIndex + 1} of {posts.length}</p>
+            <div className="postInfo">
+              <p>{currentPost.description}</p>
+              <audio controls crossOrigin="anonymous">
+                <source src={`http://localhost:5000${currentPost.audioFile}`} type="audio/mp3" />
+                Your browser does not support the audio element.
+              </audio>
+            </div>
+
+            {/* Navigation Buttons */}
+            <div>
+              <img
+                src="/voxtea/previous.png"
+                alt="Previous Button"
+                className="skip-button-left"
+                onClick={handlePrevious}
+                style={{
+                  cursor: currentPostIndex === 0 ? "not-allowed" : "pointer",
+                  opacity: currentPostIndex === 0 ? 0.5 : 1,
+                  position: "relative",
+                  right: "4ch",
+                }}
+              />
+              <img
+                src="/voxtea/next.png"
+                alt="Next Button"
+                className="skip-button-right"
+                onClick={handleNext}
+                style={{
+                  cursor: currentPostIndex === posts.length - 1 ? "not-allowed" : "pointer",
+                  opacity: currentPostIndex === posts.length - 1 ? 0.5 : 1,
+                  position: "relative",
+                  left: "4ch",
+                }}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <BottomBar />
+    </div>
+  );
 };
 
 export default Account;
+
