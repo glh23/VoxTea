@@ -15,6 +15,17 @@ const GetProfilePicture = require("./routes/users/profilePicture/getProfilePictu
 const updateProfilePicture = require("./routes/users/profilePicture/updateProfilePicture");
 const posts = require('./routes/posts/posts');
 const getPosts = require('./routes/posts/getPosts');
+const getAccount = require('./routes/users/getAccount');
+
+
+// Debugging route imports
+console.log('CreateAccount:', CreateAccount);
+console.log('Login:', Login);
+console.log('GetProfilePicture:', GetProfilePicture);
+console.log('updateProfilePicture:', updateProfilePicture);
+console.log('posts:', posts);
+console.log('getPosts:', getPosts);
+console.log('getAccount:', getAccount);
 
 
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
@@ -54,6 +65,8 @@ app.use("/api/users/updateProfilePicture", updateProfilePicture);
 
 app.use("/api/posts/create", posts);
 app.use("/api/posts/get", getPosts);
+
+app.use("/api/users/account/get", getAccount);
 
 
 // Start server

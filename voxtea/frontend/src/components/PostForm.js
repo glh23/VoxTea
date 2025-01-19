@@ -33,7 +33,7 @@ const PostForm = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} style={{marginBottom: '6ch'}}>
             <div>
                 <input
                     type="text"

@@ -22,22 +22,4 @@ router.get('/recent', async (req, res) => {
     }
 });
 
-router.get('/user/:userId/posts', async (req, res) => {
-    try {
-      const userId = req.params.userId;
-  
-      // Find user and populate the posts field
-      const userWithPosts = await User.findById(userId).populate('posts');
-  
-      if (!userWithPosts) {
-        return res.status(404).json({ message: 'User not found.' });
-      }
-  
-      res.status(200).json(userWithPosts.posts);  
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({ message: 'Failed to fetch user posts.' });
-    }
-  });
-
 module.exports = router;

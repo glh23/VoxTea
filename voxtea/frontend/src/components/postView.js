@@ -87,7 +87,7 @@ const PostList = () => {
         <h2>Player</h2>
         <div className="player">
           <img 
-            src= "/voxtea/refresh.png" 
+            src= "/voxtea/arrow.png" 
             alt="Refresh Button" 
             className="reload-button" 
             onClick={handleRefresh} 

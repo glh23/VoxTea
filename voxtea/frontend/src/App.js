@@ -14,6 +14,7 @@ import Login from './pages/Login';
 import CreateAccount from './pages/CreateAccount';
 import Home from './pages/Home';
 import Settings from './pages/Settings';
+import Account from './pages/Account';
 
 const App = () => (
     <ThemeProvider>
@@ -32,6 +33,11 @@ const App = () => (
                     <Settings />
                 </TokenBackChat>
                 } />
+            <Route path="/Account" element={
+            <TokenBackChat>
+                <Account />
+            </TokenBackChat>
+            } />
 
         </Routes>
     </ThemeProvider>
