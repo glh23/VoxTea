@@ -16,6 +16,8 @@ const updateProfilePicture = require("./routes/users/profilePicture/updateProfil
 const posts = require('./routes/posts/posts');
 const getPosts = require('./routes/posts/getPosts');
 const getAccount = require('./routes/users/getAccount');
+const searchAccounts = require("./routes/users/searchAccounts");
+const getProfile = require("./routes/users/getOtherAccount");
 
 
 // Debugging route imports
@@ -67,6 +69,10 @@ app.use("/api/posts/create", posts);
 app.use("/api/posts/get", getPosts);
 
 app.use("/api/users/account/get", getAccount);
+
+app.use("/api/users/search", searchAccounts);
+
+app.use("/api/users/profile/get", getProfile);
 
 
 // Start server

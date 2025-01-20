@@ -15,6 +15,8 @@ import CreateAccount from './pages/CreateAccount';
 import Home from './pages/Home';
 import Settings from './pages/Settings';
 import Account from './pages/Account';
+import UserSearch from './pages/UserSearch';
+import Profiles from './pages/otherAccounts'
 
 const App = () => (
     <ThemeProvider>
@@ -27,16 +29,26 @@ const App = () => (
                 <TokenBackChat>
                     <Home />
                 </TokenBackChat>
-                } />
+            } />
             <Route path="/Settings" element={
                 <TokenBackChat>
                     <Settings />
                 </TokenBackChat>
-                } />
+            } />
             <Route path="/Account" element={
-            <TokenBackChat>
-                <Account />
-            </TokenBackChat>
+                <TokenBackChat>
+                    <Account />
+                </TokenBackChat>
+            } />
+            <Route path="/UserSearch" element={
+                <TokenBackChat>
+                    <UserSearch />
+                </TokenBackChat>
+            } />
+            <Route path="/profile/:id" element={
+                <TokenBackChat>
+                    <Profiles />
+                </TokenBackChat>
             } />
 
         </Routes>

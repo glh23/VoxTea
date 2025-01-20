@@ -18,20 +18,24 @@ const Account = () => {
       setLoading(true);
       setError(null);
       try {
+        // Get token from session storage
         const token = sessionStorage.getItem("authToken");
         console.log("token: ", token);
+        // If there is no token send them back to login this is done in the auth as well
         if (!token) {
           console.error("No token found. Please log in again.");
           navigate("/login");
           return;
         }
 
+        // Request the users data        
         const response = await fetch("http://localhost:5000/api/users/account/get", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
 
+        // Receive the response and unpack the json into the the useState
         const data = await response.json();
         if (response.ok) {
           setUser(data.username);
@@ -66,7 +70,7 @@ const Account = () => {
 
   // Handle Refresh Posts
   const handleRefresh = () => {
-    setCurrentPostIndex(0); // Reset index
+    setCurrentPostIndex(0); 
     setLoading(true);
     setError(null);
     const fetchPosts = async () => {
@@ -99,25 +103,17 @@ const Account = () => {
   // Display loading screen
   if (loading) {
     return (
-      <div style={{ textAlign: "center", marginTop: "50px" }}>
-        <div>Loading...</div>
-        <img
-          src="/voxtea/VoxTea logo 1.png"
-          alt="Loading"
-          style={{ maxWidth: "50%", maxHeight: "50%" }}
-        />
-      </div>
-    );
-  }
-
-  // Display error screen
-  if (error) {
-    return (
-      <div style={{ textAlign: "center", marginTop: "50px" }}>
-        <div>{error}</div>
-        <button onClick={handleRefresh} style={{ marginTop: "20px" }}>
-          Refresh
-        </button>
+      <div>
+        <TopBar/>
+          <div style={{ textAlign: "center", marginTop: "50px" }}>
+            <div>Loading...</div>
+            <img
+              src="/voxtea/VoxTea logo 1.png"
+              alt="Loading"
+              style={{ maxWidth: "50%", maxHeight: "50%" }}
+            />
+          </div>
+        <BottomBar/>
       </div>
     );
   }
@@ -125,13 +121,17 @@ const Account = () => {
   // Display no posts available
   if (posts.length === 0) {
     return (
-      <div style={{ textAlign: "center", marginTop: "50px" }}>
-        <h2>No posts available.</h2>
-        <img
-          src="/voxtea/VoxTea logo 1.png"
-          alt="No Posts"
-          style={{ maxWidth: "30%", maxHeight: "30%" }}
-        />
+      <div>
+        <TopBar/>
+        <div style={{ textAlign: "center", marginTop: "50px" }}>
+          <h2>No posts available.</h2>
+          <img
+            src="/voxtea/VoxTea logo 1.png"
+            alt="No Posts"
+            style={{ maxWidth: "30%", maxHeight: "30%" }}
+          />
+        </div>
+        <BottomBar/>
       </div>
     );
   }

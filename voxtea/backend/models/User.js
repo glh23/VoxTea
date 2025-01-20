@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-// rust based for extra performance 
 const bcrypt = require('@node-rs/bcrypt');
 
 const UserSchema = new mongoose.Schema({
