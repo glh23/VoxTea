@@ -29,7 +29,8 @@ router.get('/', async (req, res) => {
 
         return res.status(200).json({ 
             username: user.username, 
-            posts: user.posts 
+            posts: user.posts, 
+            email: user.email
         });
     } catch (error) {
         console.error('Error fetching user and posts:', error);

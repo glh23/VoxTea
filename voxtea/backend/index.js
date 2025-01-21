@@ -18,6 +18,7 @@ const getPosts = require('./routes/posts/getPosts');
 const getAccount = require('./routes/users/getAccount');
 const searchAccounts = require("./routes/users/searchAccounts");
 const getProfile = require("./routes/users/getOtherAccount");
+const juceAPI = require("./juceSounds/juceAPI")
 
 
 // Debugging route imports
@@ -61,18 +62,14 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // Routes
 app.use("/api/users", CreateAccount);
 app.use("/api/users", Login);
-
 app.use("/api/users/getProfilePicture", GetProfilePicture);
 app.use("/api/users/updateProfilePicture", updateProfilePicture);
-
 app.use("/api/posts/create", posts);
 app.use("/api/posts/get", getPosts);
-
 app.use("/api/users/account/get", getAccount);
-
 app.use("/api/users/search", searchAccounts);
-
 app.use("/api/users/profile/get", getProfile);
+app.use("/api/effects/", juceAPI);
 
 
 // Start server

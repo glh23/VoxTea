@@ -3,10 +3,10 @@ const router = express.Router();
 const User = require("../../models/User");
 
 // Get user profile by ID
-router.get("/profile/get/:id", async (req, res) => {
+router.get("/:id", async (req, res) => {
     console.log(req.params.id);
   try {
-    const user = await User.findById(req.params.id).populate("posts"); // Fetch user and populate posts
+    const user = await User.findById(req.params.id).populate("posts"); 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
