@@ -84,7 +84,6 @@ const PostList = () => {
   return (
     <div>
       <div>
-        <h2>Player</h2>
         <div className="player">
           <img 
             src= "/voxtea/arrow.png" 
@@ -92,6 +91,7 @@ const PostList = () => {
             className="reload-button" 
             onClick={handleRefresh} 
           />
+          <h2>Player</h2>
           <p>Post {currentPostIndex + 1} of {posts.length}</p>
           <div className="postInfo">
             <p>{currentPost.description}</p>

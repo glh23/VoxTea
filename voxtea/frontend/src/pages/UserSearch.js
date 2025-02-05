@@ -45,54 +45,67 @@ const UserSearch = () => {
     navigate(`/profile/${id}`);
   };
 
+  const handleBack = () => {
+    navigate('/Home');
+}
+
   return (
-    <div style={{ textAlign: "center", marginTop: "50px" }}>
-      <h1>Search Users</h1>
-      <input
-        type="text"
-        placeholder="Type a username..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        style={{
-          padding: "10px",
-          width: "80%",
-          maxWidth: "400px",
-          borderRadius: "5px",
-          border: "1px solid #ccc",
-          marginBottom: "20px",
-        }}
+    <div>
+      <img 
+        src= "/voxtea/turn-back.png" 
+        alt="Previous Button" 
+        className="button-icon" 
+        onClick={handleBack} 
+        style={{position: 'absolute', top: '20px', left: '10px'}}
       />
-      {loading && <p>Loading...</p>}
-      <div style={{ marginTop: "20px" }}>
-        {users.length === 0 && !loading && searchTerm && <p>No users found.</p>}
-        {users.map((user) => (
-          <div
-            key={user._id}
-            onClick={() => handleUserClick(user._id)}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              marginBottom: "10px",
-            }}
-          >
-            <img
-              src={`http://localhost:5000/uploads/profilePictures/${user.profilePicture}`} 
-              alt={user.username}
+      <div style={{ textAlign: "center", marginTop: "50px" }}>
+        <h1>Search Users</h1>
+        <input
+          type="text"
+          placeholder="Type a username..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          style={{
+            padding: "10px",
+            width: "80%",
+            maxWidth: "400px",
+            borderRadius: "5px",
+            border: "1px solid #ccc",
+            marginBottom: "20px",
+          }}
+        />
+        {loading && <p>Loading...</p>}
+        <div style={{ marginTop: "20px" }}>
+          {users.length === 0 && !loading && searchTerm && <p>No users found.</p>}
+          {users.map((user) => (
+            <div
+              key={user._id}
+              onClick={() => handleUserClick(user._id)}
               style={{
-                width: "50px",
-                height: "50px",
-                borderRadius: "50%",
-                marginRight: "10px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                marginBottom: "10px",
               }}
-              onError={(e) => {
-                e.target.onerror = null; 
-                e.target.src = "/user.png";
-              }}
-            />
-            <p style={{ fontSize: "18px", fontWeight: "bold" }}>{user.username}</p>
-          </div>
-        ))}
+            >
+              <img
+                src={`http://localhost:5000/uploads/profilePictures/${user.profilePicture}`} 
+                alt={user.username}
+                style={{
+                  width: "50px",
+                  height: "50px",
+                  borderRadius: "50%",
+                  marginRight: "10px",
+                }}
+                onError={(e) => {
+                  e.target.onerror = null; 
+                  e.target.src = "/user.png";
+                }}
+              />
+              <p style={{ fontSize: "18px", fontWeight: "bold" }}>{user.username}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

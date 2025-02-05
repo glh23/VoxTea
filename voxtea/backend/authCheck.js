@@ -1,9 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-
-// Change to .env in production
 const JWT_SECRET = process.env.JWT_SECRET; 
-
 
 const verifyToken = (req, res, next) => {
     const authHeader = req.headers.authorization;
@@ -11,14 +8,16 @@ const verifyToken = (req, res, next) => {
         return res.status(401).json({ message: 'Authorization header missing' });
     }
 
-    const token = authHeader.split(' ')[1]; // Extract the token
+    // Extract the token
+    const token = authHeader.split(' ')[1]; 
     if (!token || token === null) {
         return res.status(401).json({ message: 'Token missing' });
     }
 
     try {
         const decoded = jwt.verify(token, JWT_SECRET );
-        req.user = decoded; // Attach the user info to the request
+        // Attach the user info to the request
+        req.user = decoded; 
         next();
     } catch (err) {
         console.log(err);

@@ -1,6 +1,6 @@
 import './App.css';
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Router } from 'react-router-dom';
 
 // Theme
 import { ThemeProvider } from "./components/themeContext";
@@ -17,6 +17,8 @@ import Settings from './pages/Settings';
 import Account from './pages/Account';
 import UserSearch from './pages/UserSearch';
 import Profiles from './pages/otherAccounts'
+import Contacts from './pages/contacts'
+import Message from './pages/message'
 
 const App = () => (
     <ThemeProvider>
@@ -50,7 +52,16 @@ const App = () => (
                     <Profiles />
                 </TokenBackChat>
             } />
-
+            <Route path="/contacts" element={
+                <TokenBackChat>
+                    <Contacts />
+                </TokenBackChat>
+            } />
+            <Route path="/message/:chatId" element={
+                <TokenBackChat>
+                    <Message/>
+                </TokenBackChat>
+            } />
         </Routes>
     </ThemeProvider>
 );
