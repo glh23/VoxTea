@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import socket from "../socket";
+import BottomBar from "../components/BottomBar";
 
 const Chat = () => {
   const { chatId } = useParams();
@@ -53,22 +54,36 @@ const Chat = () => {
     .catch(error => console.error(error));
   };
 
+  const handleBack = () => {
+    navigate('/contacts');
+  }
+
   return (
     <div>
-      <h1>Chat</h1>
-      <div>
-        {messages.map((msg, index) => (
-          <p key={index}>{msg.sender}: {msg.text}</p>
-        ))}
-      </div>
-      <div>
-        <input
-          type="text"
-          value={newMessage}
-          onChange={(e) => setNewMessage(e.target.value)}
-        />
-        <button onClick={sendMessage}>Send</button>
-      </div>
+      <TopBar />
+      <img 
+        src= "/voxtea/turn-back.png" 
+        alt="Previous Button" 
+        className="button-icon" 
+        onClick={handleBack} 
+        style={{position: 'absolute', top: '80px', left: '10px'}}
+      />
+          <div>
+            {messages.map((msg, index) => (
+              <p key={index}>
+                {msg.sender && msg.sender.username ? msg.sender.username : "Unknown User"}: {msg.text}
+              </p>
+            ))}
+          </div>
+        <div>
+          <input
+            type="text"
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+          />
+          <button onClick={sendMessage}>Send</button>
+        </div>
+      <BottomBar />
     </div>
   );
 };

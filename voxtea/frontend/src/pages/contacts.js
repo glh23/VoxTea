@@ -8,11 +8,11 @@ const Contacts = () => {
   const [chats, setChats] = useState([]);
   const [following, setFollowing] = useState([]);
   const [showFollowing, setShowFollowing] = useState(false);
+  const [currentUserId, setCurrentUserId] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
-
         const token = sessionStorage.getItem("authToken");
 
         try {
@@ -29,9 +29,8 @@ const Contacts = () => {
             const data = await response.json();
 
             console.log("data: ", data)
-            console.log("chat: ", data.chats);
-            console.log("following: ", data.following);
 
+            setCurrentUserId(data._id);
             setChats(data.chats);
             setFollowing(data.following);
         } 
@@ -71,13 +70,24 @@ const Contacts = () => {
         }
     };
 
-    const handleNavigation = () => {
-      navigate(`/message/${chat._id}`);
+    const handleNavigation = (chat) => {
+      navigate(`/message/${chat}`);
     };
+
+    const handleBack = () => {
+      navigate('/Home');
+  }
 
   return (
     <div>
        <TopBar />
+       <img 
+        src= "/voxtea/turn-back.png" 
+        alt="Previous Button" 
+        className="button-icon" 
+        onClick={handleBack} 
+        style={{position: 'absolute', top: '80px', left: '10px'}}
+      />
       <div style={{ textAlign: 'center', marginTop: '50px' }}>
         <h1>Your Chats</h1>
         <button onClick={openFollowingList}>
@@ -89,8 +99,10 @@ const Contacts = () => {
             {chats.map((chat) => (
               <tr key={chat._id}>
                 <td>
-                  <div onClick={handleNavigation}>
-                    {chat.participants.username?.map(u => u.name).join(", ") || "Unknown User"}
+                  <div onClick={() => handleNavigation(chat._id)}>
+                    {chat.participants && chat.participants.length > 0 
+                      ? chat.participants.map(p => p.username).join(", ") 
+                      : "Unknown User"}
                   </div>
                 </td>
               </tr>

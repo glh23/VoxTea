@@ -1,5 +1,5 @@
 const express = require("express");
-const jwt = require('jsonwebtoken'); // Add this import
+const jwt = require('jsonwebtoken'); 
 const Chat = require("../../models/Chat");
 const Message = require("../../models/Message");
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -20,7 +20,7 @@ router.post("/", async (req, res) => {
       // Decode the token
       const decoded = jwt.verify(token, JWT_SECRET);
       console.log("Token decoded", decoded);
-      currentUserId = decoded.id; // Correctly assign currentUserId
+      currentUserId = decoded.id; 
     } catch (error) {
       console.error("Token verification error:", error);
       return res.status(401).json({ message: 'Invalid message request' });
@@ -31,19 +31,14 @@ router.post("/", async (req, res) => {
 
     // Save message to DB
     const newMessage = await Message.create({
-      senderId: currentUserId,
-      chatId,
-      message,
-      timestamp: Date.now()
+      sender: currentUserId,
+      chat: chatId,
+      text: message
     });
 
     await Chat.findByIdAndUpdate(chatId, { 
-      $addToSet: {
-        messageId: newMessage._id,
-        senderId: newMessage.senderId,
-        message: newMessage.message,
-        timestamp: newMessage.timestamp
-      } 
+      $push: { messages: message._id }, 
+      lastMessage: message._id 
     });
 
     res.status(201).json(newMessage);

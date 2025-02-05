@@ -27,7 +27,10 @@ router.post("/start", async (req, res) => {
     });
 
     if (!chat) {
-      chat = new Chat({ participants: [currentUserId, userId] });
+      chat = new Chat({ 
+        participants: [currentUserId, userId],
+        isGroupChat: false
+      });
       await chat.save();
 
       // Update both users with the chat ID
@@ -35,8 +38,13 @@ router.post("/start", async (req, res) => {
       await User.findByIdAndUpdate(userId, { $addToSet: { chats: chat._id } });
     }
 
-    chat = await chat.populate("participants", "_id username profilePicture");
-    return res.status(200).json({ _id: chat._id, participants: chat.participants});
+    // Fully populate the chat
+    chat = await Chat.findById(chat._id).populate({
+      path: 'participants',
+      select: '_id username profilePicture'
+    });
+
+    return res.status(200).json(chat);
 
   } 
   catch (error) {
