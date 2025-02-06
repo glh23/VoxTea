@@ -57,7 +57,7 @@ const Login = () => {
                 style={{position: 'absolute', top: '10px', left: '10px'}}
             />
             <h1>Login</h1>
-            <form onSubmit={handleLogin} style={{ display: 'inline-block', textAlign: 'center', width: '40ch', margin: 'auto'}}>
+            <form onSubmit={handleLogin} style={{ display: 'inline-block', textAlign: 'center', maxWidth: '50ch' ,margin: 'auto'}}>
                 {error && (
                     <div style={{ color: 'red', marginBottom: '10px' }}>
                         {error}
@@ -73,7 +73,7 @@ const Login = () => {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
-                        style={{padding: '10px 20px', margin: '10px 0', width: '30ch' }}
+                        style={{padding: '10px 20px', margin: '10px 0' }}
                     />
                 </div>
                 <div>
@@ -86,7 +86,7 @@ const Login = () => {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
-                        style={{padding: '10px 20px',margin: '10px 0', width: '30ch' }}
+                        style={{padding: '10px 20px',margin: '10px 0' }}
                     />
                 </div>
                 <button

@@ -37,8 +37,8 @@ router.post("/", async (req, res) => {
     });
 
     await Chat.findByIdAndUpdate(chatId, { 
-      $push: { messages: message._id }, 
-      lastMessage: message._id 
+      $push: { messages: newMessage._id }, 
+      lastMessage: newMessage._id 
     });
 
     res.status(201).json(newMessage);

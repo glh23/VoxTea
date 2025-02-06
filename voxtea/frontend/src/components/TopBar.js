@@ -1,53 +1,72 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './TopBar.css';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 const TopBar = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const [menuOpen, setMenuOpen] = useState(false);
 
     const handleLogout = () => {
-        console.log('User logged out');
         sessionStorage.removeItem('authToken');
         navigate('/Login');
     };
 
     const handleSettingsOrAccount = () => {
-        if (location.pathname === '/Account') {
-            console.log('Redirecting to Settings');
-            navigate('/Settings');
-        } else {
-            console.log('Redirecting to Account');
-            navigate('/Account');
-        }
+        navigate(location.pathname === '/Account' ? '/Settings' : '/Account');
     };
 
     const handleAppName = () => {
-        console.log('Open Home');
         navigate('/Home');
     };
 
     const handleSearch = () => {
-        console.log('Redirecting to Search');
         navigate('/UserSearch');
     };
 
     const handleChat = () => {
-        console.log('Redirecting to Search');
         navigate('/contacts');
+    };
+
+    const toggleMenu = () => {
+        setMenuOpen(!menuOpen);
     };
 
     return (
         <div className="top-bar">
-            <button className="top-bar-button" onClick={handleSettingsOrAccount}>
-                {location.pathname === '/Account' ? 'Settings' : 'Account'}
-            </button>
-            <button className="top-bar-button" onClick={handleChat}>Chat</button>
+            {/* Left side buttons */}
+            <div className="top-bar-left">
+                <button className="top-bar-button" onClick={handleSettingsOrAccount}>
+                    {location.pathname === '/Account' ? 'Settings' : 'Account'}
+                </button>
+                <button className="top-bar-button" onClick={handleChat}>Chat</button>
+            </div>
+
+            {/* Center Logo */}
             <h1 className="app-name" onClick={handleAppName}>VoxTea</h1>
+
+            {/* Right side buttons */}
             <div className="top-bar-right">
                 <button className="top-bar-button" onClick={handleSearch}>Search</button>
                 <button className="top-bar-button" onClick={handleLogout}>Logout</button>
             </div>
+
+            {/* Hamburger Menu for Mobile */}
+            <div className="hamburger" onClick={toggleMenu}>
+                &#9776; {/* Hamburger icon */}
+            </div>
+
+            {/* Mobile Menu */}
+            {menuOpen && (
+                <div className="mobile-menu">
+                    <button onClick={handleSettingsOrAccount}>
+                        {location.pathname === '/Account' ? 'Settings' : 'Account'}
+                    </button>
+                    <button onClick={handleChat}>Chat</button>
+                    <button onClick={handleSearch}>Search</button>
+                    <button onClick={handleLogout}>Logout</button>
+                </div>
+            )}
         </div>
     );
 };
