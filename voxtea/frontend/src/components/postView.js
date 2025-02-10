@@ -81,6 +81,19 @@ const PostList = () => {
 
   const currentPost = posts[currentPostIndex];
 
+  const play = () =>{
+    document.getElementById('player').play()
+  }
+  const pause = () =>{
+    document.getElementById('player').pause()
+  }
+  const volDown = () =>{
+    document.getElementById('player').volume -= 0.1
+  }
+  const volUp = () =>{
+    document.getElementById('player').volume += 0.1
+  }
+
   return (
     <div>
       <div>
@@ -96,10 +109,17 @@ const PostList = () => {
           <div className="postInfo">
             <p>{currentPost.description}</p>
             {/* Cross origin allows the audio to play in firefox (the best browser) */}
-            <audio controls crossOrigin="anonymous"> 
+            <audio id="player" crossOrigin="anonymous"> 
               <source src={`http://localhost:5000${currentPost.audioFile}`} type="audio/mp3" />
               Your browser does not support the audio element. 
             </audio>
+            <input id="myRange" class="slider" value="0" max="100" min="0" type="range"/>
+            <div> 
+              <button onClick={play}>Play</button> 
+              <button onClick={pause}>Pause</button> 
+              <button onClick={volUp}>Vol +</button> 
+              <button onClick={volDown}>Vol -</button> 
+            </div>
           </div>
           <div>
               <img 

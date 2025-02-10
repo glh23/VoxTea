@@ -10,6 +10,7 @@ const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [participants, setParticipants] = useState([]); 
   const [newMessage, setNewMessage] = useState("");
+  const [currentUser, setCurrentUser] = useState("");
   const token = sessionStorage.getItem("authToken");
   const navigate = useNavigate();
 
@@ -20,6 +21,7 @@ const Chat = () => {
     .then((res) => {
       setMessages(res.data.messages);
       setParticipants(res.data.participants);
+      setCurrentUser(res.data.user);
       console.log("Chat data:", res.data);
     })
     .catch((err) => console.error(err));
@@ -38,12 +40,10 @@ const Chat = () => {
   const sendMessage = async () => {
     if (!newMessage.trim()) return;
 
-    const senderInfo = participants.find(p => p._id === "USER_ID"); 
-
     const messageData = { 
       chatId, 
       text: newMessage, 
-      sender: senderInfo || { username: "Unknown", profilePicture: "" }
+      sender: currentUser || { username: "Unknown", profilePicture: "" }
     };
 
     socket.emit("send_message", messageData);
