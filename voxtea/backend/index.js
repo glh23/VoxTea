@@ -15,6 +15,7 @@ const GetProfilePicture = require("./routes/users/profilePicture/getProfilePictu
 const updateProfilePicture = require("./routes/users/profilePicture/updateProfilePicture");
 const posts = require('./routes/posts/posts');
 const getPosts = require('./routes/posts/getPosts');
+const likePosts = require('./routes/posts/likePost');
 const getAccount = require('./routes/users/getAccount');
 const searchAccounts = require("./routes/users/searchAccounts");
 const getProfile = require("./routes/users/getOtherAccount");
@@ -68,6 +69,7 @@ app.use("/api/users/follow", follow);
 app.use("/api/users/me", me);
 app.use("/api/posts/create", posts);
 app.use("/api/posts/get", getPosts);
+app.use("/api/posts/like", likePosts);
 app.use("/api/chat/create", createChat);
 app.use("/api/chat/get", getMessages);
 app.use("/api/chat/send", sendMessage);
