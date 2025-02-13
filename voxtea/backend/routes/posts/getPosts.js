@@ -22,7 +22,8 @@ router.get('/recent', async (req, res) => {
 
         const recentPosts = await Post.find({ 
             createdAt: { $gte: past28Days } 
-        }).sort({ createdAt: -1 }); // Sorts by the most recent
+        // Sorts by the most recent
+        }).sort({ createdAt: -1 }); 
 
         // Check if the like on the post corresponds with the userId
         const likedList = recentPosts.map(post => {

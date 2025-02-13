@@ -18,7 +18,7 @@ const PostForm = () => {
             const token = sessionStorage.getItem('authToken');
             console.log(token);
             await axios.post('http://localhost:5000/api/posts/create', formData, {
-                headers: { 
+                headers: {
                     Authorization: token,
                     'Content-Type': 'multipart/form-data' },
             });
@@ -37,7 +37,7 @@ const PostForm = () => {
             <div>
                 <input
                     type="text"
-                    placeholder="Description"
+                    placeholder="Description (include hashtags like #guitar)"
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                 />
@@ -66,4 +66,3 @@ const PostForm = () => {
 };
 
 export default PostForm;
-

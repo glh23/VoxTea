@@ -7,30 +7,28 @@ const UserSchema = new mongoose.Schema({
   password: { type: String, required: true },
   profilePicture: { type: String, default: "" },  // Profile image path
   posts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
-  following: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }], 
+  following: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   followers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
-  chats: [{ type: mongoose.Schema.Types.ObjectId, ref: "Chat" }] 
+  chats: [{ type: mongoose.Schema.Types.ObjectId, ref: "Chat" }],
+  interestedHashtags: [{ type: String }] 
 });
 
 // Hash password before saving
 UserSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next();  // Check if password is modified
+  if (!this.isModified("password")) return next(); 
   try {
-    //const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, 10);
-    // Save the document
     next();
   } catch (error) {
-    next(error); 
+    next(error);
   }
 });
 
 // Check if entered password matches the stored password
 UserSchema.methods.comparePassword = async function (candidatePassword) {
-  return bcrypt.compare(candidatePassword, this.password); 
+  return bcrypt.compare(candidatePassword, this.password);
 };
 
 const User = mongoose.model("User", UserSchema);
 
 module.exports = User;
-

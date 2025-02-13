@@ -8,7 +8,7 @@ const User = require('../../models/User');
 
 const router = express.Router();
 
-const JWT_SECRET = process.env.JWT_SECRET; 
+const JWT_SECRET = process.env.JWT_SECRET;
 
 // Configure the directory for audio uploads
 const audioUploadDir = path.join(__dirname, '../../uploads/audioFiles');
@@ -22,7 +22,7 @@ const storage = multer.diskStorage({
       const now = new Date();
       const monthDir = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
       const uploadDir = path.join(audioUploadDir, monthDir);
-      
+
       // Create the directory if it doesn't exist
       if (!fs.existsSync(uploadDir)) {
           fs.mkdirSync(uploadDir, { recursive: true });
@@ -35,7 +35,6 @@ const storage = multer.diskStorage({
   },
 });
 
-
 const upload = multer({
   storage,
   fileFilter: (req, file, cb) => {
@@ -47,11 +46,8 @@ const upload = multer({
     }
   },
   // Limit file size to 10MB
-  limits: { fileSize: 10 * 1024 * 1024 }, 
+  limits: { fileSize: 10 * 1024 * 1024 },
 });
-
-
-
 
 // Endpoint for the new posts
 router.post('/', upload.single('audioFile'), async (req, res) => {
@@ -63,7 +59,7 @@ router.post('/', upload.single('audioFile'), async (req, res) => {
   }
 
   try {
-    const decoded = jwt.verify(token, JWT_SECRET || 'defaultsecret'); 
+    const decoded = jwt.verify(token, JWT_SECRET );
     const userId = decoded.id;
 
     if (!req.file) {
@@ -73,11 +69,15 @@ router.post('/', upload.single('audioFile'), async (req, res) => {
     const now = new Date();
     const yearMonthDir = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
 
+    // Get the hashtags from the description
+    const hashtags = description.match(/#\w+/g) || [];
+
     // Create new post
     const newPost = new Post({
       description,
       audioFile: `/uploads/audioFiles/${yearMonthDir}/${req.file.filename}`,
       userId,
+      hashtags: hashtags.map(tag => tag.substring(1)), // Remove the #
     });
 
     console.log(newPost);
@@ -85,10 +85,10 @@ router.post('/', upload.single('audioFile'), async (req, res) => {
     // Save to the database
     await newPost.save();
 
-  // Add the post ID to the user's posts array
+    // Add the post ID to the user's posts array
     await User.findByIdAndUpdate(userId, { $push: { posts: newPost._id } });
 
-    console.log("post created successfully!")
+    console.log("Post created successfully!");
 
     res.status(201).json({ message: 'Post created successfully!', post: newPost });
   } catch (error) {
@@ -98,4 +98,3 @@ router.post('/', upload.single('audioFile'), async (req, res) => {
 });
 
 module.exports = router;
-

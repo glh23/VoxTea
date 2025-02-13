@@ -11,14 +11,14 @@ const JWT_SECRET = process.env.JWT_SECRET;
 // Route for user registration
 router.post("/register", upload.single("profilePicture"), async (req, res) => {
   const { username, email, password } = req.body;
-  const profilePicture = req.file;  // Get the uploaded file for debugging
-  const fileName = req.fileName; // Get the filename generated in the upload
+  const profilePicture = req.file;  
+  const fileName = req.fileName;
 
   // Debugging
   console.log({ username, email, password, profilePicture, fileName });
 
   try {
-    // Validate input fields (e.g., password strength, email format)
+    // Validate input fields 
     if (!password) {
       return res.status(400).json({ message: "Password is required." });
     }
@@ -38,12 +38,12 @@ router.post("/register", upload.single("profilePicture"), async (req, res) => {
       return res.status(400).json({ message: "Email is already registered." });
     }
 
-    // Create new user (password hashing is handled in the model)
+    // Create new user 
     const newUser = new User({
       username,
       email,
       password,
-      profilePicture: fileName  // Store the filename in the database
+      profilePicture: fileName  
     });
 
     console.log(newUser);
