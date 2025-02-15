@@ -9,21 +9,26 @@ const { Server } = require('socket.io');
 
 // Importing Routes
 const tokenCheck = require('./authCheck2');
+
 const CreateAccount = require("./routes/users/CreateAccount");
 const Login = require("./routes/users/login");
 const GetProfilePicture = require("./routes/users/profilePicture/getProfilePicture");
 const updateProfilePicture = require("./routes/users/profilePicture/updateProfilePicture");
-const posts = require('./routes/posts/posts');
-const getPosts = require('./routes/posts/getPosts');
-const likePosts = require('./routes/posts/likePost');
 const getAccount = require('./routes/users/getAccount');
 const searchAccounts = require("./routes/users/searchAccounts");
 const getProfile = require("./routes/users/getOtherAccount");
 const follow = require("./routes/users/follow");
 const me = require("./routes/users/me");
+const updateHashtag = require("./routes/users/hashtagUpdate");
+
+const posts = require('./routes/posts/posts');
+const getPosts = require('./routes/posts/getPosts');
+const likePosts = require('./routes/posts/likePost');
+
 const createChat = require("./routes/chat/createChat");
 const getMessages = require("./routes/chat/getMessages");
 const sendMessage = require("./routes/chat/sendMessage");
+
 
 // Load environment variables
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
@@ -67,9 +72,12 @@ app.use("/api/users/search", searchAccounts);
 app.use("/api/users/profile/get", getProfile);
 app.use("/api/users/follow", follow);
 app.use("/api/users/me", me);
+app.use("/api/users/hashtags", updateHashtag);
+
 app.use("/api/posts/create", posts);
 app.use("/api/posts/get", getPosts);
 app.use("/api/posts/like", likePosts);
+
 app.use("/api/chat/create", createChat);
 app.use("/api/chat/get", getMessages);
 app.use("/api/chat/send", sendMessage);

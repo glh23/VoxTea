@@ -6,18 +6,14 @@ import ThemeContext from "../components/themeContext";
 import { useNavigate } from 'react-router-dom';
 
 const Settings = () => {
-
   const navigate = useNavigate();
-
-  const [profilePicture, setProfilePicture] = useState(null); 
+  const [profilePicture, setProfilePicture] = useState(null);
   const [newImage, setNewImage] = useState(null);
-
+  const [hashtags, setHashtags] = useState('');
   const { theme, toggleTheme } = useContext(ThemeContext);
 
-// Get token from session storage
-  const token = sessionStorage.getItem("authToken"); 
-
-  console.log(token)
+  // Get token from session storage
+  const token = sessionStorage.getItem("authToken");
 
   useEffect(() => {
     // Fetch the current profile image
@@ -26,17 +22,26 @@ const Settings = () => {
       })
       .then((res) => {
          // Default image if there isn't one
-         console.log("profile picture:",res.data.profilePicture,"     profile picture path", res.data.profilePicturePath, "        data", res.data);
          setProfilePicture(res.data.profilePicture || "default.png");
       })
       .catch((err) => {
         console.error(err);
         console.log("Failed to load profile image.");
       });
+
+    // Fetch the user's hashtags
+    axios.get("http://localhost:5000/api/users/hashtags", {
+        headers: { Authorization: token },
+      })
+      .then((res) => {
+        setHashtags(res.data.hashtags.join(' '));
+      })
+      .catch((err) => {
+        console.error(err);
+        console.log("Failed to load hashtags.");
+      });
   }, [token]);
 
-
-  
   const handleImageChange = (e) => {
     setNewImage(e.target.files[0]);
   };
@@ -63,29 +68,52 @@ const Settings = () => {
 
       alert(res.data.message);
       // Update the profile image in the UI
-      setProfilePicture(res.data.profilePicture); 
+      setProfilePicture(res.data.profilePicture);
     } catch (err) {
       console.error(err);
       alert("Failed to upload image.");
     }
   };
 
+  const handleHashtagsChange = (e) => {
+    setHashtags(e.target.value);
+  };
+
+  const handleHashtagsSave = async () => {
+    const hashtagArray = hashtags.split(' ').filter(tag => tag.trim() !== '');
+
+    try {
+      const res = await axios.post("http://localhost:5000/api/users/hashtags/update",
+        { hashtags: hashtagArray },
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+
+      alert(res.data.message);
+    } catch (err) {
+      console.error(err);
+      alert("Failed to save hashtags.");
+    }
+  };
+
   const handleBack = () => {
     navigate('/Home');
-}
+  };
 
   return (
     <div>
       <TopBar />
-      <img 
-        src= "/voxtea/turn-back.png" 
-        alt="Previous Button" 
-        className="button-icon" 
-        onClick={handleBack} 
+      <img
+        src= "/voxtea/turn-back.png"
+        alt="Previous Button"
+        className="button-icon"
+        onClick={handleBack}
         style={{position: 'absolute', top: '80px', left: '10px'}}
       />
       <div style={{ textAlign: "center", margin: "20px" }}>
-
         <h1>Settings</h1>
 
         <div className="setting">
@@ -96,7 +124,7 @@ const Settings = () => {
             alt="Profile"
             style={{ width: "150px", height: "150px" }}
             onError={(e) => {
-              e.target.onerror = null; 
+              e.target.onerror = null;
               e.target.src = "/user.png";
             }}
           />
@@ -107,12 +135,23 @@ const Settings = () => {
         </div>
 
         <div className="setting">
+          <h2>Hashtags</h2>
+          <input
+            type="text"
+            placeholder="Enter hashtags separated by spaces"
+            value={hashtags}
+            onChange={handleHashtagsChange}
+            style={{ width: "80%", marginBottom: "10px" }}
+          />
+          <button onClick={handleHashtagsSave}>Save Hashtags</button>
+        </div>
+
+        <div className="setting">
           <h2>{`Current Theme: ${theme.charAt(0).toUpperCase() + theme.slice(1)}`}</h2>
           <button onClick={toggleTheme}>
             Switch to {theme === "light" ? "Dark" : "Light"} Mode
           </button>
-      </div>
-
+        </div>
       </div>
       <BottomBar />
     </div>
