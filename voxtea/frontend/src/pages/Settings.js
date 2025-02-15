@@ -10,6 +10,7 @@ const Settings = () => {
   const [profilePicture, setProfilePicture] = useState(null);
   const [newImage, setNewImage] = useState(null);
   const [hashtags, setHashtags] = useState('');
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
   const { theme, toggleTheme } = useContext(ThemeContext);
 
   // Get token from session storage
@@ -30,7 +31,7 @@ const Settings = () => {
       });
 
     // Fetch the user's hashtags
-    axios.get("http://localhost:5000/api/users/hashtags", {
+    axios.get("http://localhost:5000/api/users/hashtags/get", {
         headers: { Authorization: token },
       })
       .then((res) => {
@@ -42,19 +43,18 @@ const Settings = () => {
       });
   }, [token]);
 
+
+  // Profile picture update
   const handleImageChange = (e) => {
     setNewImage(e.target.files[0]);
   };
-
   const handleUpload = async () => {
     if (!newImage) {
       alert("Please select an image to upload.");
       return;
     }
-
     const formData = new FormData();
     formData.append("profilePicture", newImage);
-
     try {
       const res = await axios.post("http://localhost:5000/api/users/updateProfilePicture",
         formData,
@@ -65,7 +65,6 @@ const Settings = () => {
           },
         }
       );
-
       alert(res.data.message);
       // Update the profile image in the UI
       setProfilePicture(res.data.profilePicture);
@@ -78,10 +77,8 @@ const Settings = () => {
   const handleHashtagsChange = (e) => {
     setHashtags(e.target.value);
   };
-
   const handleHashtagsSave = async () => {
     const hashtagArray = hashtags.split(' ').filter(tag => tag.trim() !== '');
-
     try {
       const res = await axios.post("http://localhost:5000/api/users/hashtags/update",
         { hashtags: hashtagArray },
@@ -91,9 +88,9 @@ const Settings = () => {
           },
         }
       );
-
       alert(res.data.message);
-    } catch (err) {
+    } 
+    catch (err) {
       console.error(err);
       alert("Failed to save hashtags.");
     }
@@ -103,15 +100,23 @@ const Settings = () => {
     navigate('/Home');
   };
 
+  const handleOpenPopup = () => {
+    setIsPopupVisible(true);
+  };
+
+  const handleClosePopup = () => {
+    setIsPopupVisible(false);
+  };
+
   return (
     <div>
       <TopBar />
       <img
-        src= "/voxtea/turn-back.png"
+        src="/voxtea/turn-back.png"
         alt="Previous Button"
         className="button-icon"
         onClick={handleBack}
-        style={{position: 'absolute', top: '80px', left: '10px'}}
+        style={{ position: 'absolute', top: '80px', left: '10px' }}
       />
       <div style={{ textAlign: "center", margin: "20px" }}>
         <h1>Settings</h1>
@@ -144,6 +149,7 @@ const Settings = () => {
             style={{ width: "80%", marginBottom: "10px" }}
           />
           <button onClick={handleHashtagsSave}>Save Hashtags</button>
+          <button onClick={handleOpenPopup}>View Hashtags</button>
         </div>
 
         <div className="setting">
@@ -153,6 +159,21 @@ const Settings = () => {
           </button>
         </div>
       </div>
+
+      {isPopupVisible && (
+        <div className="popup-overlay" onClick={handleClosePopup}>
+          <div className="popup-content" onClick={(e) => e.stopPropagation()}>
+            <button className="close-btn" onClick={handleClosePopup}>&times;</button>
+            <h2>Your Hashtags</h2>
+            <ul>
+              {hashtags.split(' ').map((tag, index) => (
+                <li key={index}>{tag}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      )}
+
       <BottomBar />
     </div>
   );
