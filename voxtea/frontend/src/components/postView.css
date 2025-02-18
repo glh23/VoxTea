@@ -102,3 +102,21 @@
     background-color: #fff5dc;
   }
   
+  /* postView.css */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown select {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.dropdown select:focus {
+  border-color: #007BFF;
+  outline: none;
+}

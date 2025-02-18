@@ -8,23 +8,30 @@ const PostList = () => {
   const [loading, setLoading] = useState(true); // Loading state
   const [error, setError] = useState(null); // Error state
   const [likedList, setLikedList] = useState([]); // Array of like status (1 or 0)
+  const [postType, setPostType] = useState('recent'); // Type of posts to fetch
   const token = sessionStorage.getItem("authToken");
 
   // Fetch posts from the backend
-  const fetchRecentPosts = async () => {
+  const fetchPosts = async (type) => {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.get("http://localhost:5000/api/posts/get/recent", {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      // Assuming the backend returns { posts: [...], likedList: [...] }
+      let response;
+      if (type === 'recent') {
+        response = await axios.get("http://localhost:5000/api/posts/get/recent", {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+      } else if (type === 'hashtags') {
+        response = await axios.get("http://localhost:5000/api/posts/get/hashtags", {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+      }
       setPosts(response.data.posts || []);
       setLikedList(response.data.likedList || []);
       setCurrentPostIndex(0);
       console.log("Response of the get:", response.data);
     } catch (error) {
-      console.error("Failed to fetch recent posts", error);
+      console.error("Failed to fetch posts", error);
       setError("Failed to fetch posts. Please try again.");
     } finally {
       setLoading(false);
@@ -34,14 +41,12 @@ const PostList = () => {
   // Toggle like status for a given post
   const handleLikes = async (postId, postIndex) => {
     try {
-      // Call your like endpoint for the post
+      // Call endpoint for the post
       const res = await axios.post(`http://localhost:5000/api/posts/like/${postId}`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
       console.log("Like toggled:", res.data);
-      
-      // Update likedList: if current value is 1, set to 0; if 0, set to 1.
-      // You might also want to update the like count in the post if you return that from your API.
+
       setLikedList(prevLikedList => {
         const updated = [...prevLikedList];
         updated[postIndex] = updated[postIndex] === 1 ? 0 : 1;
@@ -68,12 +73,18 @@ const PostList = () => {
 
   // Handle Refresh
   const handleRefresh = () => {
-    fetchRecentPosts();
+    fetchPosts(postType);
   };
 
-  // Fetch posts
+  // Handle Dropdown Selection
+  const handlePostTypeChange = (event) => {
+    setPostType(event.target.value);
+    fetchPosts(event.target.value);
+  };
+
+  // Fetch posts on mount
   useEffect(() => {
-    fetchRecentPosts();
+    fetchPosts(postType);
   }, []);
 
   if (error) {
@@ -96,7 +107,7 @@ const PostList = () => {
 
   // Check if current post is liked
   const currentPost = posts[currentPostIndex];
-  const isLiked = likedList[currentPostIndex] === 1; 
+  const isLiked = likedList[currentPostIndex] === 1;
 
   const play = () => {
     document.getElementById('player').play();
@@ -115,55 +126,61 @@ const PostList = () => {
     <div>
       <div>
         <div className="player">
-          <img 
-            src="/voxtea/arrow.png" 
-            alt="Refresh Button" 
-            className="reload-button" 
-            onClick={handleRefresh} 
+          <img
+            src="/voxtea/arrow.png"
+            alt="Refresh Button"
+            className="reload-button"
+            onClick={handleRefresh}
           />
+          <div className="dropdown" style={{ position: 'relative', top: '10px', right: '10px' }}>
+            <select onChange={handlePostTypeChange} value={postType}>
+              <option value="recent">Recent Posts</option>
+              <option value="hashtags">Hashtag Posts</option>
+            </select>
+          </div>
           <h2>Player</h2>
           <p>Post {currentPostIndex + 1} of {posts.length}</p>
           <div className="postInfo">
             <p>{currentPost.description}</p>
             {/* Cross origin allows the audio to play in firefox */}
-            <audio id="player" crossOrigin="anonymous"> 
+            <audio id="player" crossOrigin="anonymous">
               <source src={`http://localhost:5000${currentPost.audioFile}`} type="audio/mp3" />
               Your browser does not support the audio element.
             </audio>
             <input id="myRange" className="slider" defaultValue="0" max="100" min="0" type="range" />
-            <div> 
-              <button onClick={play}>Play</button> 
-              <button onClick={pause}>Pause</button> 
-              <button onClick={volUp}>Vol +</button> 
-              <button onClick={volDown}>Vol -</button> 
+            <div>
+              <button onClick={play}>Play</button>
+              <button onClick={pause}>Pause</button>
+              <button onClick={volUp}>Vol +</button>
+              <button onClick={volDown}>Vol -</button>
             </div>
           </div>
           <div>
-              <img 
-                src="/voxtea/previous.png" 
-                alt="Previous Button" 
-                className="skip-button-left" 
-                onClick={handlePrevious} 
-                disabled={currentPostIndex === 0}
-                style={{ position: 'relative', right: '4ch' }}
-              />
-              {/* Like button */}
-              <button 
-                onClick={() => handleLikes(currentPost._id, currentPostIndex)}
-                style={{
-                  backgroundColor: isLiked ? "red" : "grey",
-                }}
-              >
-                {isLiked ? "Unlike" : "Like"}
-              </button>
-              <img 
-                src="/voxtea/next.png" 
-                alt="Next Button" 
-                className="skip-button-right" 
-                onClick={handleNext} 
-                disabled={currentPostIndex === posts.length - 1}
-                style={{ position: 'relative', left: '4ch' }}
-              />
+            <img
+              src="/voxtea/previous.png"
+              alt="Previous Button"
+              className="skip-button-left"
+              onClick={handlePrevious}
+              disabled={currentPostIndex === 0}
+              style={{ position: 'relative', right: '4ch' }}
+            />
+            {/* Like button */}
+            <button
+              onClick={() => handleLikes(currentPost._id, currentPostIndex)}
+              style={{
+                backgroundColor: isLiked ? "red" : "grey",
+              }}
+            >
+              {isLiked ? "Unlike" : "Like"}
+            </button>
+            <img
+              src="/voxtea/next.png"
+              alt="Next Button"
+              className="skip-button-right"
+              onClick={handleNext}
+              disabled={currentPostIndex === posts.length - 1}
+              style={{ position: 'relative', left: '4ch' }}
+            />
           </div>
         </div>
       </div>
