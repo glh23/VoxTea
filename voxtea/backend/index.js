@@ -29,6 +29,8 @@ const createChat = require("./routes/chat/createChat");
 const getMessages = require("./routes/chat/getMessages");
 const sendMessage = require("./routes/chat/sendMessage");
 
+const spotify = require("./routes/spotify/setUpSpot");
+const spotifyUser = require("./routes/spotify/getUser");
 
 // Load environment variables
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
@@ -81,6 +83,9 @@ app.use("/api/posts/like", likePosts);
 app.use("/api/chat/create", createChat);
 app.use("/api/chat/get", getMessages);
 app.use("/api/chat/send", sendMessage);
+
+app.use("/api/spotify", spotify);
+app.use("/api/spotify/userInfo", spotifyUser);
 
 // WebSocket Events
 io.on("connection", (socket) => {

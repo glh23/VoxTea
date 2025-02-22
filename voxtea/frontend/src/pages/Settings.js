@@ -12,9 +12,11 @@ const Settings = () => {
   const [hashtags, setHashtags] = useState('');
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const { theme, toggleTheme } = useContext(ThemeContext);
+  const [spotifyInfo, setSpotifyInfo] = useState('');
 
   // Get token from session storage
   const token = sessionStorage.getItem("authToken");
+  const spotifyToken = localStorage.getItem("spotifyAccessToken")
 
   useEffect(() => {
     // Fetch the current profile image
@@ -41,6 +43,21 @@ const Settings = () => {
         console.error(err);
         console.log("Failed to load hashtags.");
       });
+
+    // Fetch the user's spotify data
+    axios.get('http://localhost:5000/api/spotify/userInfo', {
+      headers: {
+        Authorization: `Bearer ${spotifyToken}`,
+      },
+    })
+    .then((res) => {
+      console.log(res.data);
+      setSpotifyInfo(res.data);
+    })
+    .catch((err) => {
+      console.error(err);
+      console.log("Failed to load Spotify data.");
+    });
   }, [token]);
 
 
@@ -96,6 +113,32 @@ const Settings = () => {
     }
   };
 
+  const handleSpotify = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/api/spotify/login", {
+        method: "GET",
+      });
+  
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+  
+      const responseBody = await response.json(); // Parse the JSON response
+      const redirectURL = responseBody; // Since your backend returns the URL in JSON format
+  
+      console.log("Redirect URL:", redirectURL);
+  
+      if (redirectURL) {
+        window.location.href = redirectURL; // Manually redirect user
+      } else {
+        console.error("No redirect URL found.");
+        alert("Failed to connect to Spotify.");
+      }
+    } catch (err) {
+      console.error("Error connecting to Spotify:", err);
+      alert("Failed to connect to Spotify.");
+    }
+  };  
   const handleBack = () => {
     navigate('/Home');
   };
@@ -120,7 +163,7 @@ const Settings = () => {
       />
       <div style={{ textAlign: "center", margin: "20px" }}>
         <h1>Settings</h1>
-
+  
         <div className="setting">
           <h2>Profile Picture</h2>
           <img
@@ -138,7 +181,7 @@ const Settings = () => {
             <button onClick={handleUpload}>Upload</button>
           </div>
         </div>
-
+  
         <div className="setting">
           <h2>Hashtags</h2>
           <input
@@ -151,29 +194,42 @@ const Settings = () => {
           <button onClick={handleHashtagsSave}>Save Hashtags</button>
           <button onClick={handleOpenPopup}>View Hashtags</button>
         </div>
-
+  
         <div className="setting">
           <h2>{`Current Theme: ${theme.charAt(0).toUpperCase() + theme.slice(1)}`}</h2>
           <button onClick={toggleTheme}>
             Switch to {theme === "light" ? "Dark" : "Light"} Mode
           </button>
         </div>
-      </div>
-
-      {isPopupVisible && (
-        <div className="popup-overlay" onClick={handleClosePopup}>
-          <div className="popup-content" onClick={(e) => e.stopPropagation()}>
-            <button className="close-btn" onClick={handleClosePopup}>&times;</button>
-            <h2>Your Hashtags</h2>
-            <ul>
-              {hashtags.split(' ').map((tag, index) => (
-                <li key={index}>{tag}</li>
-              ))}
-            </ul>
-          </div>
+  
+        <div className="setting">
+          <h2>Spotify</h2>
+          {spotifyInfo ? (
+            <p>Logged in as: {spotifyInfo.display_name}</p> // Display username if spotifyInfo is available
+          ) : (
+            <p>Login to Spotify to improve what you see.</p> // Show the default message when not logged in
+          )}
+          <button onClick={handleSpotify}>
+            {spotifyInfo ? "Reconnect Spotify" : "Spotify Login"}  {/* Change button text accordingly */}
+          </button>
         </div>
-      )}
-
+  
+        {isPopupVisible && (
+          <div className="popup-overlay" onClick={handleClosePopup}>
+            <div className="popup-content" onClick={(e) => e.stopPropagation()}>
+              <button className="close-btn" onClick={handleClosePopup}>&times;</button>
+              <h2>Your Hashtags</h2>
+              <ul>
+                {hashtags.split(' ').map((tag, index) => (
+                  <li key={index}>{tag}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        )}
+  
+      </div> {/* This closing div is necessary for the main content div */}
+  
       <BottomBar />
     </div>
   );

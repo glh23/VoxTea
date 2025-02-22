@@ -72,9 +72,11 @@ router.get('/hashtags', async (req, res) => {
         console.log('Posts with matching hashtags: ', postsWithHashtags);
         res.status(200).json({ posts: postsWithHashtags });
     } catch (error) {
-        console.log(error);
+        console.log(error); 
         res.status(500).json({ message: 'Failed to fetch posts with matching hashtags.' });
     }
 });
+
+// https://accounts.spotify.com/authorize?client_id=66ee1cf9b4524fd4a6ce720c6209eb83&response_type=code&redirect_uri=http://localhost:5000/callback&scope=user-read-private%20user-read-email
 
 module.exports = router;

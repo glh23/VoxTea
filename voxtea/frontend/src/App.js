@@ -1,5 +1,5 @@
 import './App.css';
-import React from 'react';
+import React, { Component } from 'react';
 import { Routes, Route, Router } from 'react-router-dom';
 
 // Theme
@@ -16,9 +16,10 @@ import Home from './pages/Home';
 import Settings from './pages/Settings';
 import Account from './pages/Account';
 import UserSearch from './pages/UserSearch';
-import Profiles from './pages/otherAccounts'
-import Contacts from './pages/contacts'
-import Message from './pages/message'
+import Profiles from './pages/otherAccounts';
+import Contacts from './pages/contacts';
+import Message from './pages/message';
+import Callback from './components/callback'
 
 const App = () => (
     <ThemeProvider>
@@ -60,6 +61,11 @@ const App = () => (
             <Route path="/message/:chatId" element={
                 <TokenBackChat>
                     <Message/>
+                </TokenBackChat>
+            } />
+             <Route path="/callback" element={
+                <TokenBackChat>
+                    <Callback/>
                 </TokenBackChat>
             } />
         </Routes>
