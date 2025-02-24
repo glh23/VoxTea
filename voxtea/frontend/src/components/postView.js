@@ -3,13 +3,15 @@ import axios from "axios";
 import './postView.css';
 
 const PostList = () => {
-  const [posts, setPosts] = useState([]); // Array of posts
-  const [currentPostIndex, setCurrentPostIndex] = useState(0); // Current post index
-  const [loading, setLoading] = useState(true); // Loading state
-  const [error, setError] = useState(null); // Error state
-  const [likedList, setLikedList] = useState([]); // Array of like status (1 or 0)
-  const [postType, setPostType] = useState('recent'); // Type of posts to fetch
+  const [posts, setPosts] = useState([]); 
+  const [currentPostIndex, setCurrentPostIndex] = useState(0); 
+  const [loading, setLoading] = useState(true); 
+  const [error, setError] = useState(null); 
+  const [likedList, setLikedList] = useState([]);
+  const [postType, setPostType] = useState('recent');
   const token = sessionStorage.getItem("authToken");
+  const spotifyToken = localStorage.getItem("spotifyAccessToken")
+  const refreshToken = localStorage.getItem("spotifyRefreshToken")
 
   // Fetch posts from the backend
   const fetchPosts = async (type) => {
@@ -21,9 +23,25 @@ const PostList = () => {
         response = await axios.get("http://localhost:5000/api/posts/get/recent", {
           headers: { Authorization: `Bearer ${token}` }
         });
-      } else if (type === 'hashtags') {
+      } 
+      else if (type === 'hashtags') {
         response = await axios.get("http://localhost:5000/api/posts/get/hashtags", {
           headers: { Authorization: `Bearer ${token}` }
+        });
+      }
+      else if (type === 'spotify') {
+        // Request access token
+        try{
+        let tokens = await axios.post("http://localhost:5000/api/spotify/refresh", {
+          headers: { Authorization: `Bearer ${refreshToken}`}
+        });
+        localStorage.setItem('spotifyAccessToken', tokens.data.access_token);
+        }catch(error){
+          console.log("access")
+        }
+
+        response = await axios.get("http://localhost:5000/api/spotify/genres", {
+          headers: { Authorization: `Bearer ${token}`, Spotify: `Bearer ${spotifyToken}`}
         });
       }
       setPosts(response.data.posts || []);
@@ -43,7 +61,7 @@ const PostList = () => {
     try {
       // Call endpoint for the post
       const res = await axios.post(`http://localhost:5000/api/posts/like/${postId}`, {}, {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}`}
       });
       console.log("Like toggled:", res.data);
 
@@ -134,8 +152,9 @@ const PostList = () => {
           />
           <div className="dropdown" style={{ position: 'relative', top: '10px', right: '10px' }}>
             <select onChange={handlePostTypeChange} value={postType}>
-              <option value="recent">Recent Posts</option>
-              <option value="hashtags">Hashtag Posts</option>
+              <option value="recent">Recent</option>
+              <option value="hashtags">Interests</option>
+              <option value="spotify">Recommended</option>
             </select>
           </div>
           <h2>Player</h2>

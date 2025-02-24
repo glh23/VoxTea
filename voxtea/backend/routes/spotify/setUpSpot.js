@@ -16,6 +16,7 @@ router.get("/login", (req, res) => {
     client_id: CLIENT_ID,
     response_type: "code",
     redirect_uri: REDIRECT_URI,
+    scope: scope
   })}`;
   //res.redirect(authURL);
   res.status(200).json(authURL);
@@ -36,11 +37,38 @@ router.get("/callback", async (req, res) => {
     }), { headers: { "Content-Type": "application/x-www-form-urlencoded" } });
 
     accessToken = response.data.access_token;
-    res.json({ message: "Authenticated", access_token: accessToken });
+    refreshToken = response.data.refresh_token;
+    res.json({ message: "Authenticated", access_token: accessToken, refresh_token:refreshToken});
   } catch (error) {
     res.status(500).json({ error: "Failed to get token", details: error.response.data });
   }
 });
 
+// Function to refresh access token
+async function refreshAccessToken(refreshToken) {
+  const response = await axios.post('https://accounts.spotify.com/api/token', qs.stringify({
+    grant_type: 'refresh_token',
+    refresh_token: refreshToken,
+    client_id: CLIENT_ID,
+    client_secret: CLIENT_SECRET,
+  }), {
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+  });
+  return json({access_token: response.data.access_token, refresh_token: response.data.refresh_token});
+}
+
+// Route to refresh access token
+router.post('/refresh', async (req, res) => {
+  const { refreshToken } = req.body;
+  try {
+    const response = await refreshAccessToken(refreshToken);
+    return res.status(200).json(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Failed to refresh access token' });
+  }
+});
 
 module.exports = router;

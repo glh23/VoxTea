@@ -31,6 +31,7 @@ const sendMessage = require("./routes/chat/sendMessage");
 
 const spotify = require("./routes/spotify/setUpSpot");
 const spotifyUser = require("./routes/spotify/getUser");
+const getTopGenres = require("./routes/spotify/getTop");
 
 // Load environment variables
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
@@ -52,7 +53,7 @@ app.use(cors());
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: true })); 
 
-// Token Check Middleware (applies security globally)
+// Token Check Middleware
 app.use('/api', tokenCheck);
 
 // Connect to MongoDB
@@ -86,6 +87,7 @@ app.use("/api/chat/send", sendMessage);
 
 app.use("/api/spotify", spotify);
 app.use("/api/spotify/userInfo", spotifyUser);
+app.use("/api/spotify/genres", getTopGenres);
 
 // WebSocket Events
 io.on("connection", (socket) => {
