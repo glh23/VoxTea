@@ -46,28 +46,41 @@ router.get("/callback", async (req, res) => {
 
 // Function to refresh access token
 async function refreshAccessToken(refreshToken) {
-  const response = await axios.post('https://accounts.spotify.com/api/token', qs.stringify({
-    grant_type: 'refresh_token',
-    refresh_token: refreshToken,
-    client_id: CLIENT_ID,
-    client_secret: CLIENT_SECRET,
-  }), {
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
+  const response = await axios.post(
+    "https://accounts.spotify.com/api/token",
+    qs.stringify({
+      grant_type: "refresh_token",
+      refresh_token: refreshToken,
+      client_id: CLIENT_ID,
+      client_secret: CLIENT_SECRET,
+    }),
+    {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
   });
-  return json({access_token: response.data.access_token, refresh_token: response.data.refresh_token});
+
+  return {
+    access_token: response.data.access_token,
+    // Keeping the old if it doesn't work 
+    refresh_token: response.data.refresh_token || refreshToken, 
+  };
 }
 
 // Route to refresh access token
-router.post('/refresh', async (req, res) => {
+router.post("/refresh", async (req, res) => {
   const { refreshToken } = req.body;
+
+  if (!refreshToken) {
+    return res.status(400).json({ message: "Refresh token is required" });
+  }
+
   try {
     const response = await refreshAccessToken(refreshToken);
     return res.status(200).json(response);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Failed to refresh access token' });
+    console.error("Failed to refresh access token:", error.response?.data || error.message);
+    res.status(500).json({ message: "Failed to refresh access token", error: error.response?.data });
   }
 });
 

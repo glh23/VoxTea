@@ -30,20 +30,23 @@ const PostList = () => {
         });
       }
       else if (type === 'spotify') {
-        // Request access token
+        // Request access token for spotify api
         try{
-        let tokens = await axios.post("http://localhost:5000/api/spotify/refresh", {
-          headers: { Authorization: `Bearer ${refreshToken}`}
-        });
+          let tokens = await axios.post("http://localhost:5000/api/spotify/refresh", {
+            refresh_token: refreshToken  
+          }, {
+            headers: { Authorization: `Bearer ${token}` } 
+          });
         localStorage.setItem('spotifyAccessToken', tokens.data.access_token);
         }catch(error){
-          console.log("access")
+          console.log("Access Error: ", error)
         }
-
+        // Get the posts relating to spotify APIs genres
         response = await axios.get("http://localhost:5000/api/spotify/genres", {
           headers: { Authorization: `Bearer ${token}`, Spotify: `Bearer ${spotifyToken}`}
         });
       }
+      console.log(response);
       setPosts(response.data.posts || []);
       setLikedList(response.data.likedList || []);
       setCurrentPostIndex(0);
@@ -77,6 +80,7 @@ const PostList = () => {
 
   // Handle Next Post
   const handleNext = () => {
+    pause();
     if (currentPostIndex < posts.length - 1) {
       setCurrentPostIndex(prevIndex => prevIndex + 1);
     }
@@ -84,6 +88,7 @@ const PostList = () => {
 
   // Handle Previous Post
   const handlePrevious = () => {
+    pause();
     if (currentPostIndex > 0) {
       setCurrentPostIndex(prevIndex => prevIndex - 1);
     }

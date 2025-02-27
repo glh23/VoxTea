@@ -5,6 +5,9 @@ const fs = require('fs');
 const jwt = require('jsonwebtoken');
 const Post = require('../../models/Post');
 const User = require('../../models/User');
+const { spawn } = require("child_process");
+const { exec } = require("child_process");
+
 
 const router = express.Router();
 
@@ -49,50 +52,83 @@ const upload = multer({
   limits: { fileSize: 10 * 1024 * 1024 },
 });
 
-// Endpoint for the new posts
+// Function to apply effects using SoX
+async function applyEffects(inputFile, outputFile, effect) {
+  return new Promise((resolve, reject) => {
+    let fullEffect = ''
+
+    if(effect == 'Reverb'){fullEffect = 'gain -2 reverb 40 50 40'}
+    if(effect == 'Flanger'){fullEffect = 'gain -2 flanger 0 2 -25 70 0.5 triangle 25 lin'}
+    if(effect == 'Telephone'){fullEffect = 'gain -2 highpass 500 lowpass 3000 compand 0.3,1 6:-70,-60,-20 -5 -90 0.2 reverb 20'}
+    // Construct the SoX command.
+    // sox "in.wav" "out.wav" gain -2 reverb 40 50 40
+
+    const command = `sox "${inputFile}" "${outputFile}" ${fullEffect}`;
+    exec(command, (error, stdout, stderr) => {
+      if (error) {
+        console.error("SoX error:", stderr);
+        return reject(error);
+      }
+      resolve(outputFile);
+    });
+  });
+}
+// Route to create a new post
 router.post('/', upload.single('audioFile'), async (req, res) => {
-  const token = req.headers.authorization;
-  const { description } = req.body;
-
-  if (!token) {
-    return res.status(401).json({ message: 'Unauthorized.' });
-  }
-
   try {
-    const decoded = jwt.verify(token, JWT_SECRET );
-    const userId = decoded.id;
+    // Validate token
+    const token = req.headers.authorization?.split(' ')[1];
+    console.log("token: ", token)
+    if (!token) {
+      return res.status(401).json({ message: 'No token provided.' });
+    }
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const currentUserId = decoded.id;
 
-    if (!req.file) {
+    const { description, effect } = req.body;
+    const audioFile = req.file;
+    if (!audioFile) {
       return res.status(400).json({ message: 'Audio file is required.' });
     }
 
+    // Set up file paths
     const now = new Date();
     const yearMonthDir = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+    // The file uploaded by multer
+    const inputFilePath = path.join(__dirname, '..', '..', 'uploads', 'audioFiles', yearMonthDir, audioFile.filename);
+    // Change extension to .wav (you can also append a suffix to distinguish processed files)
+    const outputFileName = `${yearMonthDir}_${audioFile.filename.replace(/\.[^/.]+$/, '.wav')}`;
+    const outputFilePath = path.join(__dirname, '..', '..', 'uploads', 'audioFiles', outputFileName);
 
-    // Get the hashtags from the description
+    // Extract hashtags from the description (optional)
     const hashtags = description.match(/#\w+/g) || [];
 
-    // Create new post
+    // If an effect is provided, apply it using SoX.
+    // Otherwise, just copy the file.
+    if (effect) {
+      await applyEffects(inputFilePath, outputFilePath, effect);
+    } else {
+      // Copy file if no effect is applied
+      fs.copyFileSync(inputFilePath, outputFilePath);
+    }
+
+    // Create new post using the processed file path
     const newPost = new Post({
       description,
-      audioFile: `/uploads/audioFiles/${yearMonthDir}/${req.file.filename}`,
-      userId,
-      hashtags: hashtags.map(tag => tag.substring(1)), // Remove the #
+      audioFile: `/uploads/audioFiles/${outputFileName}`,
+      userId: currentUserId,
+      hashtags: hashtags.map(tag => tag.substring(1)) // Remove the '#' from each tag
     });
 
-    console.log(newPost);
-
-    // Save to the database
     await newPost.save();
 
-    // Add the post ID to the user's posts array
-    await User.findByIdAndUpdate(userId, { $push: { posts: newPost._id } });
+    // Update the user to include this new post
+    await User.findByIdAndUpdate(currentUserId, { $push: { posts: newPost._id } });
 
     console.log("Post created successfully!");
-
     res.status(201).json({ message: 'Post created successfully!', post: newPost });
   } catch (error) {
-    console.error(error);
+    console.error("Error creating post:", error);
     res.status(500).json({ message: 'Failed to create post.' });
   }
 });

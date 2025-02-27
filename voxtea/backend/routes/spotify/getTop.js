@@ -4,6 +4,7 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 const JWT_SECRET = process.env.JWT_SECRET;
 const User = require('../../models/User');
+const Post = require('../../models/Post');
 
 // Function to fetch user's top genres from Spotify
 async function fetchTopGenres(accessToken) {
@@ -43,7 +44,14 @@ router.get('/', async (req, res) => {
     const topGenres = await fetchTopGenres(spotifyAccessToken);
 
     console.log("top genres: ",topGenres);
-    res.status(200).json({ genres: topGenres });
+
+    const matchingPosts = await Post.find({ 
+      //hashtags: { $in: topGenres.map(genre => `#${genre.replace(/\s+/g, '')}`) }
+      hashtags: { $in: topGenres.map(genre => `${genre.replace(/\s+/g, '')}`) }
+    });
+
+    console.log("Found matching posts:", matchingPosts.length);
+    res.status(200).json({ posts: matchingPosts });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: 'Failed to fetch top genres.' });

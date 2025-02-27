@@ -19,7 +19,7 @@ const PostForm = () => {
             console.log(token);
             await axios.post('http://localhost:5000/api/posts/create', formData, {
                 headers: {
-                    Authorization: token,
+                    Authorization: `Bearer ${token}`,
                     'Content-Type': 'multipart/form-data' },
             });
             alert('Post created!');
@@ -55,7 +55,7 @@ const PostForm = () => {
                 </button>
                 <div className="dropdown-content">
                     <div onClick={() => handleEffectSelect('Reverb')}>Reverb</div>
-                    <div onClick={() => handleEffectSelect('Echo')}>Echo</div>
+                    <div onClick={() => handleEffectSelect('Telephone')}>Telephone</div>
                     <div onClick={() => handleEffectSelect('Flanger')}>Flanger</div>
                     <div onClick={() => handleEffectSelect('Distortion')}>Distortion</div>
                 </div>
