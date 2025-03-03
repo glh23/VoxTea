@@ -77,6 +77,24 @@ router.get('/hashtags', async (req, res) => {
     }
 });
 
+router.get('/top', async (req, res) => {
+    try {
+        const posts = await Post.find()
+            .sort({ likes: -1 })  // Sort by likes array length in descending order
+            .limit(100)            // Limit to top 100
+            .exec();
+
+        if (!posts.length) {
+            return res.status(404).json({ message: 'No posts found.' });
+        }
+
+        res.status(200).json({posts: posts});
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Failed to fetch the top 100 posts with the most likes.' });
+    }
+});
+
 // https://accounts.spotify.com/authorize?client_id=66ee1cf9b4524fd4a6ce720c6209eb83&response_type=code&redirect_uri=http://localhost:5000/callback&scope=user-read-private%20user-read-email
 
 module.exports = router;

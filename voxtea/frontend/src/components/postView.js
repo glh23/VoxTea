@@ -29,6 +29,11 @@ const PostList = () => {
           headers: { Authorization: `Bearer ${token}` }
         });
       }
+      else if (type === 'top') {
+        response = await axios.get("http://localhost:5000/api/posts/get/top", {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+      }
       else if (type === 'spotify') {
         // Request access token for spotify api
         try{
@@ -158,6 +163,7 @@ const PostList = () => {
           <div className="dropdown" style={{ position: 'relative', top: '10px', right: '10px' }}>
             <select onChange={handlePostTypeChange} value={postType}>
               <option value="recent">Recent</option>
+              <option value="top">Top</option>
               <option value="hashtags">Interests</option>
               <option value="spotify">Recommended</option>
             </select>
