@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import './postView.css';
 
@@ -12,6 +12,7 @@ const PostList = () => {
   const token = sessionStorage.getItem("authToken");
   const spotifyToken = localStorage.getItem("spotifyAccessToken")
   const refreshToken = localStorage.getItem("spotifyRefreshToken")
+  const audioRef = useRef(null);
 
   // Fetch posts from the backend
   const fetchPosts = async (type) => {
@@ -115,6 +116,39 @@ const PostList = () => {
     fetchPosts(postType);
   }, []);
 
+  useEffect(() => {
+    const audioElement = audioRef.current;
+
+    const handleTimeUpdate = () => {
+      if (audioElement) {
+        const rangeInput = document.getElementById('myRange');
+        if (rangeInput) {
+          const percentage = (audioElement.currentTime / audioElement.duration) * 100;
+          rangeInput.value = percentage.toString();
+        }
+      }
+    };
+
+    if (audioElement) {
+      audioElement.addEventListener('timeupdate', handleTimeUpdate);
+    }
+
+    return () => {
+      if (audioElement) {
+        audioElement.removeEventListener('timeupdate', handleTimeUpdate);
+      }
+    };
+  }, [currentPostIndex]);
+
+  const handleRangeInputChange = () => {
+    const rangeInput = document.getElementById('myRange');
+    if (rangeInput && audioRef.current) {
+      const audioElement = audioRef.current;
+      const newTime = (parseFloat(rangeInput.value) / 100) * audioElement.duration;
+      audioElement.currentTime = newTime;
+    }
+  };
+
   if (error) {
     return (
       <div>
@@ -138,16 +172,24 @@ const PostList = () => {
   const isLiked = likedList[currentPostIndex] === 1;
 
   const play = () => {
-    document.getElementById('player').play();
+    if (audioRef.current) {
+      audioRef.current.play();
+    }
   };
   const pause = () => {
-    document.getElementById('player').pause();
+    if (audioRef.current) {
+      audioRef.current.pause();
+    }
   };
   const volDown = () => {
-    document.getElementById('player').volume -= 0.1;
+    if (audioRef.current) {
+      audioRef.current.volume -= 0.1;
+    }
   };
   const volUp = () => {
-    document.getElementById('player').volume += 0.1;
+    if (audioRef.current) {
+      audioRef.current.volume += 0.1;
+    }
   };
 
   return (
@@ -173,11 +215,19 @@ const PostList = () => {
           <div className="postInfo">
             <p>{currentPost.description}</p>
             {/* Cross origin allows the audio to play in firefox */}
-            <audio id="player" crossOrigin="anonymous" key={currentPost._id}>
+            <audio id="player" crossOrigin="anonymous" key={currentPost._id} ref={audioRef}>
               <source src={`http://localhost:5000${currentPost.audioFile}`} type="audio/mp3" />
               Your browser does not support the audio element.
             </audio>
-            <input id="myRange" className="slider" defaultValue="0" max="100" min="0" type="range" />
+            <input
+              id="myRange"
+              className="slider"
+              type="range"
+              defaultValue="0"
+              max="100"
+              min="0"
+              onInput={handleRangeInputChange}
+            />
             <div>
               <button onClick={play}>Play</button>
               <button onClick={pause}>Pause</button>
