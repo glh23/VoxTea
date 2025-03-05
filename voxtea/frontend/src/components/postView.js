@@ -111,43 +111,45 @@
 //     fetchPosts(event.target.value);
 //   };
 
-//   // Fetch posts on mount
-//   useEffect(() => {
-//     fetchPosts(postType);
-//   }, []);
-
+//   const [progress, setProgress] = useState(0);
+//   const [isPlaying, setIsPlaying] = useState(false);
+  
 //   useEffect(() => {
 //     const audioElement = audioRef.current;
-
+  
 //     const handleTimeUpdate = () => {
-//       if (audioElement) {
-//         const rangeInput = document.getElementById('myRange');
-//         if (rangeInput) {
-//           const percentage = (audioElement.currentTime / audioElement.duration) * 100;
-//           rangeInput.value = percentage.toString();
+//       if (audioElement && !isNaN(audioElement.duration) && audioElement.duration > 0) {
+//         const percentage = (audioElement.currentTime / audioElement.duration) * 100;
+//         if (isPlaying) {
+//           setProgress(percentage); // Update progress only if playing
 //         }
 //       }
 //     };
-
+  
+//     const handlePlay = () => setIsPlaying(true);
+//     const handlePause = () => setIsPlaying(false);
+  
 //     if (audioElement) {
-//       audioElement.addEventListener('timeupdate', handleTimeUpdate);
+//       audioElement.addEventListener("timeupdate", handleTimeUpdate);
+//       audioElement.addEventListener("play", handlePlay);
+//       audioElement.addEventListener("pause", handlePause);
 //     }
-
+  
 //     return () => {
 //       if (audioElement) {
-//         audioElement.removeEventListener('timeupdate', handleTimeUpdate);
+//         audioElement.removeEventListener("timeupdate", handleTimeUpdate);
+//         audioElement.removeEventListener("play", handlePlay);
+//         audioElement.removeEventListener("pause", handlePause);
 //       }
 //     };
-//   }, [currentPostIndex]);
-
-//   const handleRangeInputChange = () => {
-//     const rangeInput = document.getElementById('myRange');
-//     if (rangeInput && audioRef.current) {
-//       const audioElement = audioRef.current;
-//       const newTime = (parseFloat(rangeInput.value) / 100) * audioElement.duration;
-//       audioElement.currentTime = newTime;
-//     }
+//   }, [currentPostIndex, isPlaying]); // Track play state
+  
+//   const handleRangeInputChange = (event) => {
+//     const newTime = (parseFloat(event.target.value) / 100) * audioRef.current.duration;
+//     audioRef.current.currentTime = newTime;
+//     setProgress(parseFloat(event.target.value));
 //   };
+  
 
 //   if (error) {
 //     return (
@@ -174,20 +176,23 @@
 //   const play = () => {
 //     if (audioRef.current) {
 //       audioRef.current.play();
+//       setIsPlaying(true); // Track playing state
 //     }
 //   };
+  
 //   const pause = () => {
 //     if (audioRef.current) {
 //       audioRef.current.pause();
+//       setIsPlaying(false); // Track pause state
 //     }
 //   };
 //   const volDown = () => {
-//     if (audioRef.current) {
+//     if (audioRef.current && audioRef.current.volume > 0.1) {
 //       audioRef.current.volume -= 0.1;
 //     }
 //   };
 //   const volUp = () => {
-//     if (audioRef.current) {
+//     if (audioRef.current && audioRef.current.volume < 1) {
 //       audioRef.current.volume += 0.1;
 //     }
 //   };
@@ -223,10 +228,10 @@
 //               id="myRange"
 //               className="slider"
 //               type="range"
-//               defaultValue="0"
-//               max="100"
 //               min="0"
-//               onInput={handleRangeInputChange}
+//               max="100"
+//               value={progress} // Controlled by React state
+//               onChange={handleRangeInputChange}
 //             />
 //             <div>
 //               <button onClick={play}>Play</button>
@@ -269,6 +274,8 @@
 // };
 
 // export default PostList;
+
+
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import './postView.css';
@@ -284,6 +291,9 @@ const PostList = () => {
   const spotifyToken = localStorage.getItem("spotifyAccessToken")
   const refreshToken = localStorage.getItem("spotifyRefreshToken")
   const audioRef = useRef(null);
+
+  const [progress, setProgress] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   // Fetch posts from the backend
   const fetchPosts = async (type) => {
@@ -382,12 +392,9 @@ const PostList = () => {
     fetchPosts(event.target.value);
   };
 
-  const [progress, setProgress] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(false);
-  
   useEffect(() => {
     const audioElement = audioRef.current;
-  
+
     const handleTimeUpdate = () => {
       if (audioElement && !isNaN(audioElement.duration) && audioElement.duration > 0) {
         const percentage = (audioElement.currentTime / audioElement.duration) * 100;
@@ -396,16 +403,16 @@ const PostList = () => {
         }
       }
     };
-  
+
     const handlePlay = () => setIsPlaying(true);
     const handlePause = () => setIsPlaying(false);
-  
+
     if (audioElement) {
       audioElement.addEventListener("timeupdate", handleTimeUpdate);
       audioElement.addEventListener("play", handlePlay);
       audioElement.addEventListener("pause", handlePause);
     }
-  
+
     return () => {
       if (audioElement) {
         audioElement.removeEventListener("timeupdate", handleTimeUpdate);
@@ -414,13 +421,12 @@ const PostList = () => {
       }
     };
   }, [currentPostIndex, isPlaying]); // Track play state
-  
+
   const handleRangeInputChange = (event) => {
     const newTime = (parseFloat(event.target.value) / 100) * audioRef.current.duration;
     audioRef.current.currentTime = newTime;
     setProgress(parseFloat(event.target.value));
   };
-  
 
   if (error) {
     return (
@@ -444,24 +450,34 @@ const PostList = () => {
   const currentPost = posts[currentPostIndex];
   const isLiked = likedList[currentPostIndex] === 1;
 
+  const togglePlayPause = () => {
+    if (isPlaying) {
+      pause();
+    } else {
+      play();
+    }
+  };
+
   const play = () => {
     if (audioRef.current) {
       audioRef.current.play();
       setIsPlaying(true); // Track playing state
     }
   };
-  
+
   const pause = () => {
     if (audioRef.current) {
       audioRef.current.pause();
       setIsPlaying(false); // Track pause state
     }
   };
+
   const volDown = () => {
     if (audioRef.current && audioRef.current.volume > 0.1) {
       audioRef.current.volume -= 0.1;
     }
   };
+
   const volUp = () => {
     if (audioRef.current && audioRef.current.volume < 1) {
       audioRef.current.volume += 0.1;
@@ -505,8 +521,7 @@ const PostList = () => {
               onChange={handleRangeInputChange}
             />
             <div>
-              <button onClick={play}>Play</button>
-              <button onClick={pause}>Pause</button>
+              <button onClick={togglePlayPause}>{isPlaying ? "Pause" : "Play"}</button>
               <button onClick={volUp}>Vol +</button>
               <button onClick={volDown}>Vol -</button>
             </div>
