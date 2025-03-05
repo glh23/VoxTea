@@ -521,9 +521,9 @@ const PostList = () => {
               onChange={handleRangeInputChange}
             />
             <div>
-              <button onClick={togglePlayPause}>{isPlaying ? "Pause" : "Play"}</button>
               <button onClick={volUp}>Vol +</button>
               <button onClick={volDown}>Vol -</button>
+              <button onClick={togglePlayPause}>{isPlaying ? "Pause" : "Play"}</button>
             </div>
           </div>
           <div>
