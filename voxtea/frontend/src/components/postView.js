@@ -3,10 +3,10 @@ import axios from "axios";
 import './postView.css';
 
 const PostList = () => {
-  const [posts, setPosts] = useState([]); 
-  const [currentPostIndex, setCurrentPostIndex] = useState(0); 
-  const [loading, setLoading] = useState(true); 
-  const [error, setError] = useState(null); 
+  const [posts, setPosts] = useState([]);
+  const [currentPostIndex, setCurrentPostIndex] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [likedList, setLikedList] = useState([]);
   const [postType, setPostType] = useState('recent');
   const token = sessionStorage.getItem("authToken");
@@ -23,7 +23,7 @@ const PostList = () => {
         response = await axios.get("http://localhost:5000/api/posts/get/recent", {
           headers: { Authorization: `Bearer ${token}` }
         });
-      } 
+      }
       else if (type === 'hashtags') {
         response = await axios.get("http://localhost:5000/api/posts/get/hashtags", {
           headers: { Authorization: `Bearer ${token}` }
@@ -38,9 +38,9 @@ const PostList = () => {
         // Request access token for spotify api
         try{
           let tokens = await axios.post("http://localhost:5000/api/spotify/refresh", {
-            refresh_token: refreshToken  
+            refresh_token: refreshToken
           }, {
-            headers: { Authorization: `Bearer ${token}` } 
+            headers: { Authorization: `Bearer ${token}` }
           });
         localStorage.setItem('spotifyAccessToken', tokens.data.access_token);
         }catch(error){
@@ -173,7 +173,7 @@ const PostList = () => {
           <div className="postInfo">
             <p>{currentPost.description}</p>
             {/* Cross origin allows the audio to play in firefox */}
-            <audio id="player" crossOrigin="anonymous">
+            <audio id="player" crossOrigin="anonymous" key={currentPost._id}>
               <source src={`http://localhost:5000${currentPost.audioFile}`} type="audio/mp3" />
               Your browser does not support the audio element.
             </audio>
