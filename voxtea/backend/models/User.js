@@ -10,7 +10,8 @@ const UserSchema = new mongoose.Schema({
   following: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   followers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   chats: [{ type: mongoose.Schema.Types.ObjectId, ref: "Chat" }],
-  interestedHashtags: [{ type: String }] 
+  interestedHashtags: [{ type: String }],
+  clout: { type: Number, default: 0 }
 });
 
 // Hash password before saving

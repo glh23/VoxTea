@@ -15,10 +15,23 @@
     border: 3px solid var(--form-border);
     border-radius: 15px;
     background-color: var(--background);
+    color: var(--text);
     max-width: 50%;
     margin: auto;
 }
 
+
+.volume-button{
+  max-height: 6ch;
+  max-width: 6ch;
+  margin: 10px 10px;
+}
+
+.like-button{
+  max-height: 6ch;
+  max-width: 6ch;
+  margin: 10px 10px;
+}
 
 /* Skip buttons */
 @keyframes moveLeft {

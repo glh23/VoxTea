@@ -14,6 +14,9 @@
 //   const refreshToken = localStorage.getItem("spotifyRefreshToken")
 //   const audioRef = useRef(null);
 
+//   const [progress, setProgress] = useState(0);
+//   const [isPlaying, setIsPlaying] = useState(false);
+
 //   // Fetch posts from the backend
 //   const fetchPosts = async (type) => {
 //     setLoading(true);
@@ -111,12 +114,9 @@
 //     fetchPosts(event.target.value);
 //   };
 
-//   const [progress, setProgress] = useState(0);
-//   const [isPlaying, setIsPlaying] = useState(false);
-  
 //   useEffect(() => {
 //     const audioElement = audioRef.current;
-  
+
 //     const handleTimeUpdate = () => {
 //       if (audioElement && !isNaN(audioElement.duration) && audioElement.duration > 0) {
 //         const percentage = (audioElement.currentTime / audioElement.duration) * 100;
@@ -125,16 +125,16 @@
 //         }
 //       }
 //     };
-  
+
 //     const handlePlay = () => setIsPlaying(true);
 //     const handlePause = () => setIsPlaying(false);
-  
+
 //     if (audioElement) {
 //       audioElement.addEventListener("timeupdate", handleTimeUpdate);
 //       audioElement.addEventListener("play", handlePlay);
 //       audioElement.addEventListener("pause", handlePause);
 //     }
-  
+
 //     return () => {
 //       if (audioElement) {
 //         audioElement.removeEventListener("timeupdate", handleTimeUpdate);
@@ -143,13 +143,12 @@
 //       }
 //     };
 //   }, [currentPostIndex, isPlaying]); // Track play state
-  
+
 //   const handleRangeInputChange = (event) => {
 //     const newTime = (parseFloat(event.target.value) / 100) * audioRef.current.duration;
 //     audioRef.current.currentTime = newTime;
 //     setProgress(parseFloat(event.target.value));
 //   };
-  
 
 //   if (error) {
 //     return (
@@ -173,24 +172,34 @@
 //   const currentPost = posts[currentPostIndex];
 //   const isLiked = likedList[currentPostIndex] === 1;
 
+//   const togglePlayPause = () => {
+//     if (isPlaying) {
+//       pause();
+//     } else {
+//       play();
+//     }
+//   };
+
 //   const play = () => {
 //     if (audioRef.current) {
 //       audioRef.current.play();
 //       setIsPlaying(true); // Track playing state
 //     }
 //   };
-  
+
 //   const pause = () => {
 //     if (audioRef.current) {
 //       audioRef.current.pause();
 //       setIsPlaying(false); // Track pause state
 //     }
 //   };
+
 //   const volDown = () => {
 //     if (audioRef.current && audioRef.current.volume > 0.1) {
 //       audioRef.current.volume -= 0.1;
 //     }
 //   };
+
 //   const volUp = () => {
 //     if (audioRef.current && audioRef.current.volume < 1) {
 //       audioRef.current.volume += 0.1;
@@ -234,10 +243,9 @@
 //               onChange={handleRangeInputChange}
 //             />
 //             <div>
-//               <button onClick={play}>Play</button>
-//               <button onClick={pause}>Pause</button>
 //               <button onClick={volUp}>Vol +</button>
 //               <button onClick={volDown}>Vol -</button>
+//               <button onClick={togglePlayPause}>{isPlaying ? "Pause" : "Play"}</button>
 //             </div>
 //           </div>
 //           <div>
@@ -521,9 +529,21 @@ const PostList = () => {
               onChange={handleRangeInputChange}
             />
             <div>
-              <button onClick={volUp}>Vol +</button>
-              <button onClick={volDown}>Vol -</button>
               <button onClick={togglePlayPause}>{isPlaying ? "Pause" : "Play"}</button>
+              <img
+                src="/voxtea/volume-down.png"
+                alt="Volume Down"
+                className="volume-button"
+                onClick={volDown}
+                style={{ cursor: 'pointer' }}
+              />
+              <img
+                src="/voxtea/volume-up.png"
+                alt="Volume Up"
+                className="volume-button"
+                onClick={volUp}
+                style={{ cursor: 'pointer' }}
+              />
             </div>
           </div>
           <div>
@@ -535,15 +555,14 @@ const PostList = () => {
               disabled={currentPostIndex === 0}
               style={{ position: 'relative', right: '4ch' }}
             />
-            {/* Like button */}
-            <button
+            {/* Like button with icons */}
+            <img
+              src={isLiked ? "/voxtea/love(2).png" : "/voxtea/love.png"}
+              alt={isLiked ? "Unlike" : "Like"}
+              className="like-button"
               onClick={() => handleLikes(currentPost._id, currentPostIndex)}
-              style={{
-                backgroundColor: isLiked ? "red" : "grey",
-              }}
-            >
-              {isLiked ? "Unlike" : "Like"}
-            </button>
+              style={{ cursor: 'pointer' }}
+            />
             <img
               src="/voxtea/next.png"
               alt="Next Button"
