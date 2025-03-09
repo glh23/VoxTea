@@ -13,31 +13,29 @@ const UserProfile = () => {
 
   useEffect(() => {
     const fetchUserProfile = async () => {
-      
       try {
         const token = sessionStorage.getItem("authToken");
-  
         const response = await fetch(`http://localhost:5000/api/users/profile/get/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-  
+
         if (response.ok) {
           const data = await response.json();
           setUser(data);
           console.log('Fetched user data:', data); // Log user data
-  
+
           // Get logged-in user info
           const currentUserResponse = await fetch(`http://localhost:5000/api/users/account/get`, {
             headers: { Authorization: `Bearer ${token}` },
           });
-  
+
           if (currentUserResponse.ok) {
             const currentUserData = await currentUserResponse.json();
             setCurrentUser(currentUserData);
-            console.log('Fetched current user data:', currentUserData); // Log current user data
-  
-            // Check if the logged-in user is already following this profile
-            setIsFollowing(currentUserData.following.includes(id));
+
+            // Check if the logged in user is already following this profile
+            const isFollowingUser = currentUserData.following.some(followedUser => followedUser._id === id);
+            setIsFollowing(isFollowingUser);
           }
         } else {
           const errorMessage = await response.json();
@@ -50,9 +48,9 @@ const UserProfile = () => {
         setLoading(false);
       }
     };
-  
+
     fetchUserProfile();
-  }, [id]);  
+  }, [id]);
 
   const handleFollowToggle = async () => {
     try {
@@ -111,16 +109,14 @@ const UserProfile = () => {
           alt={`${user.username}'s avatar`}
           style={{ width: "150px", height: "150px", borderRadius: "50%", marginBottom: "20px" }}
           onError={(e) => {
-            e.target.onerror = null; 
+            e.target.onerror = null;
             e.target.src = "/user.png";
           }}
         />
         <div>
-     
           <button onClick={handleFollowToggle} style={{ padding: "10px", margin: "10px" }}>
             {isFollowing ? "Unfollow" : "Follow"}
           </button>
-        
         </div>
 
         <h2>Posts</h2>
@@ -147,5 +143,3 @@ const UserProfile = () => {
 };
 
 export default UserProfile;
-
-

@@ -4,6 +4,20 @@ const User = require('../../models/User');
 const jwt = require('jsonwebtoken');
 const JWT_SECRET = process.env.JWT_SECRET ; 
 
+const calculateClout = async (userId) => {
+    const user = await User.findById(userId).populate('followers').populate('posts');
+    if (!user) return;
+  
+    let clout = user.followers.length + user.posts.length;
+    user.posts.forEach(post => {
+      clout += post.likes.length;
+    });
+  
+    user.clout = clout;
+    await user.save();
+  };
+  
+
 // Follow a user
 router.post('/follow/:id', async (req, res) => {
     try {
@@ -43,6 +57,8 @@ router.post('/follow/:id', async (req, res) => {
 
             console.log("save");
 
+            calculateClout(targetUserId)
+
             return res.status(200).json({ message: "User followed successfully." });
         } else {
             return res.status(400).json({ message: "You are already following this user." });
@@ -80,6 +96,8 @@ router.post('/unfollow/:id', async (req, res) => {
 
         await currentUser.save();
         await targetUser.save();
+
+        calculateClout(targetUserId);
 
         res.status(200).json({ message: "User unfollowed successfully." });
     } catch (error) {

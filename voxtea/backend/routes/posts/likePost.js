@@ -4,6 +4,20 @@ const Post = require("../../models/Post");
 const jwt = require("jsonwebtoken");
 const JWT_SECRET = process.env.JWT_SECRET;
 
+const calculateClout = async (userId) => {
+  const user = await User.findById(userId).populate('followers').populate('posts');
+  if (!user) return;
+
+  let clout = user.followers.length + user.posts.length;
+  user.posts.forEach(post => {
+    clout += post.likes.length;
+  });
+
+  user.clout = clout;
+  await user.save();
+};
+
+
 router.post("/:postId", async (req, res) => {
   try {
     const token = req.headers.authorization?.split(" ")[1];
