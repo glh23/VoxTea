@@ -3,6 +3,7 @@ const router = express.Router();
 const Post = require("../../models/Post");
 const jwt = require("jsonwebtoken");
 const JWT_SECRET = process.env.JWT_SECRET;
+const User = require("../../models/User");
 
 const calculateClout = async (userId) => {
   const user = await User.findById(userId).populate('followers').populate('posts');
@@ -16,7 +17,6 @@ const calculateClout = async (userId) => {
   user.clout = clout;
   await user.save();
 };
-
 
 router.post("/:postId", async (req, res) => {
   try {
