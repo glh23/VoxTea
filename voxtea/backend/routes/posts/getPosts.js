@@ -80,8 +80,8 @@ router.get('/hashtags', async (req, res) => {
 router.get('/top', async (req, res) => {
     try {
         const posts = await Post.find()
-            .sort({ likes: -1 })  // Sort by likes array length in descending order
-            .limit(100)            // Limit to top 100
+            .sort({ likes: -1 }) 
+            .limit(100)            
             .exec();
 
         if (!posts.length) {

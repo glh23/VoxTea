@@ -39,16 +39,18 @@ router.post("/:postId", async (req, res) => {
     const likeIndex = post.likes.indexOf(currentUserId);
     let action;
     if (likeIndex === -1) {
-      // Not liked yet, add like
+      // Not liked yet then add like
       post.likes.push(currentUserId);
       action = "liked";
     } else {
-      // Already liked, remove like
+      // Already liked then remove like
       post.likes.splice(likeIndex, 1);
       action = "unliked";
     }
     
     await post.save();
+
+    calculateClout(post.userId);
     
     // Return the updated like count and the array of user IDs
     res.status(200).json({ 

@@ -176,7 +176,7 @@ input:hover{
 }
 
 .popup-content {
-  background-color: #fff5dc;
+  background-color: var(--background);
   padding: 20px;
   border-radius: 8px;
   width: 80%;
