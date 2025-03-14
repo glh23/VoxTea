@@ -510,13 +510,20 @@ const PostList = () => {
     }
   };
 
-  const volDown = () => {
+  const handleBounce = (e) => {
+    e.target.classList.add("bounce");
+    setTimeout(() => e.target.classList.remove("bounce"), 400); // Remove class after animation ends
+  };
+
+  const volDown = (e) => {
+    handleBounce(e);
     if (audioRef.current && audioRef.current.volume > 0.1) {
       audioRef.current.volume -= 0.1;
     }
   };
 
-  const volUp = () => {
+  const volUp = (e) => {
+    handleBounce(e);
     if (audioRef.current && audioRef.current.volume < 1) {
       audioRef.current.volume += 0.1;
     }
@@ -563,11 +570,11 @@ const PostList = () => {
                 src="/voxtea/volume-down.png"
                 alt="Volume Down"
                 className="volume-button"
-                onClick={volDown}
+                onClick={(e) => volDown(e)}
                 style={{ cursor: 'pointer' }}
               />
               <img
-                src={isLiked ? "/voxtea/love(2).png" : "/voxtea/love.png"}
+                src={isLiked ? "/voxtea/favourite(1).png" : "/voxtea/favourite.png"}
                 alt={isLiked ? "Unlike" : "Like"}
                 className="like-button"
                 onClick={() => handleLikes(currentPost._id, currentPostIndex)}
@@ -577,7 +584,7 @@ const PostList = () => {
                 src="/voxtea/volume-up.png"
                 alt="Volume Up"
                 className="volume-button"
-                onClick={volUp}
+                onClick={(e) => volUp(e)}
                 style={{ cursor: 'pointer' }}
               />
             </div>

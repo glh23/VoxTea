@@ -21,11 +21,24 @@
 }
 
 
-.volume-button{
+@keyframes bounce {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-7px); } /* Move up */
+  100% { transform: translateY(0); } /* Return to original position */
+}
+
+.volume-button {
   max-height: 6ch;
   max-width: 6ch;
   margin: 10px 10px;
+  cursor: pointer;
+  transition: transform 0.1s ease-in-out;
 }
+
+.volume-button.bounce {
+  animation: bounce 0.1s ease-out;
+}
+
 
 .like-button{
   max-height: 6ch;
