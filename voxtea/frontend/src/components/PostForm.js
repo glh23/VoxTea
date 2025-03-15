@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import axios from 'axios';
 import './PostForm.css';
 
@@ -6,6 +6,9 @@ const PostForm = () => {
     const [description, setDescription] = useState('');
     const [audioFile, setAudioFile] = useState(null);
     const [selectedEffect, setSelectedEffect] = useState('');
+    const [recording, setRecording] = useState(false);
+    const mediaRecorderRef = useRef(null);
+    const audioChunksRef = useRef([]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -16,11 +19,11 @@ const PostForm = () => {
 
         try {
             const token = sessionStorage.getItem('authToken');
-            console.log(token);
             await axios.post('http://localhost:5000/api/posts/create', formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
-                    'Content-Type': 'multipart/form-data' },
+                    'Content-Type': 'multipart/form-data'
+                },
             });
             alert('Post created!');
         } catch (error) {
@@ -32,8 +35,39 @@ const PostForm = () => {
         setSelectedEffect(effect);
     };
 
+    const startRecording = async () => {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            const mediaRecorder = new MediaRecorder(stream);
+            mediaRecorderRef.current = mediaRecorder;
+            audioChunksRef.current = [];
+
+            mediaRecorder.ondataavailable = (event) => {
+                audioChunksRef.current.push(event.data);
+            };
+
+            mediaRecorder.onstop = () => {
+                const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/mp3' });
+                const audioFile = new File([audioBlob], 'recording.mp3', { type: 'audio/mp3' });
+                setAudioFile(audioFile);
+            };
+
+            mediaRecorder.start();
+            setRecording(true);
+        } catch (error) {
+            console.error('Error accessing microphone:', error);
+        }
+    };
+
+    const stopRecording = () => {
+        if (mediaRecorderRef.current) {
+            mediaRecorderRef.current.stop();
+            setRecording(false);
+        }
+    };
+
     return (
-        <form onSubmit={handleSubmit} style={{marginBottom: '6ch'}}>
+        <form onSubmit={handleSubmit} style={{ marginBottom: '6ch' }}>
             <div>
                 <input
                     type="text"
@@ -54,12 +88,17 @@ const PostForm = () => {
                     Effects: {selectedEffect || 'None'}
                 </button>
                 <div className="dropdown-content">
-                    <div onClick={() => handleEffectSelect('Reverb')}>Reverb</div>
-                    <div onClick={() => handleEffectSelect('Telephone')}>Telephone</div>
-                    <div onClick={() => handleEffectSelect('Flanger')}>Flanger</div>
-                    <div onClick={() => handleEffectSelect('Distortion')}>Distortion</div>
+                    {['Reverb', 'Telephone', 'Flanger', 'Distortion'].map(effect => (
+                        <div key={effect} onClick={() => handleEffectSelect(effect)}>{effect}</div>
+                    ))}
                 </div>
             </div>
+
+            {/* Recording Button */}
+            <button type="button" onClick={recording ? stopRecording : startRecording}>
+                {recording ? 'Stop Recording' : 'Record Voice'}
+            </button>
+
             <button type="submit">Post</button>
         </form>
     );
