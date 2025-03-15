@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import AudioPlayer from "./myAudioPlayer"; 
 
 const DragNdrop = ({ onFileSelect }) => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -23,36 +24,40 @@ const DragNdrop = ({ onFileSelect }) => {
   };
 
   return (
-    <div 
-      style = {{marginTop: '10px', padding: '10px'}}
-      onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
+    <div
+      style={{ marginTop: "10px", padding: "10px", border: "2px dashed #ccc", borderRadius: "8px", textAlign: "center" }}
+      onDragOver={(e) => {
+        e.preventDefault();
+        setDragging(true);
+      }}
       onDragLeave={() => setDragging(false)}
       onDrop={handleDrop}
     >
       {selectedFile ? (
         <div className="text-center">
-          {selectedFile.type.startsWith('image') && (
-            <img src={URL.createObjectURL(selectedFile)} alt="Preview" className="w-24 h-24 mx-auto rounded-md mb-2" />
-          )}
+          {/* Display File Name */}
           <p>{selectedFile.name}</p>
-          {selectedFile.type.startsWith('audio') && (
-            <audio controls className="mx-auto">
-              <source src={URL.createObjectURL(selectedFile)} type={selectedFile.type} />
-              Your browser does not support the audio tag.
-            </audio>
+          {/* Use AudioPlayer for audio files */}
+          {selectedFile.type.startsWith("audio") && (
+            <AudioPlayer
+              audioSrc={URL.createObjectURL(selectedFile)}
+              onPlayNext={() => console.log("Next track")}
+              onPlayPrevious={() => console.log("Previous track")}
+              isLiked={false}
+              onLikeToggle={() => console.log("Like toggled")}
+            />
           )}
         </div>
-          ) : (
-            <div>
-              <p className="text-gray-500 mb-2">Drag & Drop a file here</p>
-              <label className="cursor-pointer bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-500 transition-all">
-                Select File
-                <input type="file" className="hidden" onChange={handleFileChange} />
-              </label>
-            </div>
-          )
-      }
+      ) : (
+        <div>
+          <p>Drag & Drop a file here</p>
+          <label>
+            Or select a file
+            <input type="file" className="hidden" onChange={handleFileChange} accept="audio/mp3" />
+          </label>
         </div>
+      )}
+    </div>
   );
 };
 

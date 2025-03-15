@@ -1,0 +1,127 @@
+@import "../App.css";
+
+.audio-player {
+    background-color: var(--background);
+    color: var(--form-text);
+    border: 5px solid var(--form-border);
+    border-radius: 3px;
+    box-shadow: 0px 15px 25px 0px rgba(0,0,0,0.2);
+    max-width: 60ch;
+    max-height: 75%;
+    margin: auto;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Progress slider */
+.slider {
+    width: 90%;
+    height: 10px;
+    border-radius: 5px;
+    background-color: var(--form-border);
+    outline: none;
+    opacity: 0.9;
+}
+
+.slider::-webkit-slider-thumb {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #fff5dc;
+    cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #fff5dc;
+}
+
+/* Controls */
+.controls, .extra-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+/* Play/Pause Button */
+.play-pause-button {
+    max-height: 6ch;
+    max-width: 6ch;
+    margin: 10px;
+    cursor: pointer;
+    transition: transform 0.1s ease-in-out;
+}
+
+.play-pause-button:hover {
+    transform: scale(1.1);
+}
+
+/* Like Button */
+.like-button {
+    max-height: 6ch;
+    max-width: 6ch;
+    margin: 10px;
+    cursor: pointer;
+    transition: transform 0.1s ease-in-out;
+}
+
+.like-button:hover {
+    transform: scale(1.1);
+}
+
+/* Volume Buttons */
+.volume-button {
+    max-height: 6ch;
+    max-width: 6ch;
+    margin: 10px;
+    cursor: pointer;
+    transition: transform 0.1s ease-in-out;
+}
+
+.volume-button.bounce {
+    animation: bounce 0.1s ease-out;
+}
+
+@keyframes bounce {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-7px); } 
+    100% { transform: translateY(0); } 
+}
+
+/* Skip Buttons */
+.skip-button {
+    max-height: 6ch;
+    max-width: 6ch;
+    margin: 10px;
+    cursor: pointer;
+}
+
+/* Skip button hover animations */
+@keyframes moveLeft {
+    0% {transform: translateX(0px);}
+    25% {transform: translateX(1px);}
+    50% {transform: translateX(-2px);}
+    75% {transform: translateX(-0.5px);}
+    100% {transform: translateX(0px);}
+}
+.skip-button:first-child:hover {
+    animation: moveLeft 0.2s linear;
+}
+
+@keyframes moveRight {
+    0% {transform: translateX(0px);}
+    25% {transform: translateX(-1px);}
+    50% {transform: translateX(2px);}
+    75% {transform: translateX(0.5px);}
+    100% {transform: translateX(0px);}
+}
+.skip-button:last-child:hover {
+    animation: moveRight 0.2s linear;
+}
