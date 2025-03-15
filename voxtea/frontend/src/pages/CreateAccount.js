@@ -75,7 +75,7 @@ const CreateAccount = () => {
                 style={{position: 'absolute', top: '10px', left: '10px'}}
             />
             <h1>Create Account</h1>
-            <form onSubmit={handleCreateAccount} style={{ display: 'inline-block', textAlign: 'center' }}>
+            <form onSubmit={handleCreateAccount} style={{ display: 'inline-block', textAlign: 'center', margin: 'auto' }}>
                 <div>
                     <div>
                         <label>Username:</label>
@@ -93,7 +93,7 @@ const CreateAccount = () => {
                         <label>Email:</label>
                     </div>
                     <input
-                        type="email"
+                        type="text"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
