@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Forgor from '../components/forgor'; 
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -89,6 +90,7 @@ const Login = () => {
                         style={{padding: '10px 20px',margin: '10px 0' }}
                     />
                 </div>
+                <Forgor /> 
                 <button
                     type="submit"
                     disabled={loading}

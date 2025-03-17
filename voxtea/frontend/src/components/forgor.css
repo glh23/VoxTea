@@ -1,0 +1,66 @@
+/* ForgotPassword.css */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: var(--background);
+  padding: 20px;
+  border-radius: 8px;
+  width: 300px;
+  position: relative;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.forgot-password-text {
+  color: var(--button-bgh);
+  cursor: pointer;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.modal-content h2 {
+  color: var(--form-bg);
+  margin-top: 0;
+}
+
+.modal-content form div {
+  margin-bottom: 10px;
+}
+
+.modal-content input[type="email"] {
+  padding: 10px;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.modal-content button[type="submit"] {
+  padding: 10px 20px;
+  background-color: var(--button-bgh);
+  color: var(--button-text);
+  border: none;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.modal-content button[type="submit"]:disabled {
+  cursor: not-allowed;
+}
