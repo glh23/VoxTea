@@ -7,11 +7,16 @@
     "cra-template": "1.2.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-scripts": "5.0.1",
+    "react-multi-carousel": "^2.8.5",
+    "react-responsive-carousel": "^3.2.23",
     "react-router-dom": "^6.x.x",
-    "web-vitals": "^3.x.x",
+    "react-scripts": "5.0.1",
+    "react-slick": "^0.30.3",
+    "slick-carousel": "^1.8.1",
     "socket.io": "^4.8.1",
-    "socket.io-client": "^4.8.1"
+    "socket.io-client": "^4.8.1",
+    "swiper": "^11.2.6",
+    "web-vitals": "^3.x.x"
   },
   "scripts": {
     "start": "react-scripts start",

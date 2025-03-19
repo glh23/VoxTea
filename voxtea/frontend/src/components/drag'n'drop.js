@@ -52,7 +52,7 @@ const DragNdrop = ({ onFileSelect }) => {
         <div>
           <p>Drag & Drop a file here</p>
           <label>
-            Or select a file
+            Or select a file 
             <input type="file" className="hidden" onChange={handleFileChange} accept="audio/mp3" />
           </label>
         </div>

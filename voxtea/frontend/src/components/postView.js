@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import './postView.css';
 
-const PostList = () => {
+const PostList = ({ refreshPostView }) => {
   const [posts, setPosts] = useState([]);
   const [currentPostIndex, setCurrentPostIndex] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -64,6 +64,11 @@ const PostList = () => {
       setLoading(false);
     }
   };
+
+  // Refresh post view when a new post is created
+  useEffect(() => {
+    fetchPosts(postType);
+  }, [postType, refreshPostView]); 
 
   // Toggle like status for a given post
   const handleLikes = async (postId, postIndex) => {
