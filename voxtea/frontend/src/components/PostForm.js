@@ -268,17 +268,14 @@ const PostForm = ({ onPostSuccess }) => {
 
             {/* Effects Carousel */}
             <div className="carousel-container">
-                <div
-                    className="carousel-slide-group"
-                    style={{ transform: `translateX(-${currentSlide * 100}%)` }}
-                >
+                <div className="carousel-slide-group" style={{ transform: `translateX(-${currentSlide * 25}%)` }}>
                     {['Reverb', 'Telephone', 'Flanger', 'Distortion'].map((effect, index) => (
                         <div
                             key={effect}
-                            className={`carousel-slide ${selectedEffect === effect ? 'active-slide' : ''}`}
+                            className={`carousel-slide ${currentSlide === index ? 'active-slide' : ''}`}
                             onClick={() => setSelectedEffect(effect)}
                         >
-                            <h3>{effect}</h3>
+                            <p>{effect}</p> {/* Ensures text is always rendered */}
                         </div>
                     ))}
                 </div>
@@ -292,7 +289,7 @@ const PostForm = ({ onPostSuccess }) => {
                 className={`record-button ${recording ? 'recording' : ''} ${isClicked ? 'bounce' : ''}`}
                 onClick={() => {
                     setIsClicked(true);
-                    setTimeout(() => setIsClicked(false), 300); // Reset after animation
+                    setTimeout(() => setIsClicked(false), 6000); // Reset after animation
                     recording ? stopRecording() : startRecording();
                 }}
                 style={{ cursor: 'pointer' }}
