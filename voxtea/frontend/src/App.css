@@ -161,8 +161,14 @@ input:hover{
   border: 3px solid var(--setting-border);
   border-radius: 15px;
   background-color: var(--setting-bg);
-  margin: 10px 20px;
+  margin: 10px auto;
+  max-width: 80ch;
   box-shadow: 0px 10px 20px 0px rgba(0,0,0,0.2);
+}
+
+.buffer{
+  margin: 10px auto;
+  min-height: 15px;
 }
 
 .profilePicture{

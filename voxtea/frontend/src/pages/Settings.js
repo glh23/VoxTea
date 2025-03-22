@@ -11,6 +11,7 @@ const Settings = () => {
   const [newImage, setNewImage] = useState(null);
   const [hashtags, setHashtags] = useState('');
   const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const [isDeletePopupVisible, setIsDeletePopupVisible] = useState(false);
   const { theme, toggleTheme } = useContext(ThemeContext);
   const [spotifyInfo, setSpotifyInfo] = useState('');
 
@@ -123,13 +124,13 @@ const Settings = () => {
         throw new Error("Network response was not ok");
       }
   
-      const responseBody = await response.json(); // Parse the JSON response
-      const redirectURL = responseBody; // Since your backend returns the URL in JSON format
+      const responseBody = await response.json(); 
+      const redirectURL = responseBody; 
   
       console.log("Redirect URL:", redirectURL);
   
       if (redirectURL) {
-        window.location.href = redirectURL; // Manually redirect user
+        window.location.href = redirectURL; 
       } else {
         console.error("No redirect URL found.");
         alert("Failed to connect to Spotify.");
@@ -143,12 +144,41 @@ const Settings = () => {
     navigate('/Home');
   };
 
+  const handleDeleteUser = async () => {
+    try {
+      
+      axios.delete('http://localhost:5000/api/users/delete/user', {
+        headers: { Authorization: `Bearer ${token}`} 
+      })
+      
+      .then(response => console.log("User deleted:", response.data))
+      .catch(error => console.error("Failed to delete user:", error));
+
+      console.log("User information has been deleted successfully.");
+
+      sessionStorage.removeItem("authToken");
+      localStorage.removeItem("spotifyAccessToken");
+
+      navigate("/login");
+      alert("Your account has been deleted.");
+    } 
+    catch (error) {
+      console.error("Failed to delete user:", error);
+      alert("Failed to delete user.");
+    }
+  };
+
   const handleOpenPopup = () => {
     setIsPopupVisible(true);
   };
 
   const handleClosePopup = () => {
     setIsPopupVisible(false);
+    setIsDeletePopupVisible(false);
+  };
+
+  const handleDeleteUserPopup = () => {
+    setIsDeletePopupVisible(true);
   };
 
   return (
@@ -213,11 +243,16 @@ const Settings = () => {
             {spotifyInfo ? "Reconnect Spotify" : "Spotify Login"}  {/* Change button text accordingly */}
           </button>
         </div>
+
+        <div className="setting">
+          <h2>Delete User</h2>
+          <p>This will delete your messages, chats, posts and information</p>
+          <button onClick={handleDeleteUserPopup}>Delete User</button>
+         </div>
   
         {isPopupVisible && (
           <div className="popup-overlay" onClick={handleClosePopup}>
             <div className="popup-content" onClick={(e) => e.stopPropagation()}>
-              <button className="close-btn" onClick={handleClosePopup}>&times;</button>
               <h2>Your Hashtags</h2>
               <ul>
                 {hashtags.split(' ').map((tag, index) => (
@@ -227,9 +262,19 @@ const Settings = () => {
             </div>
           </div>
         )}
-  
-      </div> {/* This closing div is necessary for the main content div */}
-  
+      </div> 
+
+      {isDeletePopupVisible && (
+          <div className="popup-overlay" onClick={handleClosePopup}>
+            <div className="popup-content" onClick={(e) => e.stopPropagation()}>
+              <h3>Are you sure you want to delete your account</h3>
+              <button onClick={handleDeleteUser}>Yes</button>
+            </div>
+          </div>
+        )}
+
+      <div className = "buffer"></div>
+
       <BottomBar />
     </div>
   );

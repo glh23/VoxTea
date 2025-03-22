@@ -20,6 +20,7 @@ const getProfile = require("./routes/users/getOtherAccount");
 const follow = require("./routes/users/follow");
 const me = require("./routes/users/me");
 const updateHashtag = require("./routes/users/hashtagUpdate");
+const deleteAccount = require("./routes/users/delete");
 
 const posts = require('./routes/posts/posts');
 const getPosts = require('./routes/posts/getPosts');
@@ -62,7 +63,7 @@ mongoose
   .then(() => console.log("✅ MongoDB connected"))
   .catch((err) => console.log("❌ MongoDB connection error: ", err));
 
-// Serve Static Files (Profile Pictures)
+// Serve Static Files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // API Routes
@@ -76,6 +77,7 @@ app.use("/api/users/profile/get", getProfile);
 app.use("/api/users/follow", follow);
 app.use("/api/users/me", me);
 app.use("/api/users/hashtags", updateHashtag);
+app.use("/api/users/delete", deleteAccount);
 
 app.use("/api/posts/create", posts);
 app.use("/api/posts/get", getPosts);
@@ -107,8 +109,8 @@ io.on("connection", (socket) => {
   });
 });
 
-// Start Server (Single Listener for Express & WebSockets)
-const PORT = process.env.PORT || 5000;
+// Start Server
+const PORT = process.env.PORT;
 server.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
