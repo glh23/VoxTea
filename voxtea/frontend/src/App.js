@@ -21,12 +21,15 @@ import Contacts from './pages/contacts';
 import Message from './pages/message';
 import Callback from './components/callback'
 
+import Tune from './pages/tune';
+
 const App = () => (
     <ThemeProvider>
         <Routes>
             <Route path="/" element={<Welcome />} />
             <Route path="/login" element={<Login />} />
             <Route path="/create-account" element={<CreateAccount />} />
+            <Route path="/tune" element={<Tune />} />
 
             <Route path="/Home" element={
                 <TokenBackChat>
