@@ -12,16 +12,16 @@ const GuitarTuner = () => {
     const [frequency, setFrequency] = useState(null);
     const [isTuning, setIsTuning] = useState(false);
     const canvasRef = useRef(null);
+    
+    window.AudioContext = window.AudioContext || window.webkitAudioContext;
 
-    // isTuning
     useEffect(() => {
-        let audioContext, dataArray,  analyser,  source, bufferLength, stream;
+        let audioContext, dataArray, analyser, source, bufferLength, stream;
 
-        const startTuning = async  () => {
+        const startTuning = async () => {
             setIsTuning(true);
-            // Get the  mic, get analyser for frequency and time, set FFT for the bin count
             stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            audioContext = new AudioContext();
             analyser = audioContext.createAnalyser();
             analyser.fftSize = 8192;
             bufferLength = analyser.frequencyBinCount;
@@ -30,38 +30,92 @@ const GuitarTuner = () => {
             source = audioContext.createMediaStreamSource(stream);
             source.connect(analyser);
 
+            // Function below
             processAudio();
         };
 
-        // Turn it off
-        const stopTuning =()=>{
+        const stopTuning = () => {
             setIsTuning(false);
             if (audioContext) audioContext.close();
             if (stream) stream.getTracks().forEach(track => track.stop());
         };
 
-        const processAudio =()=>{
+        const processAudio = () => {
             if (!isTuning) return;
 
-            // Use my auto-correlate function to get the frequency
             analyser.getFloatTimeDomainData(dataArray);
             const freq = autoCorrelate(dataArray, audioContext.sampleRate);
 
-            // Get the note that matches the frequency
-            if (freq){
+            if (freq) {
                 const detectedNote = getClosestNote(freq);
                 setFrequency(freq.toFixed(2));
                 setNote(detectedNote);
 
-                // Draw the frequency graph and the tuning pin
-                drawFrequencyGraph(dataArray);
-                if (note) drawTuningPin(freq); 
+                // Function below
+                frequencyGraph(dataArray);
+                if (note) drawTuningPin(freq);
             }
-            // 
+
             requestAnimationFrame(processAudio);
         };
 
-        // Make the notes by doing maths
+        const frequencyGraph = (dataArray) => {
+            const canvas = canvasRef.current;
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+            const barWidth = (width / bufferLength) * 2;
+            let barHeight;
+            let x = 0;
+
+            ctx.clearRect(0, 0, width, height);
+
+            for (let i = 0; i < bufferLength; i++) {
+                barHeight = dataArray[i] * height;
+                ctx.fillStyle = barHeight > 0 ? '#ffffff' : '#ff004b';
+                ctx.fillRect(x, height / 2 - barHeight / 2, barWidth, barHeight);
+                x += barWidth + 1;
+            }
+        };
+
+        const drawTuningPin = (freq) => {
+            const canvas = canvasRef.current;
+            if (!canvas) return;
+            const ctx = canvas.getContext("2d");
+            const width = canvas.width;
+            const height = canvas.height;
+            const rectHeight = 30;
+            const y = height - rectHeight;
+
+            ctx.clearRect(0, y, width, rectHeight);
+
+            if (!freq || !note) return;
+
+            const targetFreq = getTargetFrequency(note);
+            const diff = freq - targetFreq;
+
+            let leftColor = "transparent";
+            let middleColor = "transparent";
+            let rightColor = "transparent";
+
+            if (Math.abs(diff) < 3) {
+                middleColor = "#50c681";
+            } else if (diff < -5) {
+                leftColor = Math.abs(diff) < 15 ? "#c6bc50" : "#c65095";
+            } else if (diff > 5) {
+                rightColor = Math.abs(diff) < 15 ? "#c6bc50" : "#c65095";
+            }
+
+            ctx.fillStyle = leftColor;
+            ctx.fillRect(0, y, width / 3, rectHeight);
+
+            ctx.fillStyle = middleColor;
+            ctx.fillRect(width / 3, y, width / 3, rectHeight);
+
+            ctx.fillStyle = rightColor;
+            ctx.fillRect(width / 3 * 2, y, width / 3, rectHeight);
+        };
+
         const getTargetFrequency = (note) => {
             const notes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
             const baseFreq = 16.35;
@@ -70,7 +124,6 @@ const GuitarTuner = () => {
             return baseFreq * Math.pow(2, (noteIndex + octave * 12) / 12);
         };
 
-        // ON / OFF button 
         if (isTuning) startTuning();
         else stopTuning();
 
@@ -78,13 +131,8 @@ const GuitarTuner = () => {
             if (audioContext) audioContext.close();
             if (stream) stream.getTracks().forEach(track => track.stop());
         };
-    }, [isTuning]);
+    }, [isTuning]); // Ensure the dependency array is correctly formatted
 
-
-
-    
-
-    // Find the fundamental frequency function 2, the empire strikes back
     const autoCorrelate = (buffer, sampleRate) => {
         let size = buffer.length;
         let bestOffset = -1;
@@ -93,41 +141,32 @@ const GuitarTuner = () => {
         let foundCorr = false;
         let lastCorr = 1;
 
-        // Get all of the Square roots and then find the average
         for (let i = 0; i < size; i++) {
             let x = buffer[i];
             rootMeanSquare += x * x;
         }
         rootMeanSquare = Math.sqrt(rootMeanSquare / size);
 
-        // Check if the sound is too quite
         if (rootMeanSquare < 0.01) return null;
 
-        // Hill climbing to find the best offset
         for (let offset = 0; offset < size / 2; offset++) {
             let correlation = 0;
-            
-            // Find the correlation for the offset 
+
             for (let i = 0; i < size / 2; i++) {
                 correlation += Math.abs(buffer[i] - buffer[i + offset]);
             }
-            // Normalize the correlation
             correlation = 1 - (correlation / (size / 2));
 
-            // See if the current offset is better that the previous best
             if (correlation > 0.95 && correlation > lastCorr) {
                 foundCorr = true;
                 if (correlation > bestCorr) {
                     bestCorr = correlation;
                     bestOffset = offset;
                 }
-            } 
-            else if (foundCorr) {
-                // Get the frequency of the offset using the sample rate that I passed in
+            } else if (foundCorr) {
                 let frequency = sampleRate / bestOffset;
                 return frequency;
             }
-            // Update for the next loop
             lastCorr = correlation;
         }
 
@@ -154,7 +193,7 @@ const GuitarTuner = () => {
             <button
                 onClick={() => setIsTuning(!isTuning)}
                 style={{
-                    backgroundColor: isTuning ? '#50c681' : ' #304463 ',
+                    backgroundColor: isTuning ? '#50c681' : '#304463',
                     padding: "10px 20px",
                     fontSize: "18px",
                     margin: "10px",

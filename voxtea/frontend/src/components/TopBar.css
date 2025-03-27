@@ -43,8 +43,8 @@
 }
 
 /* Mobile Menu */
-.mobile-menu {
-  color: #f8cdc4;
+.hamburger-dropdown {
+  color: #fff5dc;
   position: absolute;
   top: 60px;
   right: 10px;
@@ -54,21 +54,21 @@
   display: flex;
   flex-direction: column;
   padding: 10px;
-  width: 150px;
+  width: 130px;
   z-index: 1000; 
 }
 
-.mobile-menu button {
+.hamburger-dropdown button {
+  color: #fff5dc;
   background: none;
   border: none;
   padding: 10px;
   text-align: left;
   max-width: 130px;
   cursor: pointer;
-  color: var(--topbar-text);
 }
 
-.mobile-menu button:hover {
+.hamburger-dropdown button:hover {
   background: #1d2954;
 }
 
