@@ -3,6 +3,7 @@ import TopBar from '../components/TopBar';
 import BottomBar from '../components/BottomBar';
 import PostForm from '../components/PostForm';
 import PostView from '../components/postView';
+import SideBar from '../components/sideBar';
 
 const Home = () => {
     const [showPostForm, setShowPostForm] = useState(false);
@@ -22,6 +23,7 @@ const Home = () => {
         <div>
             <TopBar />
             <div style={{ textAlign: "center", margin: "20px" }}>
+            <SideBar />
                 <div>
                     <PostView />
                 </div>
