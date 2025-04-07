@@ -71,6 +71,26 @@ const AudioPlayer = ({ audioSrc, onPlayNext, onPlayPrevious, isLiked, onLikeTogg
         onChange={handleSeek}
       />
 
+      <div className="extra-controls">
+        <img
+          src="/voxtea/volume-down.png"
+          alt="Volume Down"
+          className="volume-button"
+          onClick={() => adjustVolume(-0.1)}
+        />
+        <img
+          src={isLiked ? "/voxtea/favourite(1).png" : "/voxtea/favourite.png"}
+          alt={isLiked ? "Unlike" : "Like"}
+          className="like-button"
+          onClick={onLikeToggle}
+        />
+        <img
+          src="/voxtea/volume-up.png"
+          alt="Volume Up"
+          className="volume-button"
+          onClick={() => adjustVolume(0.1)}
+        />
+      </div>
       <div className="controls">
         <img
           src="/voxtea/fast-backward-button.png"
@@ -93,27 +113,7 @@ const AudioPlayer = ({ audioSrc, onPlayNext, onPlayPrevious, isLiked, onLikeTogg
           onClick={onPlayNext}
         />
       </div>
-
-      <div className="extra-controls">
-        <img
-          src="/voxtea/volume-down.png"
-          alt="Volume Down"
-          className="volume-button"
-          onClick={() => adjustVolume(-0.1)}
-        />
-        <img
-          src={isLiked ? "/voxtea/favourite(1).png" : "/voxtea/favourite.png"}
-          alt={isLiked ? "Unlike" : "Like"}
-          className="like-button"
-          onClick={onLikeToggle}
-        />
-        <img
-          src="/voxtea/volume-up.png"
-          alt="Volume Up"
-          className="volume-button"
-          onClick={() => adjustVolume(0.1)}
-        />
-      </div>
+      
     </div>
   );
 };

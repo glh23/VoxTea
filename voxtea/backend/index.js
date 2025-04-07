@@ -63,7 +63,7 @@ mongoose
   .then(() => console.log("✅ MongoDB connected"))
   .catch((err) => console.log("❌ MongoDB connection error: ", err));
 
-// Serve Static Files
+// Multer Setup for File Uploads
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // API Routes

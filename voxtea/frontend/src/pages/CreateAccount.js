@@ -85,7 +85,7 @@ const CreateAccount = () => {
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                         required
-                        style={{ margin: '10px' }}
+                        style={{ margin: '10px auto' }}
                     />
                 </div>
                 <div>
@@ -97,7 +97,7 @@ const CreateAccount = () => {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
-                        style={{ margin: '10px' }}
+                        style={{ margin: '10px auto' }}
                     />
                 </div>
                 <div>
@@ -109,7 +109,7 @@ const CreateAccount = () => {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
-                        style={{margin: '10px'}}
+                        style={{margin: '10px auto'}}
                     />
                 </div>
                 <div>
@@ -121,7 +121,7 @@ const CreateAccount = () => {
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         required
-                        style={{ margin: '10px' }}
+                        style={{ margin: '10px auto' }}
                     />
                 </div>
                 <div>
