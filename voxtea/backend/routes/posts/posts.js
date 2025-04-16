@@ -133,7 +133,7 @@ router.post('/', upload.single('audioFile'), async (req, res) => {
     // Validate token
     const token = req.headers.authorization?.split(' ')[1];
     if (!token) {
-      return res.status(401).json({ message: 'No token provided.' });
+      return res.status(401).json({ message: 'No authentication.' });
     }
     const decoded = jwt.verify(token, JWT_SECRET);
     const currentUserId = decoded.id;
@@ -142,6 +142,10 @@ router.post('/', upload.single('audioFile'), async (req, res) => {
     const audioFile = req.file;
     if (!audioFile) {
       return res.status(400).json({ message: 'Audio file is required.' });
+    }
+
+    if(!description ) {
+      return res.status(400).json({ message: 'Description is required.' });
     }
 
     // Set up file paths
