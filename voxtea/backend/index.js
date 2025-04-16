@@ -25,10 +25,12 @@ const deleteAccount = require("./routes/users/delete");
 const posts = require('./routes/posts/posts');
 const getPosts = require('./routes/posts/getPosts');
 const likePosts = require('./routes/posts/likePost');
+const deletePosts = require('./routes/posts/deletePost');
 
 const createChat = require("./routes/chat/createChat");
 const getMessages = require("./routes/chat/getMessages");
 const sendMessage = require("./routes/chat/sendMessage");
+const deleteChat = require("./routes/chat/deleteChat");
 
 const spotify = require("./routes/spotify/setUpSpot");
 const spotifyUser = require("./routes/spotify/getUser");
@@ -82,10 +84,12 @@ app.use("/api/users/delete", deleteAccount);
 app.use("/api/posts/create", posts);
 app.use("/api/posts/get", getPosts);
 app.use("/api/posts/like", likePosts);
+app.use("/api/posts/delete", deletePosts);
 
 app.use("/api/chat/create", createChat);
 app.use("/api/chat/get", getMessages);
 app.use("/api/chat/send", sendMessage);
+app.use("/api/chat/delete", deleteChat);
 
 app.use("/api/spotify", spotify);
 app.use("/api/spotify/userInfo", spotifyUser);

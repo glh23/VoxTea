@@ -43,7 +43,7 @@ const GuitarTuner = () => {
         const processAudio = () => {
             if (!isTuning) return;
 
-            analyser.getFloatTimeDomainData(dataArray);
+            analyser.getFloatTimeDomainData(dataArray); 
             const freq = autoCorrelate(dataArray, audioContext.sampleRate);
 
             if (freq) {
@@ -53,7 +53,7 @@ const GuitarTuner = () => {
 
                 // Function below
                 frequencyGraph(dataArray);
-                if (note) drawTuningPin(freq);
+                if (note) tuningPin(freq);
             }
 
             requestAnimationFrame(processAudio);
@@ -64,7 +64,7 @@ const GuitarTuner = () => {
             const ctx = canvas.getContext('2d');
             const width = canvas.width;
             const height = canvas.height;
-            const barWidth = (width / bufferLength) * 2;
+            const barWidth = (width / bufferLength) * 3;
             let barHeight;
             let x = 0;
 
@@ -78,7 +78,7 @@ const GuitarTuner = () => {
             }
         };
 
-        const drawTuningPin = (freq) => {
+        const tuningPin = (freq) => {
             const canvas = canvasRef.current;
             if (!canvas) return;
             const ctx = canvas.getContext("2d");
@@ -100,9 +100,9 @@ const GuitarTuner = () => {
 
             if (Math.abs(diff) < 3) {
                 middleColor = "#50c681";
-            } else if (diff < -5) {
+            } else if (diff < -10) {
                 leftColor = Math.abs(diff) < 15 ? "#c6bc50" : "#c65095";
-            } else if (diff > 5) {
+            } else if (diff > 10) {
                 rightColor = Math.abs(diff) < 15 ? "#c6bc50" : "#c65095";
             }
 
@@ -131,7 +131,7 @@ const GuitarTuner = () => {
             if (audioContext) audioContext.close();
             if (stream) stream.getTracks().forEach(track => track.stop());
         };
-    }, [isTuning]); // Ensure the dependency array is correctly formatted
+    }, [isTuning]); 
 
     const autoCorrelate = (buffer, sampleRate) => {
         let size = buffer.length;
@@ -141,29 +141,32 @@ const GuitarTuner = () => {
         let foundCorr = false;
         let lastCorr = 1;
 
+        // Is there any sound?
         for (let i = 0; i < size; i++) {
             let x = buffer[i];
             rootMeanSquare += x * x;
         }
         rootMeanSquare = Math.sqrt(rootMeanSquare / size);
-
         if (rootMeanSquare < 0.01) return null;
 
+        // Loop through all of the different offsets to find the one that matches best
         for (let offset = 0; offset < size / 2; offset++) {
             let correlation = 0;
-
             for (let i = 0; i < size / 2; i++) {
                 correlation += Math.abs(buffer[i] - buffer[i + offset]);
             }
             correlation = 1 - (correlation / (size / 2));
 
-            if (correlation > 0.95 && correlation > lastCorr) {
+            // Stop is the the correlation is good enough
+            if (correlation > 0.97 && correlation > lastCorr) {
                 foundCorr = true;
+                // If this is the best correlation save the offset
                 if (correlation > bestCorr) {
                     bestCorr = correlation;
                     bestOffset = offset;
                 }
             } else if (foundCorr) {
+                // Use the offest to calculate the frequency
                 let frequency = sampleRate / bestOffset;
                 return frequency;
             }
@@ -178,6 +181,7 @@ const GuitarTuner = () => {
         const baseFreq = 16.35;
         const noteFreq = Array.from({ length: 96 }, (_, i) => baseFreq * Math.pow(2, i / 12));
 
+        // Find the closest note frequency
         const closestNote = noteFreq.reduce((prev, curr, index) =>
             Math.abs(curr - freq) < Math.abs(noteFreq[prev] - freq) ? index : prev, 0
         );

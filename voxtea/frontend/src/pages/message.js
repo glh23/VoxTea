@@ -61,6 +61,18 @@ const Chat = () => {
     .catch(error => console.error(error));
   };
 
+  const deleteChat = async () => {
+    try {
+      await axios.delete(`http://localhost:5000/api/chat/delete/${chatId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      // After deletion, navigate back to the contacts page
+      navigate("/contacts");
+    } catch (error) {
+      console.error("Error deleting chat:", error);
+    }
+  };
+
   const handleBack = () => {
     navigate("/contacts");
   };
@@ -76,6 +88,23 @@ const Chat = () => {
         onClick={handleBack} 
         style={{ position: 'absolute', top: '80px', left: '10px' }}
       />
+       <button 
+        onClick={deleteChat}
+        style={{
+          position: "fixed",
+          top: "80px",
+          right: "10px",
+          padding: "10px 20px",
+          backgroundColor: "#DB2F62",
+          color: "white",
+          border: "none",
+          borderRadius: "15px",
+          cursor: "pointer",
+          zIndex: 1000
+        }}
+      >
+        Delete Chat
+      </button>
 
       {/* Chat messages - scrollable */}
       <div style={{

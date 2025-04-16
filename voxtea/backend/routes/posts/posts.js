@@ -8,6 +8,7 @@ const User = require('../../models/User');
 const { exec } = require('child_process');
 const router = express.Router();
 
+
 const JWT_SECRET = process.env.JWT_SECRET;
 
 
@@ -47,7 +48,7 @@ const upload = multer({
       cb(new Error('Only MP3, OGG, and WebM files are allowed!'), false);
     }
   },
-  limits: { fileSize: 20 * 1024 * 1024 }, // Limit file size to 20MB
+  limits: { fileSize: 50 * 1024 * 1024 }, // Limit file size to 50MB
 });
 
 

@@ -9,9 +9,9 @@ const calculateClout = async (userId) => {
   const user = await User.findById(userId).populate('followers').populate('posts');
   if (!user) return;
 
-  let clout = user.followers.length + user.posts.length;
+  let clout = ((user.followers.length)*5 )+ (user.posts.length);
   user.posts.forEach(post => {
-    clout += post.likes.length;
+    clout += (post.likes.length) * 2; 
   });
 
   user.clout = clout;

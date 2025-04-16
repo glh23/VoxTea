@@ -82,6 +82,8 @@ const CreateAccount = () => {
                     </div>
                     <input
                         type="text"
+                        label="Username"
+                        placeholder="Enter your username"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                         required
@@ -94,6 +96,8 @@ const CreateAccount = () => {
                     </div>
                     <input
                         type="text"
+                        label="Email"
+                        placeholder="Enter your email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
@@ -106,6 +110,8 @@ const CreateAccount = () => {
                     </div>
                     <input
                         type="password"
+                        label="Password"
+                        placeholder="Enter your password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
@@ -118,6 +124,8 @@ const CreateAccount = () => {
                     </div>
                     <input
                         type="password"
+                        label="Confirm Password"
+                        placeholder="Confirm your password"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         required

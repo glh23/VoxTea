@@ -4,6 +4,8 @@ const jwt = require("jsonwebtoken");
 const JWT_SECRET = process.env.JWT_SECRET;
 const User = require("../../models/User");
 
+// !!!! the spotify get is in the getTop.js file !!!!
+
 const router = express.Router();
 
 // Get posts from the last 28 days
@@ -24,7 +26,7 @@ router.get('/recent', async (req, res) => {
         const recentPosts = await Post.find({ 
             createdAt: { $gte: past28Days } 
         // Sorts by the most recent
-        }).sort({ createdAt: -1 }); 
+        }).sort({ createdAt: -1 }).populate("userId", "username profilePicture"); 
 
         // Check if the like on the post corresponds with the userId
         const likedList = recentPosts.map(post => {
@@ -67,7 +69,7 @@ router.get('/hashtags', async (req, res) => {
         const postsWithHashtags = await Post.find({
             hashtags: { $in: userHashtags },
             createdAt: { $gte: past56Days }
-        }).sort({ createdAt: -1 });
+        }).sort({ createdAt: -1 }).populate("userId", "username profilePicture");
 
         console.log('Posts with matching hashtags: ', postsWithHashtags);
         res.status(200).json({ posts: postsWithHashtags });
@@ -77,11 +79,13 @@ router.get('/hashtags', async (req, res) => {
     }
 });
 
+// Get the top 100 posts
 router.get('/top', async (req, res) => {
     try {
         const posts = await Post.find()
             .sort({ likes: -1 }) 
-            .limit(100)            
+            .limit(100)
+            .populate("userId", "username profilePicture")         
             .exec();
 
         if (!posts.length) {
@@ -94,7 +98,5 @@ router.get('/top', async (req, res) => {
         res.status(500).json({ message: 'Failed to fetch the top 100 posts with the most likes.' });
     }
 });
-
-// https://accounts.spotify.com/authorize?client_id=66ee1cf9b4524fd4a6ce720c6209eb83&response_type=code&redirect_uri=http://localhost:5000/callback&scope=user-read-private%20user-read-email
 
 module.exports = router;

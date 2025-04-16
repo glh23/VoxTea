@@ -6,7 +6,7 @@ import BottomBar from "../components/BottomBar";
 const UserProfile = () => {
   const { id } = useParams();
   const [user, setUser] = useState(null);
-  const [currentUser, setCurrentUser] = useState(null); // Logged-in user
+  const [otherUser, setOtherUser] = useState(null); // Logged-in user
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isFollowing, setIsFollowing] = useState(false);
@@ -24,17 +24,17 @@ const UserProfile = () => {
           setUser(data);
           console.log('Fetched user data:', data); // Log user data
 
-          // Get logged-in user info
-          const currentUserResponse = await fetch(`http://localhost:5000/api/users/account/get`, {
+          // Get user info
+          const otherUserResponse = await fetch(`http://localhost:5000/api/users/account/get`, {
             headers: { Authorization: `Bearer ${token}` },
           });
 
-          if (currentUserResponse.ok) {
-            const currentUserData = await currentUserResponse.json();
-            setCurrentUser(currentUserData);
+          if (otherUserResponse.ok) {
+            const otherUserData = await otherUserResponse.json();
+            setOtherUser(otherUserData);
 
             // Check if the logged in user is already following this profile
-            const isFollowingUser = currentUserData.following.some(followedUser => followedUser._id === id);
+            const isFollowingUser = otherUserData.following.some(followedUser => followedUser._id === id);
             setIsFollowing(isFollowingUser);
           }
         } else {

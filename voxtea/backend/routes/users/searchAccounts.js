@@ -13,7 +13,7 @@ router.get("/", async (req, res) => {
 
     const users = await User.find({
       username: { $regex: query, $options: "i" }
-    }).select("username profilePicture clout").sort({ clout: -1 }); 
+    }).select("username profilePicture clout").sort({ clout: -1 }).limit(20); 
 
     return res.status(200).json(users);
   } catch (error) {

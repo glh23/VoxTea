@@ -27,6 +27,7 @@ const PostList = ({ refreshPostView }) => {
         response = await axios.get("http://localhost:5000/api/posts/get/recent", {
           headers: { Authorization: `Bearer ${token}` }
         });
+        console.log(response);
       } else if (type === 'hashtags') {
         response = await axios.get("http://localhost:5000/api/posts/get/hashtags", {
           headers: { Authorization: `Bearer ${token}` }
@@ -46,6 +47,10 @@ const PostList = ({ refreshPostView }) => {
           localStorage.setItem('spotifyAccessToken', tokens.data.access_token);
         } catch (error) {
           console.log("Access Error: ", error);
+          // If  it can't get spotify just show the top posts
+          response = await axios.get("http://localhost:5000/api/posts/get/top", {
+            headers: { Authorization: `Bearer ${token}` }
+          });
         }
         // Get the posts relating to spotify API's genres
         response = await axios.get("http://localhost:5000/api/spotify/genres", {
@@ -245,7 +250,7 @@ const PostList = ({ refreshPostView }) => {
               <option value="spotify">Recommended</option>
             </select>
           </div>
-          <h2>Player</h2>
+          <h2>{currentPost.userId?.username || 'Unknown User'}</h2>
           <p>Post {currentPostIndex + 1} of {posts.length}</p>
           <div className="postInfo">
             <p>{currentPost.description}</p>
