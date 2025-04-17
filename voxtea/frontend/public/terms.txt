@@ -1,0 +1,75 @@
+Privacy Policy
+What Stuff We Collect
+
+Your Basic Info: When you sign up or update your profile, we grab things like your name, email, and maybe a profile pic.
+How You Use Our App: We keep an eye on stuff like your IP address, what browser you're using, what device you have, and how you're using the app.
+Sound from Your Mic: Since we have a guitar tuner feature, we listen to the sounds from your mic to help you tune up. Don't worry - we don't save these recordings, we just process them in real-time on your device.
+Cookies and Such: We use cookies (the digital kind, not the tasty ones) to make your experience better and to see how people are using our app.
+
+What We Do With Your Info
+Keep Things Running: We use your data to make sure the app works properly for you.
+Make Things Better for You: We might use your info to personalize your experience and improve how the app works.
+Figure Out What's Working: We look at overall patterns to see how we can make the app better.
+Drop You a Line: We might email you about updates, newsletters, and stuff about the service.
+
+Who We Share Your Info With
+Our Helpers: Sometimes we need help from other companies for things like hosting or analytics.
+The Law: If the cops or government folks come knocking with proper legal paperwork, we might have to hand over some info.
+If We Get Bought: If our company merges with another or gets sold, your info might be part of that deal.
+
+How We Keep Your Info Safe
+Security Stuff: We do our best to keep your info secure using encryption and other safety measures.
+How Long We Keep Things: We only hang onto your personal info for as long as we need it, unless the law says otherwise.
+
+Your Options
+Checking Your Info: You can log in anytime to see and update your personal details.
+Turning Off Messages: Don't want emails from us? No problem. Just unsubscribe or change your settings in the app.
+
+Kids' Stuff
+Our app isn't meant for kids under 13. If you're a parent and think your kid is using our app without your OK, let us know.
+
+Questions?
+Got questions about any of this? Just shoot us an email at support@voxtea.com.
+
+
+
+Terms of Service
+The Basics
+By using VoxTea, you're agreeing to these rules. If you don't like them, then unfortunately you can't use the app.
+Using Our App
+
+Age Check: You need to be at least 13 to use VoxTea. Under 18? Get your parents' permission.
+Your Account: When you create an account, make sure your info is accurate. Keep it up to date too.
+Account Security: Keep your password safe and don't share it. You're responsible for anything that happens with your account.
+
+Content and Behavior
+Your Content: Anything you upload or post is still yours, but you're giving us permission to use it for the app.
+Don't Be a Jerk: Don't post anything illegal, mean, obscene, or just plain nasty.
+Play Nice: Don't try to hack the app, mess with our servers, or do anything illegal.
+
+Intellectual Property
+Who Owns What: We own VoxTea and everything in it.
+What You Can Do: We're letting you use the app for your personal, non-commercial stuff.
+
+Other Services
+Third-Party Connections: Sometimes we connect with other services. They have their own rules.
+Not Our Problem: We're not responsible for these other services or what they do.
+
+Quitting
+You Can Leave: You can delete your account anytime you want.
+We Can Boot You: We can shut down your account if you break these rules or for pretty much any reason.
+
+The Fine Print
+As Is: We provide the app as is. No guarantees it'll work perfectly.
+Not Our Fault: If something goes wrong, we're not responsible for any damages.
+
+Legal Stuff
+These terms follow UK law.
+
+Changes
+We might update these terms sometimes. We'll post the new version here, so check back now and then.
+
+Questions?
+Contact us up at support@voxtea.com if you've got questions about any of this stuff.
+Date: April 17, 2025  
+Version: 1.0
