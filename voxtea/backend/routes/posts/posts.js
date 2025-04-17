@@ -48,7 +48,7 @@ const upload = multer({
       cb(new Error('Only MP3, OGG, and WebM files are allowed!'), false);
     }
   },
-  limits: { fileSize: 50 * 1024 * 1024 }, // Limit file size to 50MB
+  limits: { fileSize: 50 * 1024 * 1024 }, // Limit to 50MB
 });
 
 
@@ -56,7 +56,7 @@ const upload = multer({
 async function applyEffects(inputFile, outputFile, effect) {
   return new Promise((resolve, reject) => {
     let fullEffect = '';
-    const trimmedEffect = effect.trim(); // Trim any extra spaces
+    const trimmedEffect = effect.trim(); // Trim any white-space
 
     console.log("Effect:", trimmedEffect);
 

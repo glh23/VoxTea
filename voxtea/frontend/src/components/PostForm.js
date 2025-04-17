@@ -60,6 +60,11 @@ const PostForm = ({ onPostSuccess }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        // Check that description and audio file are there
+        if (!description) {
+            alert('Please write a description!');
+            return;
+        }
         if (!audioFile) {
             alert('Please upload or record an audio file!');
             return;
@@ -80,7 +85,7 @@ const PostForm = ({ onPostSuccess }) => {
             });
             onPostSuccess();
         } catch (error) {
-            alert('Failed to create post');
+            alert('Failed to create post:', error);
         }
     };
 

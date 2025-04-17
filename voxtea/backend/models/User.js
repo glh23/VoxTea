@@ -26,8 +26,8 @@ UserSchema.pre("save", async function (next) {
 });
 
 // Check if entered password matches the stored password
-UserSchema.methods.comparePassword = async function (candidatePassword) {
-  return bcrypt.compare(candidatePassword, this.password);
+UserSchema.methods.comparePassword = async function (inputPassword) {
+  return bcrypt.compare(inputPassword, this.password);
 };
 
 const User = mongoose.model("User", UserSchema);

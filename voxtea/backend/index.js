@@ -21,6 +21,7 @@ const follow = require("./routes/users/follow");
 const me = require("./routes/users/me");
 const updateHashtag = require("./routes/users/hashtagUpdate");
 const deleteAccount = require("./routes/users/delete");
+const updateAccount = require("./routes/users/update");
 
 const posts = require('./routes/posts/posts');
 const getPosts = require('./routes/posts/getPosts');
@@ -80,6 +81,7 @@ app.use("/api/users/follow", follow);
 app.use("/api/users/me", me);
 app.use("/api/users/hashtags", updateHashtag);
 app.use("/api/users/delete", deleteAccount);
+app.use("/api/users/update", updateAccount);
 
 app.use("/api/posts/create", posts);
 app.use("/api/posts/get", getPosts);
