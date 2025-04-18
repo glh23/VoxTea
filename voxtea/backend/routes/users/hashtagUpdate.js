@@ -47,7 +47,6 @@ router.post('/update', async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: 'User not found.' });
     }
-
     user.interestedHashtags = hashtags;
     await user.save();
 
@@ -55,6 +54,38 @@ router.post('/update', async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Failed to update hashtags.' });
+  }
+});
+
+router.post("/delete", async (req, res) => {
+  const token = req.headers.authorization;
+
+  if (!token) {
+    return res.status(401).json({ message: "Authorization token required." });
+  }
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const userId = decoded.id;
+
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ message: "User not found." });
+
+    const { hashtag } = req.body;
+    if (!hashtag) return res.status(400).json({ message: "Hashtag is required." });
+
+    // Check if interestedHashtags is an array before using .filter
+    if (!Array.isArray(user.interestedHashtags)) {
+      user.interestedHashtags = [];
+    }
+
+    user.interestedHashtags = user.interestedHashtags.filter((tag) => tag !== hashtag);
+    await user.save();
+
+    return res.json({ message: "Hashtag removed." });
+  } catch (err) {
+    console.error("Error deleting hashtag:", err);
+    res.status(500).json({ message: "Server error while deleting hashtag." });
   }
 });
 
