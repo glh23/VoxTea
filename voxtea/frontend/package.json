@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@testing-library/react": "^16.3.0",
     "axios": "^1.7.9",
     "cra-template": "1.2.0",
     "react": "^19.0.0",
@@ -17,6 +18,12 @@
     "socket.io-client": "^4.8.1",
     "swiper": "^11.2.6",
     "web-vitals": "^3.x.x"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.26.9",
+    "@babel/preset-react": "^7.26.3",
+    "@testing-library/jest-dom": "^5.17.0",
+    "babel-jest": "^29.7.0"
   },
   "scripts": {
     "start": "react-scripts start",

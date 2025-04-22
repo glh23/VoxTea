@@ -79,6 +79,7 @@ router.post("/delete", async (req, res) => {
       user.interestedHashtags = [];
     }
 
+    // Get the hashtags the user is interested in by filtering out the one to be deleted
     user.interestedHashtags = user.interestedHashtags.filter((tag) => tag !== hashtag);
     await user.save();
 

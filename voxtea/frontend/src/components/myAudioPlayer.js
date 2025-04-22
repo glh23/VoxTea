@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import "./myAudioPlayer.css"; // Make sure to style it separately
+import "./myAudioPlayer.css"; 
 
 const AudioPlayer = ({ audioSrc, onPlayNext, onPlayPrevious, isLiked, onLikeToggle }) => {
   const audioRef = useRef(null);
@@ -9,6 +9,7 @@ const AudioPlayer = ({ audioSrc, onPlayNext, onPlayPrevious, isLiked, onLikeTogg
   useEffect(() => {
     const audioElement = audioRef.current;
 
+    // Update progress bar as the audio plays
     const updateProgress = () => {
       if (audioElement && !isNaN(audioElement.duration) && audioElement.duration > 0) {
         const percentage = (audioElement.currentTime / audioElement.duration) * 100;
@@ -19,6 +20,7 @@ const AudioPlayer = ({ audioSrc, onPlayNext, onPlayPrevious, isLiked, onLikeTogg
     const handlePlay = () => setIsPlaying(true);
     const handlePause = () => setIsPlaying(false);
 
+    // 
     if (audioElement) {
       audioElement.addEventListener("timeupdate", updateProgress);
       audioElement.addEventListener("play", handlePlay);
@@ -43,6 +45,7 @@ const AudioPlayer = ({ audioSrc, onPlayNext, onPlayPrevious, isLiked, onLikeTogg
   };
 
   const handleSeek = (event) => {
+    // Calculate the new time based on the slider value
     const newTime = (parseFloat(event.target.value) / 100) * audioRef.current.duration;
     audioRef.current.currentTime = newTime;
     setProgress(parseFloat(event.target.value));

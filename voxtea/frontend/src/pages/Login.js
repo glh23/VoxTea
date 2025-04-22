@@ -14,6 +14,11 @@ const Login = () => {
         setError('');
         setLoading(true);
 
+        if (!email || !password) {
+            setError('Email and password are required');
+            return;
+        }
+
         try {
             const response = await fetch('http://localhost:5000/api/users/login', {
                 method: 'POST',

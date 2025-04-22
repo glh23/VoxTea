@@ -78,11 +78,11 @@ const CreateAccount = () => {
             <form onSubmit={handleCreateAccount} style={{ display: 'inline-block', textAlign: 'center', margin: 'auto' }}>
                 <div>
                     <div>
-                        <label>Username:</label>
+                        <label htmlFor="username">Username:</label>
                     </div>
                     <input
                         type="text"
-                        label="Username"
+                        id="Username"
                         placeholder="Enter your username"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
@@ -92,11 +92,11 @@ const CreateAccount = () => {
                 </div>
                 <div>
                     <div>
-                        <label>Email:</label>
+                        <label htmlFor="email">Email:</label>
                     </div>
                     <input
                         type="text"
-                        label="Email"
+                        id="Email"
                         placeholder="Enter your email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
@@ -106,11 +106,11 @@ const CreateAccount = () => {
                 </div>
                 <div>
                     <div>
-                        <label>Password:</label>
+                        <label htmlFor="password">Password:</label>
                     </div>
                     <input
                         type="password"
-                        label="Password"
+                        id="Password"
                         placeholder="Enter your password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
@@ -120,11 +120,11 @@ const CreateAccount = () => {
                 </div>
                 <div>
                     <div>
-                        <label>Confirm Password:</label>
+                        <label htmlFor="confirmPassword">Confirm Password:</label>
                     </div>
                     <input
                         type="password"
-                        label="Confirm Password"
+                        id="Confirm Password"
                         placeholder="Confirm your password"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
@@ -134,10 +134,11 @@ const CreateAccount = () => {
                 </div>
                 <div>
                     <div>
-                    <label>Profile Image (optional):</label>
+                        <label htmlFor="profileImage">Profile Image (optional):</label>
                     </div>
                     <input
                         type="file"
+                        id="profileImage"
                         accept="image/png, image/jpeg"
                         onChange={(e) => setProfilePicture(e.target.files[0])}
                         style={{ margin: '10px' }}
