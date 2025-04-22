@@ -6,6 +6,8 @@
 // https://ccrma.stanford.edu/~pdelac/154/m154paper.htm            using autocorrelation to detect pitch instead but similar approach
 
 import React, { useState, useEffect, useRef } from "react";
+import TopBar from "../components/TopBar";
+import BottomBar from "../components/BottomBar";
 
 const GuitarTuner = () => {
     const [note, setNote] = useState(null);
@@ -193,6 +195,7 @@ const GuitarTuner = () => {
 
     return (
         <div style={{ textAlign: "center", fontFamily: "Arial, sans-serif" }}>
+            <TopBar />
             <h1>Guitar Tuner</h1>
             <button
                 onClick={() => setIsTuning(!isTuning)}
@@ -209,6 +212,7 @@ const GuitarTuner = () => {
             <h2>Detected Note: {note || "Waiting..."}</h2>
             <p>Frequency: {frequency ? `${frequency} Hz` : "Waiting..."}</p>
             <canvas ref={canvasRef} width="600" height="200" style={{ border: "1px solid #DB2F62", backgroundColor: "black", marginTop: "20px" }}></canvas>
+            <BottomBar />
         </div>
     );
 };

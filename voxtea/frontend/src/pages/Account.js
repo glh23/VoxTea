@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import TopBar from "../components/TopBar";
 import BottomBar from "../components/BottomBar";
-import AudioPlayer from "../components/myAudioPlayer"; // Import the AudioPlayer component
+import AudioPlayer from "../components/myAudioPlayer"; 
 import '../components/postView.css';
 
 const Account = () => {

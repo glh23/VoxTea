@@ -9,14 +9,9 @@ const Settings = () => {
   const navigate = useNavigate();
   const [profilePicture, setProfilePicture] = useState(null);
   const [newImage, setNewImage] = useState(null);
-
   const [hashtags, setHashtags] = useState('');
-
-  // Change the delete popups visibility 
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [isDeletePopupVisible, setIsDeletePopupVisible] = useState(false);
-
-  // Change the username and password
   const [isChangePasswordVisible, setIsChangePasswordVisible] = useState(false);
   const [isChangeUsernameVisible, setIsChangeUsernameVisible] = useState(false);
   const [changePasswordEmail, setChangePasswordEmail] = useState('');
@@ -27,24 +22,18 @@ const Settings = () => {
   const [newUsername, setNewUsername] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [usernameError, setUsernameError] = useState('');
-
   const { theme, toggleTheme } = useContext(ThemeContext);
   const [spotifyInfo, setSpotifyInfo] = useState('');
-
   const [isTermsPopupVisible, setIsTermsPopupVisible] = useState(false);
   const [termsText, setTermsText] = useState('');
-
-  // Get token from session storage
   const token = sessionStorage.getItem("authToken");
-  const spotifyToken = localStorage.getItem("spotifyAccessToken")
+  const spotifyToken = localStorage.getItem("spotifyAccessToken");
 
   useEffect(() => {
-    // Fetch the current profile image
     axios.get("http://localhost:5000/api/users/getProfilePicture", {
         headers: { Authorization: token },
       })
       .then((res) => {
-         // Default image if there isn't one
          setProfilePicture(res.data.profilePicture || "default.png");
       })
       .catch((err) => {
@@ -52,7 +41,6 @@ const Settings = () => {
         console.log("Failed to load profile image.");
       });
 
-    // Fetch the user's hashtags
     axios.get("http://localhost:5000/api/users/hashtags/get", {
         headers: { Authorization: token },
       })
@@ -64,7 +52,6 @@ const Settings = () => {
         console.log("Failed to load hashtags.");
       });
 
-    // Fetch the user's spotify data
     axios.get('http://localhost:5000/api/spotify/userInfo', {
       headers: {
         Authorization: `Bearer ${spotifyToken}`,
@@ -80,10 +67,10 @@ const Settings = () => {
     });
   }, [token]);
 
-  // Profile picture update
   const handleImageChange = (e) => {
     setNewImage(e.target.files[0]);
   };
+
   const handleUpload = async () => {
     if (!newImage) {
       alert("Please select an image to upload.");
@@ -102,7 +89,6 @@ const Settings = () => {
         }
       );
       alert(res.data.message);
-      // Update the profile image in the UI
       setProfilePicture(res.data.profilePicture);
     } catch (err) {
       console.error(err);
@@ -119,10 +105,9 @@ const Settings = () => {
           Authorization: token
         }
       });
-  
+
       alert(res.data.message);
-  
-      // Remove the tag from UI immediately
+
       setHashtags((prev) =>
         prev
           .split(' ')
@@ -134,13 +119,12 @@ const Settings = () => {
       alert("Could not delete hashtag.");
     }
   };
-  
 
   const handleHashtagsChange = (e) => {
     setHashtags(e.target.value);
   };
+
   const handleHashtagsSave = async () => {
-    // Split the hashtags by spaces and filter out empty strings, then send request
     const hashtagArray = hashtags.split(' ').filter(tag => tag.trim() !== '');
     try {
       const res = await axios.post("http://localhost:5000/api/users/hashtags/update",
@@ -160,7 +144,6 @@ const Settings = () => {
   };
 
   const handleSpotify = async () => {
-    // Login to Spotify
     try {
       const response = await fetch("http://localhost:5000/api/spotify/login", {
         method: "GET",
@@ -171,7 +154,6 @@ const Settings = () => {
       const responseBody = await response.json();
       const redirectURL = responseBody;
 
-      // Check if the redirect URL is valid before redirecting
       if (redirectURL) {
         window.location.href = redirectURL;
       } else {
@@ -183,13 +165,13 @@ const Settings = () => {
       alert("Failed to connect to Spotify.");
     }
   };
+
   const handleBack = () => {
     navigate('/Home');
   };
 
   const handleDeleteUser = async () => {
     try {
-      // Delete the user account then
       axios.delete('http://localhost:5000/api/users/delete/user', {
         headers: { Authorization: `Bearer ${token}`}
       })
@@ -197,10 +179,8 @@ const Settings = () => {
       .catch(error => console.error("Failed to delete user:", error));
 
       console.log("User information has been deleted successfully.");
-      // Remove the tokens from session and local storage
       sessionStorage.removeItem("authToken");
       localStorage.removeItem("spotifyAccessToken");
-      // Redirect to the login page
       navigate("/login");
       alert("Your account has been deleted.");
     }
@@ -210,7 +190,6 @@ const Settings = () => {
     }
   };
 
-  // Open and close the popup for hashtags
   const handleOpenPopup = () => {
     setIsPopupVisible(true);
   };
@@ -257,7 +236,6 @@ const Settings = () => {
       alert(response.data.message);
       handleClosePopup();
     } catch (err) {
-      // Check if the error response is there and set the error message if there is one
       setPasswordError(err.response?.data?.message || 'Failed to change password.');
     }
   };
@@ -276,14 +254,13 @@ const Settings = () => {
       alert(response.data.message);
       handleClosePopup();
     } catch (err) {
-      // Check if the error response is there and set the error message if there is one
       setUsernameError(err.response?.data?.message || 'Failed to change username.');
     }
   };
 
   const handleOpenTermsPopup = async () => {
     try {
-      const response = await fetch('/terms.txt'); // fetch from public folder
+      const response = await fetch('/terms.txt');
       const text = await response.text();
       setTermsText(text);
       setIsTermsPopupVisible(true);
@@ -292,9 +269,6 @@ const Settings = () => {
       alert("Could not load terms and policies.");
     }
   };
-
-  
-
 
   return (
     <div>
@@ -322,8 +296,9 @@ const Settings = () => {
             }}
           />
           <div>
-            <input type="file" accept="image/png, image/jpeg" onChange={handleImageChange} />
-            <button onClick={handleUpload}>Upload</button>
+            <label htmlFor="pictureInput">Upload Profile Picture</label>
+            <input type="file" id="pictureInput" accept="image/png, image/jpeg" onChange={handleImageChange} />
+            <button data-testid="upload-button" onClick={handleUpload}>Upload</button>
           </div>
         </div>
 
@@ -350,18 +325,18 @@ const Settings = () => {
         <div className="setting">
           <h2>Spotify</h2>
           {spotifyInfo ? (
-            <p>Logged in as: {spotifyInfo.display_name}</p> 
+            <p>Logged in as: {spotifyInfo.display_name}</p>
           ) : (
-            <p>Login to Spotify to improve what you see.</p> 
+            <p>Login to Spotify to improve what you see.</p>
           )}
           <button onClick={handleSpotify}>
-            {spotifyInfo ? "Reconnect Spotify" : "Spotify Login"}  
+            {spotifyInfo ? "Reconnect Spotify" : "Spotify Login"}
           </button>
         </div>
 
         <div className="setting">
-          <h2>Change Password</h2>
-          <button onClick={handleChangePasswordPopup}>Change Password</button>
+          <h2>Change Your Password</h2>
+          <button aria-label="Change Password Button" onClick={handleChangePasswordPopup}>Change Password</button>
         </div>
 
         <div className="setting">
@@ -374,11 +349,10 @@ const Settings = () => {
           <button onClick={handleOpenTermsPopup}>View Terms</button>
         </div>
 
-
         <div className="setting">
-          <h2>Delete User</h2>
+          <h2>Delete Account</h2>
           <p>This will delete your messages, chats, posts and information</p>
-          <button onClick={handleDeleteUserPopup}>Delete User</button>
+          <button aria-label="Delete User" onClick={handleDeleteUserPopup}>Delete User</button>
         </div>
 
         {isPopupVisible && (
@@ -392,6 +366,7 @@ const Settings = () => {
                     onClick={() => handleDeleteHashtag(tag)}
                     style={{ cursor: 'pointer', color: 'red', borderRadius: '15px' }}
                     title="Click to remove"
+                    data-testid={`hashtag-${tag}`}
                   >
                     {tag}
                   </li>
@@ -406,7 +381,7 @@ const Settings = () => {
       {isDeletePopupVisible && (
           <div className="popup-overlay" onClick={handleClosePopup}>
             <div className="popup-content" onClick={(e) => e.stopPropagation()}>
-              <h3>Are you sure you want to delete your account</h3>
+              <h3>Are you sure you want to delete your account?</h3>
               <button onClick={handleDeleteUser}>Yes</button>
             </div>
           </div>
@@ -417,30 +392,34 @@ const Settings = () => {
           <div className="popup-content" onClick={(e) => e.stopPropagation()} style={{textAlign: "center"}}>
             <h2>Change Password</h2>
             <input
-              style = {{ width: "80%", marginBottom: "10px",  padding: "5px"}}
+              style={{ width: "80%", marginBottom: "10px", padding: "5px" }}
               type="email"
+              id="passwordEmailInput"
               placeholder="Enter your email"
               value={changePasswordEmail}
               onChange={(e) => setChangePasswordEmail(e.target.value)}
             />
             <input
-              style = {{ width: "80%", marginBottom: "10px",  padding: "5px"}}
+              style={{ width: "80%", marginBottom: "10px", padding: "5px" }}
               type="password"
+              id="currentPasswordInput"
               placeholder="Current Password"
               value={currentPassword}
               onChange={(e) => setCurrentPassword(e.target.value)}
             />
             <input
-              style = {{ width: "80%", marginBottom: "10px",  padding: "5px"}}
+              style={{ width: "80%", marginBottom: "10px", padding: "5px" }}
               type="password"
+              id="newPasswordInput"
               placeholder="New Password"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
             />
             <input
-              style = {{ width: "80%", marginBottom: "10px",  padding: "5px"}}
+              style={{ width: "80%", marginBottom: "10px", padding: "5px" }}
               type="password"
-              placeholder="Confirm New Password"
+              id="confirmPasswordInput"
+              placeholder="Confirm Password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
             />
@@ -456,15 +435,17 @@ const Settings = () => {
           <div className="popup-content" onClick={(e) => e.stopPropagation()} style={{textAlign: "center"}}>
             <h2>Change Username</h2>
             <input
-              style = {{ width: "80%", marginBottom: "10px",  padding: "5px"}}
+              style={{ width: "80%", marginBottom: "10px", padding: "5px" }}
               type="email"
+              id="emailInput"
               placeholder="Enter your email"
               value={changeUsernameEmail}
               onChange={(e) => setChangeUsernameEmail(e.target.value)}
             />
             <input
-              style = {{ width: "80%", marginBottom: "10px",  padding: "5px"}}
+              style={{ width: "80%", marginBottom: "10px", padding: "5px" }}
               type="text"
+              id="usernameInput"
               placeholder="New Username"
               value={newUsername}
               onChange={(e) => setNewUsername(e.target.value)}
@@ -486,7 +467,7 @@ const Settings = () => {
         </div>
       )}
 
-      <div className = "buffer"></div>
+      <div className="buffer"></div>
 
       <BottomBar />
     </div>

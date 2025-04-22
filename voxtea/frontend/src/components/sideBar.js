@@ -30,6 +30,7 @@ const Sidebar = () => {
               <button className="sidebar-button" onClick={() => handleNavigation('/contacts')}>Chat</button>
               <button className="sidebar-button" onClick={() => handleNavigation('/UserSearch')}>Search</button>
               <button className="sidebar-button" onClick={() => handleNavigation('/Login')}>Logout</button>
+              <button className="sidebar-button" onClick={() => handleNavigation('/tune')}>Logout</button>
           </div>
       </div>
   );

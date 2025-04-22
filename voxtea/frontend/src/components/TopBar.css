@@ -7,13 +7,7 @@
   align-items: center;
   box-shadow: 0px 10px 20px 0px rgba(0, 0, 0, 0.2);
   max-height: 50px;
-  position: relative; 
-}
-
-.top-bar-left,
-.top-bar-right {
-  display: flex;
-  gap: 10px;
+  position: relative;
 }
 
 .top-bar .app-name {
@@ -24,20 +18,7 @@
   animation: colorChange 30s infinite;
 }
 
-.top-bar-button {
-  background-color: var(--topbar-button-bg);
-  color: var(--topbar-button-text);
-  padding: 8px 15px;
-  border: none;
-  cursor: pointer;
-}
-
-.top-bar-button:hover {
-  background-color: var(--topbar-button-h);
-}
-
 .hamburger {
-  display: none;
   font-size: 2rem;
   cursor: pointer;
 }
@@ -55,7 +36,7 @@
   flex-direction: column;
   padding: 10px;
   width: 130px;
-  z-index: 1000; 
+  z-index: 1000;
 }
 
 .hamburger-dropdown button {
@@ -70,17 +51,6 @@
 
 .hamburger-dropdown button:hover {
   background: #1d2954;
-}
-
-@media (max-width: 768px) {
-  .top-bar-left,
-  .top-bar-right {
-    display: none; 
-  }
-
-  .hamburger {
-    display: block; 
-  }
 }
 
 @keyframes colorChange {

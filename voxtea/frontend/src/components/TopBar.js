@@ -13,10 +13,6 @@ const TopBar = () => {
         navigate('/Login');
     };
 
-    const handleSettingsOrAccount = () => {
-        navigate(location.pathname === '/Account' ? '/Settings' : '/Account');
-    };
-
     const handleAccount = () => {
         navigate('/Account');
     };
@@ -35,6 +31,9 @@ const TopBar = () => {
 
     const handleChat = () => {
         navigate('/contacts');
+    };
+    const handleTune = () => {
+        navigate('/tune');
     };
 
     const toggleMenu = () => {
@@ -61,26 +60,18 @@ const TopBar = () => {
 
     return (
         <div className="top-bar">
-            <div className="top-bar-left">
-                <button className="top-bar-button" onClick={handleSettingsOrAccount}>
-                    {location.pathname === '/Account' ? 'Settings' : 'Account'}
-                </button>
-                <button className="top-bar-button" onClick={handleChat}>Chat</button>
-            </div>
             <h1 className="app-name" onClick={handleAppName}>VoxTea</h1>
-            <div className="top-bar-right">
-                <button className="top-bar-button" onClick={handleSearch}>Search</button>
-                <button className="top-bar-button" onClick={handleLogout}>Logout</button>
-            </div>
             <div className="hamburger" onClick={toggleMenu} ref={menuRef}>
                 &#9776;
             </div>
             {menuOpen && (
                 <div className="hamburger-dropdown" ref={menuRef}>
+                    <button onClick={handleAppName}>Home</button>
                     <button onClick={handleAccount}>Account</button>
                     <button onClick={handleSettings}>Settings</button>
                     <button onClick={handleChat}>Chat</button>
                     <button onClick={handleSearch}>Search</button>
+                    <button onClick={handleTune}>Tuner</button>
                     <button onClick={handleLogout}>Logout</button>
                 </div>
             )}

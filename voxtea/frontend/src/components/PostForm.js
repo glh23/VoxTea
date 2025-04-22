@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
-import DragNdrop from './drag\'n\'drop';
+import DragNdrop from './dragNdrop';
 import AudioPlayer from './myAudioPlayer'; // Import AudioPlayer
 import './PostForm.css';
 
@@ -156,6 +156,7 @@ const PostForm = ({ onPostSuccess }) => {
             <img
                 src="/voxtea/microphone.png"
                 alt="Record"
+                data-testid="record-button" 
                 className={`record-button ${recording ? 'recording' : ''} ${isClicked ? 'bounce' : ''}`}
                 onClick={() => {
                     setIsClicked(true);

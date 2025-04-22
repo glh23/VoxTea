@@ -243,7 +243,7 @@ const PostList = ({ refreshPostView }) => {
             onClick={handleRefresh}
           />
           <div className="dropdown" style={{ position: 'relative', top: '10px', right: '10px' }}>
-            <select onChange={handlePostTypeChange} value={postType}>
+            <select onChange={handlePostTypeChange} value={postType} role="combobox">
               <option value="recent">Recent</option>
               <option value="top">Top</option>
               <option value="hashtags">Interests</option>
@@ -255,7 +255,7 @@ const PostList = ({ refreshPostView }) => {
           <div className="postInfo">
             <p>{currentPost.description}</p>
             {/* Cross origin allows the audio to play in firefox */}
-            <audio id="player" crossOrigin="anonymous" key={currentPost._id} ref={audioRef}>
+            <audio id="player" data-testid="player" crossOrigin="anonymous" key={currentPost._id} ref={audioRef}>
               <source src={`http://localhost:5000${currentPost.audioFile}`} type="audio/mp3" />
               Your browser does not support the audio element.
             </audio>
