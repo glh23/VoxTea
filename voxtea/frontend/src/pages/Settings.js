@@ -102,7 +102,7 @@ const Settings = () => {
         hashtag: tagToDelete
       }, {
         headers: {
-          Authorization: token
+          Authorization: `Bearer ${token}`
         }
       });
 
@@ -131,7 +131,7 @@ const Settings = () => {
         { hashtags: hashtagArray },
         {
           headers: {
-            Authorization: token,
+            Authorization: `Bearer ${token}`,
           },
         }
       );

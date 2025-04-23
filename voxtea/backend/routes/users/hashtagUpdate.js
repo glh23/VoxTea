@@ -32,11 +32,14 @@ router.get('/get', async (req, res) => {
 
 // Endpoint to update user hashtags
 router.post('/update', async (req, res) => {
-  const token = req.headers.authorization;
+  const token = req.headers.authorization?.split(" ")[1];
   const { hashtags } = req.body;
 
   if (!token) {
     return res.status(401).json({ message: 'Unauthorized.' });
+  }
+  if (!hashtags || hashtags.length === 0) {
+    return res.status(400).json({ message: 'Hashtags are required.' });
   }
 
   try {
@@ -58,7 +61,9 @@ router.post('/update', async (req, res) => {
 });
 
 router.post("/delete", async (req, res) => {
-  const token = req.headers.authorization;
+  //const token = req.headers.authorization;
+  const token = req.headers.authorization?.split(" ")[1];
+  
 
   if (!token) {
     return res.status(401).json({ message: "Authorization token required." });
