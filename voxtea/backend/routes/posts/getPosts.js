@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const JWT_SECRET = process.env.JWT_SECRET;
 const User = require("../../models/User");
 
-// !!!! the spotify get is in the getTop.js file !!!!
+// !!!! the spotify get is in the spotify/getTop.js file !!!!
 
 const router = express.Router();
 

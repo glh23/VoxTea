@@ -364,7 +364,7 @@ const Settings = () => {
                   <li
                     key={index}
                     onClick={() => handleDeleteHashtag(tag)}
-                    style={{ cursor: 'pointer', color: 'red', borderRadius: '15px' }}
+                    style={{ cursor: 'pointer', borderRadius: '15px' }}
                     title="Click to remove"
                     data-testid={`hashtag-${tag}`}
                   >

@@ -42,7 +42,8 @@ require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
 // Create Express App
 const app = express();
-const server = http.createServer(app); // Use HTTP server for WebSockets
+// Use HTTP server for WebSockets
+const server = http.createServer(app); 
 
 // Initialize WebSockets
 const io = new Server(server, {

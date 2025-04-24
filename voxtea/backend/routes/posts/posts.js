@@ -11,8 +11,6 @@ const router = express.Router();
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
-
-
 // Configure the directory for audio uploads
 const audioUploadDir = path.join(__dirname, '../../uploads/audioFiles');
 if (!fs.existsSync(audioUploadDir)) {
@@ -102,8 +100,8 @@ async function applyEffects(inputFile, outputFile, effect) {
 
     console.log('Applied effect:', fullEffect);
 
-    // Convert WebM to WAV using ffmpeg first
-    const wavFile = inputFile.replace(/\.[^/.]+$/, '.wav');  // Convert to .wav
+    // Convert WebM to WAV using ffmpeg 
+    const wavFile = inputFile.replace(/\.[^/.]+$/, '.wav');  
     const convertToWavCmd = `ffmpeg -i "${inputFile}" -acodec pcm_s16le -ar 44100 "${wavFile}"`;
 
     exec(convertToWavCmd, (err, stdout, stderr) => {

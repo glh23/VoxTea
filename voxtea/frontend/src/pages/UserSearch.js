@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const UserSearch = () => {
-  const [searchTerm, setSearchTerm] = useState(""); // User input
-  const [users, setUsers] = useState([]); // Search results
-  const [loading, setLoading] = useState(false); // Loading state
+  const [searchTerm, setSearchTerm] = useState("");
+  const [users, setUsers] = useState([]); 
+  const [loading, setLoading] = useState(false); 
 
   const navigate = useNavigate();
 

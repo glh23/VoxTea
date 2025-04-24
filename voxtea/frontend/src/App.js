@@ -20,7 +20,6 @@ import Profiles from './pages/otherAccounts';
 import Contacts from './pages/contacts';
 import Message from './pages/message';
 import Callback from './components/callback'
-
 import Tune from './pages/tune';
 
 const App = () => (

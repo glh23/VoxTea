@@ -1,4 +1,4 @@
-// Insporation: 
+// Inspiration: 
 // https://github.com/zplata/tuner-app/blob/main/app.js          
 // https://github.com/citronneur/onlinetuner.co/tree/master/js
 // https://github.com/qiuxiang/tuner/tree/master/app
@@ -22,10 +22,12 @@ const GuitarTuner = () => {
 
         const startTuning = async () => {
             setIsTuning(true);
+            // Get data from the microphone
             stream = await navigator.mediaDevices.getUserMedia({ audio: true });
             audioContext = new AudioContext();
             analyser = audioContext.createAnalyser();
-            analyser.fftSize = 8192;
+            // Set the Size of the fast fourier transform which I'm not using any more
+            //analyser.fftSize = 8192;
             bufferLength = analyser.frequencyBinCount;
             dataArray = new Float32Array(bufferLength);
 
@@ -168,7 +170,7 @@ const GuitarTuner = () => {
                     bestOffset = offset;
                 }
             } else if (foundCorr) {
-                // Use the offest to calculate the frequency
+                // Use the offset to calculate the frequency
                 let frequency = sampleRate / bestOffset;
                 return frequency;
             }

@@ -106,7 +106,7 @@ const Chat = () => {
         Delete Chat
       </button>
 
-      {/* Chat messages - scrollable */}
+      {/* Chat messages  */}
       <div style={{
         flex: 1, 
         overflowY: "auto",
@@ -139,7 +139,7 @@ const Chat = () => {
 
       </div>
 
-      {/* Message input - stays above BottomBar */}
+      {/* Message input  */}
       <div style={{
         display: "flex",
         justifyContent: "center",

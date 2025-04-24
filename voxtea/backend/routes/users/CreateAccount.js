@@ -1,7 +1,7 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const User = require("../../models/User");
-const upload = require("./profilePicture/profilePictureUpload");  // Import the file upload component
+const upload = require("./profilePicture/profilePictureUpload");  
 const validator = require('validator');
 
 const router = express.Router();

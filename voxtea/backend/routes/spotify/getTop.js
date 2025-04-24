@@ -14,7 +14,7 @@ async function fetchTopGenres(accessToken) {
     },
     params: {
       limit: 10,
-      time_range: 'short_term', // Adjust the time range as needed
+      time_range: 'short_term', 
     },
   });
 

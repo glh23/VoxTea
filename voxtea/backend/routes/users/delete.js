@@ -22,7 +22,7 @@ router.delete('/user', async (req, res) => {
 
 
   try {
-    // Delete user's posts
+    // Delete users posts
     await Post.deleteMany({ userId: userId });
 
     // Remove user from likes in all posts
@@ -41,6 +41,7 @@ router.delete('/user', async (req, res) => {
     // Delete the user
     const deletedUser = await User.findByIdAndDelete(userId);
 
+    // This is to check if the user was found and deleted as the above line returns null if not found 
     if (!deletedUser) {
       return res.status(404).json({ message: "User not found" });
     }

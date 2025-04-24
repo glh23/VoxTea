@@ -89,11 +89,11 @@ const PostForm = ({ onPostSuccess }) => {
         }
     };
 
-    // Auto-slide every 60 seconds
+    // Auto-slide every 600 seconds
     useEffect(() => {
         const interval = setInterval(() => {
             setCurrentSlide((prev) => (prev + 1) % totalSlides);
-        }, 60000);
+        }, 600000);
         return () => clearInterval(interval);
     }, []);
 

@@ -13,7 +13,7 @@ const Sidebar = () => {
       setIsOpen(false); 
   };
 
-  // Go away if the screen is too narrow
+  // Go away if the screen is tooo narrow
   const toggleSidebar = () => {
       setIsOpen(!isOpen);
   };
@@ -29,8 +29,8 @@ const Sidebar = () => {
               <button className="sidebar-button" onClick={() => handleNavigation('/Settings')}>Settings</button>
               <button className="sidebar-button" onClick={() => handleNavigation('/contacts')}>Chat</button>
               <button className="sidebar-button" onClick={() => handleNavigation('/UserSearch')}>Search</button>
+              <button className="sidebar-button" onClick={() => handleNavigation('/tune')}>tuner</button>
               <button className="sidebar-button" onClick={() => handleNavigation('/Login')}>Logout</button>
-              <button className="sidebar-button" onClick={() => handleNavigation('/tune')}>Logout</button>
           </div>
       </div>
   );
